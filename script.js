@@ -72,11 +72,11 @@
     }
     
     function saveToStorage() {
-      localStorage.setItem('crGendarmerie', JSON.stringify(state));
+      localStorage.setItem('borderforce', JSON.stringify(state));
     }
     
     function loadFromStorage() {
-      const data = localStorage.getItem('crGendarmerie');
+      const data = localStorage.getItem('borderforce');
       if(data) {
         const parsed = JSON.parse(data);
         Object.assign(state, parsed);
@@ -1336,7 +1336,7 @@ function resetData() {
   if (confirm("Voulez-vous vraiment effacer toutes les données sauf le premier ESR ?")) {
     
     // Charger l'état actuel depuis le localStorage
-    const data = localStorage.getItem('crGendarmerie');
+    const data = localStorage.getItem('borderforce');
     let premierEsr = null;
     if (data) {
       const parsed = JSON.parse(data);
@@ -1380,7 +1380,7 @@ function resetData() {
     }
 
     // Sauvegarde et rechargement
-    localStorage.setItem('crGendarmerie', JSON.stringify(newState));
+    localStorage.setItem('borderforce', JSON.stringify(newState));
     location.reload();
 
     alert("Données effacées. Le premier ESR a été conservé.");
