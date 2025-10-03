@@ -976,9 +976,9 @@ suitesDonnees: document.getElementById('suitesDonnees').value,
         piecesIdentite: pieces
     };
     
-    const fiches = JSON.parse(localStorage.getItem('fichesESI') || '[]');
+    const fiches = JSON.parse(localStorage.getItem('fichesborderforce') || '[]');
     fiches.push(fiche);
-    localStorage.setItem('fichesESI', JSON.stringify(fiches));
+    localStorage.setItem('fichesborderforce', JSON.stringify(fiches));
     this.reset();
     setCurrentDateTime();
     afficherHistorique();
@@ -987,7 +987,7 @@ suitesDonnees: document.getElementById('suitesDonnees').value,
 function afficherHistorique() {
     const historiqueDiv = document.getElementById('historique');
     historiqueDiv.innerHTML = '';
-    const fiches = JSON.parse(localStorage.getItem('fichesESI') || '[]');
+    const fiches = JSON.parse(localStorage.getItem('fichesborderforce') || '[]');
     fiches.forEach((fiche, index) => {
         const ficheDiv = document.createElement('div');
         ficheDiv.className = 'fiche';
@@ -1009,15 +1009,15 @@ Lieu: ${fiche.lieuInterpellation} | Suites données: ${fiche.suitesDonnees || ''
 
 function supprimerFiche(index) {
     if (confirm("Voulez-vous vraiment supprimer cette fiche ?")) {
-        const fiches = JSON.parse(localStorage.getItem('fichesESI') || '[]');
+        const fiches = JSON.parse(localStorage.getItem('fichesborderforce') || '[]');
         fiches.splice(index, 1);
-        localStorage.setItem('fichesESI', JSON.stringify(fiches));
+        localStorage.setItem('fichesborderforce', JSON.stringify(fiches));
         afficherHistorique();
     }
 }
 
 function modifierFiche(index) {
-    const fiches = JSON.parse(localStorage.getItem('fichesESI') || '[]');
+    const fiches = JSON.parse(localStorage.getItem('fichesborderforce') || '[]');
     const fiche = fiches[index];
 document.getElementById('categorie').value = fiche.categorie;
     document.getElementById('nom').value = fiche.nom;
@@ -1058,13 +1058,13 @@ document.getElementById('suitesDonnees').value = fiche.suitesDonnees || '';
     });
     
     fiches.splice(index, 1);
-    localStorage.setItem('fichesESI', JSON.stringify(fiches));
+    localStorage.setItem('fichesborderforce', JSON.stringify(fiches));
     afficherHistorique();
 }
 
 document.getElementById('effacerFiches').addEventListener('click', function() {
     if (confirm("Voulez-vous vraiment effacer toutes les fiches ?")) {
-        localStorage.removeItem('fichesESI');
+        localStorage.removeItem('fichesborderforce');
         afficherHistorique();
         alert("Toutes les fiches ont été effacées !");
     }
