@@ -1,0 +1,434 @@
+
+ 
+  body {
+    font-family: verdana, sans-serif;
+    margin: 0;
+    padding: 0; /* on enlève tout le padding */
+    background: #f0f2f5;
+    color: #222;
+    min-height: 100vh;
+    box-sizing: border-box;
+	touch-action: manipulation;
+  }
+
+  /* Page d'accueil */
+  .home-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    text-align: center;
+    padding: 20px;
+  }
+
+  /* Bandeau titre propre (uniquement accueil) */
+  #homePage .home-title {
+    background: #003366;
+    color: white;
+    font-size: 1.5em;
+    text-align: center;
+    padding: 20px;
+    margin: 0 0 30px 0; /* colle bien en haut, espace dessous */
+  }
+
+  #homePage .home-title .sous-titre {
+    font-size: 0.6em;
+    font-weight: normal;
+    display: block;
+    margin-top: 8px;
+  }
+
+  /* Grille icônes */
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .icon-button {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    font-family: inherit;
+  }
+
+  .icon-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  }
+
+  .icon-button i {
+    font-size: 40px;
+    margin-bottom: 8px;
+    color: #0d6efd;
+  }
+
+  .icon-button span {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+  }
+
+  /* Couleurs spécifiques pour chaque icône */
+  .icon-infos i { color: #3498db; }
+  .icon-esr i { color: #2ecc71; }
+  .icon-materiel i { color: #f39c12; }
+  .icon-compteurs i { color: #9b59b6; }
+  .icon-esi i { color: #e74c3c; }
+  .icon-passeur i { color: #16a085; }
+  .icon-obs i { color: #95a5a6; }
+  .icon-deroulement i { color: #d35400; }
+  .icon-pulsar i { color: #e67e22; }
+  .icon-cr i { color: #27ae60; }
+  .icon-fiche i { color: #e74c3c; }
+  .icon-visa i { color: #0055A4; }
+  .icon-qr i { color: #8e44ad; }
+
+  /* Pages individuelles */
+  .page {
+    display: none;
+    min-height: 100vh;
+    background: #f0f2f5;
+  }
+
+  .page.active {
+    display: block;
+  }
+
+  .page-header {
+    background-color: #003366;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: -10px -10px 20px -10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .back-button {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1em;
+  }
+
+  .back-button:hover {
+    background: rgba(255,255,255,0.3);
+  }
+
+  .page-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    flex-grow: 1;
+  }
+
+  .page-content {
+    padding: 0 10px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* Styles formulaires */
+  h2, h3 {
+    text-align: center;
+    color: #2c3e50;
+  }
+
+  label {
+    display: block;
+    margin: 6px 0 3px 0;
+    font-weight: 500;
+  }
+
+  input[type=text], input[type=date], input[type=time], input[type=number], select {
+    width: 100%;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    margin-bottom: 8px;
+  }
+  
+/* Empêche le zoom automatique sur iOS */
+  @supports (-webkit-touch-callout: none) {
+    input[type=text], input[type=date], input[type=time], input[type=number], select {
+      font-size: 16px;
+    }
+  }
+  
+  button {
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 1em;
+    margin: 4px 2px;
+    min-width: 36px;
+    min-height: 36px;
+    user-select: none;
+    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  button.plusminus {
+    width: 48px;
+    border-radius: 10px;
+    font-size: 1.5em;
+    background-color: #f0f0f0;
+  }
+
+  button.plusminus:hover { background-color: #ddd; }
+  button.plusminus.minus { background-color: #e74c3c; color: white; }
+  button.plusminus.minus:hover { background-color: #c0392b; }
+  button.plusminus.plus { background-color: #3498db; color: white; }
+  button.plusminus.plus:hover { background-color: #2980b9; }
+  button.add { background-color: #27ae60; color: white; }
+  button.add:hover { background-color: #229954; }
+  button.red { background-color: #e74c3c; color: white; }
+  button.red:hover { background-color: #c0392b; }
+  button.blue { background-color: #3498db; color: white; }
+  button.blue:hover { background-color: #2980b9; }
+  button.green { background-color: #27ae60; color: white; }
+  button.green:hover { background-color: #229954; }
+
+  .flex-col { flex: 1 1 200px; min-width: 200px; }
+
+  .vehicle-card {
+    border: 2px solid #3498db;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #f8f9fa;
+  }
+
+  .vehicle-card h3 {
+    margin-top: 0;
+    color: #2c3e50;
+  }
+
+  span[id$="Count"] {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 10px;
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .flex-row > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .flex-row > div label {
+    justify-content: flex-start;
+    text-align: left;
+    width: 100%;
+  }
+
+  .manual-input { width: 80px; font-size: 1em; padding: 4px 6px; }
+
+  textarea {
+    width: 100%;
+    min-height: 200px;
+    font-family: monospace;
+    font-size: 1em;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    resize: vertical;
+  }
+
+  .small-note { font-size: 0.85em; color: #666; margin-top: 5px; margin-bottom: 15px; }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .icon-button { width: 100px; height: 100px; }
+    .icon-button i { font-size: 32px; }
+  }
+
+  @media (max-width: 768px) {
+    .app-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 5px; }
+    .icon-button { width: 100%; height: 90px; }
+    .icon-button i { font-size: 28px; }
+    .icon-button span { font-size: 12px; }
+  }
+
+  /* Titres page Fiche identité */
+  #ficheIdentitePage h2 {
+    background-color: #003366 !important;
+    color: white !important;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  #ficheIdentitePage .red { background-color: #e74c3c; color: white; }
+  #ficheIdentitePage .red:hover { background-color: #c0392b; }
+  #ficheIdentitePage .green { background-color: #27ae60; color: white; }
+  #ficheIdentitePage .green:hover { background-color: #229954; }
+  #ficheIdentitePage .blue { background-color: #3498db; color: white; }
+  #ficheIdentitePage .blue:hover { background-color: #2980b9; }
+
+/* Carte centrée et resserrée pour la page Informations */
+#infosPage .page-content{
+  max-width: 520px;          /* largeur du bloc */
+  margin: 16px auto;         /* centré */
+  padding: 16px;
+  border: 2px solid #1f6fb2; /* bordure */
+  border-radius: 12px;
+  background: #87CEEB;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+/* Ajuste la présentation des champs dans Infos */
+#infosPage .flex-row {
+  display: flex;
+  flex-direction: column;   /* toujours vertical */
+  align-items: stretch;     /* occupe toute la largeur au lieu d'être centrés */
+  gap: 50px;                 /* espace réduit entre champs */
+  margin-bottom: 10px;
+}
+
+#infosPage .flex-col {
+  min-width: auto;          /* plus de largeur minimum inutile */
+  flex: none;               /* évite l'étirement bizarre */
+}
+
+#infosPage .flex-col label {
+  margin-bottom: 4px;
+}
+#siteSelect,
+#dateInput,
+#heureDebutInput,
+#heureFinInput {
+  font-weight: bold;
+}
+  #siteSelect {
+  margin-bottom: 50px; /* tu peux ajuster la valeur (px) */
+}
+#homePage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Bandeau accueil */
+#homePage .home-title {
+  background: #003366;
+  color: white;
+  font-size: 1.5em;
+  text-align: center;
+  padding: 20px;
+  margin-top: -20px;   /* enlève le padding haut */
+  margin-left: -20px;  /* enlève le padding gauche */
+  margin-right: -20px; /* enlève le padding droit */
+  margin-bottom: 30px; /* espace sous le bandeau */
+}
+
+#homePage .home-title .sous-titre {
+  font-size: 0.6em;
+  font-weight: normal;
+  display: block;
+  margin-top: 8px;
+}
+
+/* Empêche tout scroll horizontal */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Corrige les pages internes qui ont des marges négatives */
+.page {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* On cache le radio natif */
+#pulsarPage input[type="radio"] {
+  display: none;
+}
+
+/* Style de base des boutons */
+#pulsarPage label {
+  display: inline-block;
+  margin: 15px;
+  cursor: pointer;
+}
+
+#pulsarPage label span {
+  display: inline-block;
+  padding: 20px 50px;
+  border: 2px solid #ccc;
+  border-radius: 14px;
+  font-size: 1.6em;
+  font-weight: bold;
+  background: #f9f9f9;
+  color: #333;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+/* Effet hover */
+#pulsarPage label span:hover {
+  background: #eee;
+}
+
+/* ✅ Bouton Oui sélectionné */
+#pulsarPage input[type="radio"]:checked + span.yes {
+  background: #2ecc71;    /* vert */
+  color: #fff;
+  border-color: #27ae60;
+}
+
+/* ❌ Bouton Non sélectionné */
+#pulsarPage input[type="radio"]:checked + span.no {
+  background: #e74c3c;    /* rouge */
+  color: #fff;
+  border-color: #c0392b;
+}
+ /* Responsive mobile pour Pulsar */
+  @media (max-width: 480px) {
+    #pulsarPage label span {
+      padding: 18px 40px;
+      font-size: 1.2em;
+    }
+  }
+
+
