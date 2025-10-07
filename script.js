@@ -1386,4 +1386,12 @@ function resetData() {
     alert("Données effacées. Le premier ESR a été conservé.");
   }
 }
+
+function confirmCallCORG() {
+  const confirmer = confirm("⚠️ CONFIRMER L’APPEL AU CORG ALPES-MARITIMES ?");
+  if (confirmer) {
+    window.location.href = 'tel:170'; // 👉 remplace 170 par le vrai numéro si besoin
+  }
+}
+
       
