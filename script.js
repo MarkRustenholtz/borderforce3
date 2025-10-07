@@ -1387,11 +1387,21 @@ function resetData() {
   }
 }
 
-window.confirmCallCORG = function() {
-  const confirmer = confirm("⚠️ CONFIRMER L’APPEL AU CORG ALPES-MARITIMES ?");
-  if (confirmer) {
-    window.location.href = 'tel:0493182361'; // change le numéro si besoin
-  }
-};
+function confirmCallCORG() {
+  const popup = document.getElementById('popupCORG');
+  const callBtn = document.getElementById('popupCallBtn');
+  const cancelBtn = document.getElementById('popupCancelBtn');
+
+  popup.style.display = 'flex';
+
+  callBtn.onclick = () => {
+    popup.style.display = 'none';
+    window.location.href = 'tel:0493182361';
+  };
+
+  cancelBtn.onclick = () => {
+    popup.style.display = 'none';
+  };
+}
 
       
