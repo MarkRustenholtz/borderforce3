@@ -1390,7 +1390,7 @@ function resetData() {
 window.confirmCallCORG = function() {
   const confirmer = confirm("⚠️ CONFIRMER L’APPEL AU CORG ALPES-MARITIMES ?");
   if (confirmer) {
-    window.location.href = 'tel:0634148288'; // change le numéro si besoin
+    window.location.href = 'tel:04 93 18 23 61'; // change le numéro si besoin
   }
 };
 
