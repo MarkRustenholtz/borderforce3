@@ -74,10 +74,24 @@
 <i class="fas fa-qrcode"></i>
 <span>QR Code</span>
 </button>
+<!-- 🔴 BOUTON APPEL CORG -->
 <button class="icon-button urgent" onclick="confirmCallCORG()">
-    <i class="fas fa-phone"></i>
-    <span>APPEL CORG</span>
-  </button>
+  <i class="fas fa-phone"></i>
+  <span>APPEL CORG</span>
+</button>
+
+<!-- 🟦 POPUP CONFIRMATION APPEL -->
+<div id="popupCORG" class="popup-overlay">
+  <div class="popup-box">
+    <h3>⚠️ CONFIRMATION</h3>
+    <p>Souhaitez-vous appeler le <strong>CORG ALPES-MARITIMES</strong> ?<br>
+    Numéro : <strong>06 34 24 22 88</strong></p>
+    <div class="popup-buttons">
+      <button id="popupCallBtn" class="popup-btn call">📞 Appeler</button>
+      <button id="popupCancelBtn" class="popup-btn cancel">Annuler</button>
+    </div>
+  </div>
+</div>
 </div>
 </div>
 <!-- Page Informations -->
