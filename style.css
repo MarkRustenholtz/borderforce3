@@ -430,5 +430,14 @@ html, body {
       font-size: 1.2em;
     }
   }
+.icon-button.urgent {
+  background: #c0392b; /* rouge alerte */
+  color: white;
+}
+
+.icon-button.urgent:hover {
+  background: #e74c3c;
+  transform: scale(1.05);
+}
 
 
