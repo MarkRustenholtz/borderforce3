@@ -1387,11 +1387,11 @@ function resetData() {
   }
 }
 
-function confirmCallCORG() {
+window.confirmCallCORG = function() {
   const confirmer = confirm("⚠️ CONFIRMER L’APPEL AU CORG ALPES-MARITIMES ?");
   if (confirmer) {
-    window.location.href = 'tel:170'; // 👉 remplace 170 par le vrai numéro si besoin
+    window.location.href = 'tel:0634248288'; // change le numéro si besoin
   }
-}
+};
 
       
