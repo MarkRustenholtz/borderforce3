@@ -505,6 +505,15 @@ h1 {
 </style>
 
 </head>
+<script>
+  // ✅ Autorise l'exécution dans un iframe (certains navigateurs bloquent sinon)
+  if (window.top !== window.self) {
+    document.body.style.display = "block";
+  }
+  window.addEventListener("error", e => {
+    console.warn("⚠️ Erreur dans iframe :", e.message);
+  });
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.3.1/html-docx.min.js"></script>
