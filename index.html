@@ -74,29 +74,7 @@
 <i class="fas fa-qrcode"></i>
 <span>QR Code</span>
 </button>
-<!-- 🔴 BOUTON APPEL CORG -->
-<button class="icon-button urgent" onclick="confirmCallCORG()">
-  <i class="fas fa-phone"></i>
-  <span>APPEL CORG</span>
-</button>
-<button class="icon-button" onclick="showPage('pvPage')">
-  <i class="fas fa-id-card"></i><br>
-  Fiche PV
-</button>
-</div>
-<!-- 🟦 POPUP CONFIRMATION APPEL -->
-<div id="popupCORG" class="popup-overlay">
-  <div class="popup-box">
-    <h3>⚠️ CONFIRMATION</h3>
-    <p>Souhaitez-vous appeler le <strong>CORG ALPES-MARITIMES</strong> ?<br>
-    Numéro : <strong>04 93 18 23 61</strong></p>
-    <div class="popup-buttons">
-      <button id="popupCallBtn" class="popup-btn call">📞 Appeler</button>
-      <button id="popupCancelBtn" class="popup-btn cancel">Annuler</button>
-    </div>
-  </div>
-</div>
-<!-- PAGE IDENTITÉ / PV -->
+    <!-- PAGE IDENTITÉ / PV -->
 <div id="pvPage" class="page">
   <div class="page-header">
     <button class="back-button" onclick="showPage('homePage')">
@@ -119,7 +97,29 @@
   "
   allow="clipboard-write; clipboard-read; fullscreen"
   sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads">
-</iframe>
+  </iframe>
+<!-- 🔴 BOUTON APPEL CORG -->
+<button class="icon-button urgent" onclick="confirmCallCORG()">
+  <i class="fas fa-phone"></i>
+  <span>APPEL CORG</span>
+</button>
+<button class="icon-button" onclick="showPage('pvPage')">
+  <i class="fas fa-id-card"></i><br>
+  Fiche PV
+</button>
+</div>
+<!-- 🟦 POPUP CONFIRMATION APPEL -->
+<div id="popupCORG" class="popup-overlay">
+  <div class="popup-box">
+    <h3>⚠️ CONFIRMATION</h3>
+    <p>Souhaitez-vous appeler le <strong>CORG ALPES-MARITIMES</strong> ?<br>
+    Numéro : <strong>04 93 18 23 61</strong></p>
+    <div class="popup-buttons">
+      <button id="popupCallBtn" class="popup-btn call">📞 Appeler</button>
+      <button id="popupCancelBtn" class="popup-btn cancel">Annuler</button>
+    </div>
+  </div>
+</div>
 </div>
 </div>
 
