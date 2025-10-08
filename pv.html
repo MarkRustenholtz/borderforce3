@@ -506,12 +506,9 @@ h1 {
 
 </head>
 <script>
-  // ✅ Autorise l'exécution dans un iframe (certains navigateurs bloquent sinon)
-  if (window.top !== window.self) {
+  // ✅ Compatibilité affichage dans iframe (mobile, GitHub Pages)
+  document.addEventListener("DOMContentLoaded", () => {
     document.body.style.display = "block";
-  }
-  window.addEventListener("error", e => {
-    console.warn("⚠️ Erreur dans iframe :", e.message);
   });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
