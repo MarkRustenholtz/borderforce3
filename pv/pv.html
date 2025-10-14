@@ -2,1057 +2,1192 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROCÈS-VERBAL D’INTERPELLATION — App PV</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>PV Interpellation — ESI</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#003366">
-<link rel="icon" href="icon-192.png" sizes="192x192">
-<link rel="apple-touch-icon" href="icon-512.png">
+<meta name="theme-color" content="#003366" />
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <style>
-:root {
-  --page-w: 210mm;
-  --page-h: 297mm;
-  --m-left: 30mm;
-  --m-others: 25mm;
-  --font: "Times New Roman", serif;
-  --ui: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  --brand: #003366;
-  --muted: #6b7280;
-}
-
-/* ====== FORMAT IMPRESSION OFFICIEL ====== */
-@page {
-  size: A4;
-  margin: var(--m-others) var(--m-others) var(--m-others) var(--m-left);
-}
-
-@media print {
-  body {
-    background: #fff;
-    margin: 0;
+  :root {
+    --page-w:210mm;
+    --page-h:297mm;
+    --m-left:10mm;
+    --m-others:10mm;
+    --ui:system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+    --serif:"Times New Roman", Times, serif;
+    --brand:#003366;
+    --muted:#6b7280;
   }
-  #tabbar,
-  #tab-content,
-  .toolbar,
-  .saved-tab,
-  .mobile-only {
-    display: none !important;
-  }
-  .sheet {
-    margin: 0 !important;
-    padding: var(--m-others) var(--m-others) var(--m-others) var(--m-left) !important;
-    box-shadow: none !important;
-    width: auto !important;
-    min-height: auto !important;
-  }
-}
 
-/* ====== INTERFACE GÉNÉRALE ====== */
-html, body {
-  height: 100%;
-  margin: 0;
-  font-family: var(--ui);
-  background: white;
-  color: #222;
-}
 
-/* ====== BARRE D'ONGLETS ====== */
-#tabbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: #e0e3e7; /* gris clair uniforme */
-  display: flex;
-  gap: 8px;
-  padding: 10px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-.tabbtn {
-  flex: 1;
-  text-align: center;
-  padding: 10px 12px;
+  * { box-sizing:border-box; }
+
+  html, body {
+    margin:0;
+    padding:0;
+    background:#fff;
+    color:#222;
+    font-family:var(--ui);
+  }
+
+  .wrap {
+    max-width:980px;
+    margin:18px auto;
+    padding:16px;
+  }
+
+  .toolbar {
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:14px;
+  }
+
+  .toolbar button {
+    padding:10px 14px;
+    border:0;
+    border-radius:10px;
+    background:var(--brand);
+    color:#fff;
+    cursor:pointer;
+    font-size:15px;
+  }
+
+  .toolbar button.secondary {
+    background:#0d5bd7;
+  }
+
+  .toolbar button:active {
+    transform:translateY(1px);
+  }
+
+  .grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:12px;
+  }
+
+  fieldset {
+    border:1px solid #d0d7de;
+    border-radius:10px;
+    padding:12px;
+    background:#a8c7ff;
+  }
+
+  legend {
+    padding:0 8px;
+    color:#111;
+    font-weight:700;
+  }
+
+  label {
+    display:block;
+    font-size:14px;
+    margin:8px 0 4px;
+  }
+
+  input, select, textarea {
+    width:100%;
+    padding:10px;
+    border:1px solid #c9c9c9;
+    border-radius:8px;
+    font-size:14px;
+  }
+
+  .row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .row3 {
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+  }
+
+  /* ======== FEUILLE A4 IMPRIMABLE ======== */
+  #sheet {
+    width:var(--page-w);
+    height:var(--page-h);
+    margin:0 auto;
+    background:#fff;
+    color:#000;
+    font-family:var(--serif);
+    padding:10mm 10mm 20mm var(--m-left);
+    display:none;
+    grid-template-columns:58mm 1fr;
+    gap:8mm;
+    position:relative;
+  }
+
+  #sheet .col-g {
+    border-right:1px solid #cfcfcf;
+    padding-right:5mm;
+  }
+
+  #sheet .col-d {
+    padding-left:4mm;
+    text-align:justify;
+    line-height:1.42;
+  }
+
+  .logo {
+    width:60mm;
+    margin:0 0 8mm 0;
+  }
+
+  .title-left {
+    font-weight:bold;
+  }
+
+  .num-pv {
+    margin-top:8mm;
+    font-style:italic;
+  }
+
+  .signzone {
+    margin-top:16mm;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .signcell {
+    min-height:28mm;
+    border-top:1px solid #aaa;
+    padding-top:4mm;
+  }
+
+  /* ======== RESPONSIVE DESIGN ======== */
+
+  @media (max-width: 900px) {
+    .wrap {
+      padding:12px;
+      margin:10px;
+    }
+    .grid, .row, .row3 {
+      grid-template-columns:1fr; /* Les champs s’empilent */
+    }
+    fieldset {
+      padding:10px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    body {
+      font-size:15px;
+    }
+    .toolbar {
+      flex-direction:column;
+      gap:10px;
+    }
+    .toolbar button {
+      width:100%;
+      font-size:16px;
+    }
+    input, select, textarea {
+      font-size:16px; /* Évite le zoom sur iPhone */
+    }
+    .wrap {
+      padding:10px;
+    }
+  }
+
+  /* Impression : ne garder que #sheet */
+  @media print {
+    body>*:not(#sheet){display:none !important}
+    #sheet{display:grid !important;position:static;margin:0}
+  }
+  
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #003366;
+  color: #fff;
+  border: none;
   border-radius: 8px;
-  color: #333;
-  background: #ffffff;
-  border: 1px solid #ccc;
+  padding: 10px 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
-}
-.tabbtn.active {
-  background: #003366;
-  color: #fff;
-  border-color: #003366;
-}
-#tab-content {
-  padding: 12px;
+  transition: all 0.2s ease-in-out;
 }
 
-/* ====== CARTES / FORMULAIRES ====== */
-.card {
-  background: #e6f0ff;     /* bleu agréable */
-  color: #000;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-}
-.row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.grid2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-@media (max-width: 680px) {
-  .grid2 {
-    grid-template-columns: 1fr;
-  }
+.add-btn:hover {
+  background: #0055aa;
+  transform: scale(1.05);
 }
 
-label {
-  display: block;
-  font-size: 13px;
-  color: #333;
-  margin-bottom: 4px;
+.add-btn:active {
+  transform: scale(0.97);
+  background: #002244;
 }
 
-input,
-select,
-textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #bbb;
-  background: #fff;
-  color: #000;
-  font-size: 15px;
-  transition: border-color 0.2s;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #3b82f6;
-  outline: none;
-}
-
-textarea {
-  min-height: 90px;
-}
-
-/* ====== BOUTONS ====== */
-.btn {
-  background: #003366;
-  border: 0;
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn:hover {
-  background: #0050aa;
-}
-.btn.secondary {
-  background: #64748b;
-}
-.btn.warn {
-  background: #d62828;
-}
-.btn.ghost {
-  background: #90EE90;
-  border: 1px dashed #aaa;
-  color: #003366;
-}
-.btnbar {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-.kicker {
-  font-size: 12px;
-  color: #555;
-  margin-bottom: 8px;
-}
-
-/* ====== BLOCS DYNAMIQUES ====== */
-.dyn-block {
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  margin-top: 8px;
-  background: #e6f0ff;
-}
-.minirow {
-  display: flex;
-  gap: 8px;
-}
-.w-1-3 {
-  flex: 1 1 100px;
-  max-width: 140px;
-}
-.chip {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #eee;
-  font-size: 12px;
-  color: #333;
-}
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* ====== PAGE A4 (APERÇU & PDF) ====== */
-.sheet {
-  background: #fff;
-  color: #000;
-  font-family: var(--font);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-  box-sizing: border-box;
-  padding: 20px;
-  margin: 20px auto;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 95vw;
+.add-btn i {
   font-size: 18px;
-  line-height: 1.7;
 }
-
-@media (min-width: 900px) {
-  .sheet {
-    width: var(--page-w);
-    min-height: var(--page-h);
-    margin: 18px auto;
-    padding: var(--m-others);
-    font-size: 17px;
-    line-height: 1.6;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  }
+#listePV {
+  background:#eef3ff;
+  border-radius:12px;
+  margin:20px auto;
+  max-width:800px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
-
-@media print {
-  .sheet {
-    width: var(--page-w);
-    min-height: var(--page-h);
-    margin: 0;
-    padding: var(--m-others) var(--m-others) var(--m-others) var(--m-left);
-    font-size: 14px;
-    line-height: 1.55;
-    box-shadow: none;
-    border-radius: 0;
-  }
-}
-
-/* ====== EN-TÊTE PV ====== */
-h1 {
-  text-align: center;
-  text-transform: uppercase;
-  text-decoration: underline;
-  font-weight: bold;
-  font-size: 20px;
-  letter-spacing: 0.5px;
-  margin: 8px 0 14px 0;
-  color: #000;
-}
-.pv {
-  font-size: 18px;
-  line-height: 1.7;
-  text-align: justify;
-  color: #000;
-}
-.pv p {
-  margin: 0 0 10px 0;
-}
-.muted {
-  color: #555;
-  font-style: italic;
-}
-
-/* ====== LOGO RÉPUBLIQUE FRANÇAISE ====== */
-.pv-header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-bottom: 10px;
-}
-.logo-rf {
-  display: block;
-  width: 35mm;
-  height: auto;
-  margin: 0;
-}
-@media screen {
-  .logo-rf { width: 120px; }
-}
-@media print {
-  .logo-rf {
-    width: 35mm !important;
-    image-rendering: crisp-edges;
-  }
-}
-
-/* ====== SIGNATURES ALIGNÉES ====== */
-.signature-row {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: flex-end;
-  margin-top: 60px;
-  text-align: center;
-  width: 100%;
-  gap: 40px;
-  page-break-inside: avoid;
-}
-.sig-col {
-  flex: 1;
-  min-width: 180px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-.sig-title {
-  font-weight: bold;
-  text-decoration: underline;
-  font-size: 15px;
-  margin-top: 40px;
-  margin-bottom: 0;
-}
-@media (max-width: 600px) {
-  .signature-row {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 20px;
-  }
-  .sig-col { min-width: 100px; }
-}
-
-/* ====== LISTE DES PV ENREGISTRÉS ====== */
-.saved-tab .item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 10px 12px;
-  color: #000;
-}
-.saved-tab .meta {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.saved-tab .title {
-  color: #000;
-  font-weight: 700;
-}
-.saved-tab .sub {
-  color: #555;
-  font-size: 12px;
-}
-
-/* ====== RESPONSIVE ====== */
-@media (max-width: 768px) {
-  body { font-size: 17px; }
-  .card { padding: 18px; border-radius: 12px; margin-bottom: 18px; }
-  label { font-size: 15px; }
-  input, select, textarea { font-size: 17px; padding: 12px; }
-  .btn { width: 100%; font-size: 17px; padding: 13px; }
-  .btnbar { flex-direction: column; }
-}
-
-/* ====== APERÇU ÉCRAN ====== */
-@media screen {
-  .sheet {
-    max-width: 900px;
-    margin: 10px auto;
-    padding: 20px;
-    border-radius: 10px;
-    background: #ffffff;
-    color: #000;
-    font-family: "Georgia", serif;
-    line-height: 1.6;
-    font-size: 17px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  }
-  .sheet h1 {
-    font-size: 22px;
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .pv p { margin: 0 0 12px; line-height: 1.7; }
-  @media (max-width: 600px) {
-    .sheet {
-      margin: 0; padding: 16px; border-radius: 0;
-      width: 100%; box-shadow: none; font-size: 18px;
-    }
-  }
-}
-
-/* === MISE EN PAGE PV 2 COLONNES === */
-.pv-main { display:flex; flex-direction:row; align-items:stretch; gap:20px; }
-.pv-col-gauche { flex:0 0 30mm; border-right:1px solid #000; padding-right:6px; position:relative; display:flex; flex-direction:column; justify-content:space-between; text-align:center; }
-.pv-logo { position:absolute; top:0; left:0; width: 26mm; }
-.pv-logo img { width:100%; height:auto; }
-.pv-info-center { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:10mm 0; }
-.pv-title {
-  text-align: center;
-  font-size: 11pt;
-  font-weight: bold;
-  margin-top: 4px;
-}
-.pv-info-center h2 { font-size:12pt; font-weight:bold; margin-bottom:10px; }
-.pv-num { font-weight:bold; font-size:12pt; margin-bottom:8px; }
-.esi-list { font-size:11pt; line-height:1.4; white-space:pre-line; }
-.pv-col-droite { flex:1; padding-left:15px; display:flex; flex-direction:column; justify-content:space-between; text-align:justify; }
-.pv-col-droite h1 { text-align:center; font-size:18pt; text-decoration:underline; margin:0 0 20mm 0; }
-.pv-text p { margin:0 0 10px; line-height:1.6; }
-.signature-row { display:flex; justify-content:space-between; text-align:center; margin-top:60px; }
-.signature-row .sig-col { flex:1; }
-.signature-row .sig-col .sig-title { text-decoration:underline; margin-bottom:80px; }
-/* Impression pleine page */
-@page { size:A4; margin:0; }
-@media print {
-  #tabbar, #tab-content, .toolbar, .saved-tab, .mobile-only { display:none !important; }
-  body, .sheet { margin:0; padding:0; background:#fff; box-shadow:none; }
-}
-/* =========================
-   ✅ CORRECTION PDF + COLONNE GAUCHE
-   ========================= */
-@media print {
-
-  /* -- Correction Chrome PDF (espaces collés) -- */
-  .pv-text p {
-    text-align: left !important;
-    word-spacing: normal !important;
-    letter-spacing: normal !important;
-  }
-  body {
-    font-family: Georgia, serif !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* -- Colonne gauche centrée verticalement uniquement sur la 1ère page -- */
-  .pv-col-gauche {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 297mm; /* pleine hauteur A4 */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-right: 1px solid #000;
-    page-break-after: always;
-    width: 30mm;
-    padding-right: 6px;
-  }
-
-  /* décale le contenu droit */
-  .pv-col-droite { margin-left: 40mm; }
-
-  /* empêche la répétition sur pages suivantes */
-  .pv-col-gauche::after {
-    content: "";
-    display: block;
-    height: 1px;
-    page-break-after: always;
-  }
-}
-<!--@media print, screen {
-  /* Empêche html2canvas de coller les mots dans les PDF */
-  .pv-text p {
-    text-align: left !important;
-    word-spacing: normal !important;
-    letter-spacing: normal !important;
-    line-height: 1.6 !important;
-  }
-}-->
-
-/* ✅ Force l’affichage du logo Gendarmerie */
-.pv-logo img {
-  display: block !important;
-  width: 100% !important;
-  height: auto !important;
-  visibility: visible !important;
-  content: url("logo-rf.png") !important;
-}
-
-/* ✅ Assure le rendu même en impression et PDF */
-<!--@media print {
-  .pv-logo img {
-    image-rendering: crisp-edges !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-}-->
 
 </style>
-
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.3.1/html-docx.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/evidenceprime/html-docx-js@0.3.1/dist/html-docx.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button onclick="generatePV()">🧾 Générer le PV</button>
+     <button class="secondary" onclick="openPrintPreview()">🖨️ Imprimer / PDF</button>
+	<button onclick="sauvegarderPV()">💾 Sauvegarder le PV</button>
+  <button onclick="ouvrirMesPV()">📁 Mes PV sauvegardés</button>
+	</div>
 
-<!-- BARRE D’ONGLETS -->
-<div id="tabbar">
-  <button class="tabbtn active" id="tabNewBtn">📝 Nouveau PV</button>
-  <button class="tabbtn" id="tabPreviewBtn">👁️ Aperçu / Impression</button>
-  <button class="tabbtn" id="tabSavedBtn">📂 Mes PV enregistrés</button>
-</div>
+    <div class="grid">
+      <fieldset>
+        <legend>ESR (rédacteur)</legend>
+        <label>Grade</label>
+        <input id="esr_grade" placeholder="ex: Gendarme" />
+        <label>Nom</label>
+        <input id="esr_nom"
+       placeholder="NOM"
+       style="text-transform:uppercase"
+       oninput="this.value=this.value.toUpperCase()"
+       autocorrect="off"
+       autocapitalize="characters"
+       spellcheck="false">
+        <label>Prénom</label>
+        <input id="esr_prenom" placeholder="Prénom" />
+        <label>Sexe ESR (accord de « assisté(e) »)</label>
+        <select id="esr_sexe"><option value="m">Masculin</option><option value="f">Féminin</option></select>
+     <label>Qualité</label>
+<select id="esr_qualite">
+  <option value="">— Sélectionner —</option>
+  <option value="APJA">APJA</option>
+  <option value="APJ">APJ</option>
+  <option value="OPJ">OPJ</option>
+  <option value="AFP">AFP</option>
+</select>
 
-<div id="tab-content">
-  <!-- ONGLET 1 : FORM -->
-  <div id="tab-new">
-    <div class="card">
-      <div class="kicker">Service</div>
-      <div class="grid2">
-        <div><label>Poste</label><input id="poste" type="text" placeholder="ex : La Turbie"></div>
-        <div><label>Date de l’interpellation</label><input id="datepv" type="date"></div>
-        <div><label>Heure du contrôle</label><input id="heurepv" type="time"></div>
-        <div><label>Heure début de service</label><input id="hdeb" type="time"></div>
-        <div><label>Heure fin de service</label><input id="hfin" type="time"></div>
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="kicker">Rédacteur</div>
-      <div class="grid2">
-        <div><label>Grade</label><input id="agentGrade" type="text" placeholder="ex: Maréchal des logis"></div>
-        <div><label>Nom & prénom</label><input id="agentNom" type="text" placeholder="Nom Prénom"></div>
-        <div><label>Qualité</label>
-          <select id="agentQualite">
-            <option value="">-- Choisir --</option>
-            <option>APJ</option><option>APJA</option><option>OPJ</option><option>AFP</option>
-          </select>
+
+        <label>Affectation</label>
+        <input id="esr_affect" placeholder="ex: CRT 06/1 Nice" />
+        <div class="row">
+          <div>
+            <label>Numéro de PV</label>
+            <input id="pv_num" placeholder="(ex: 2025 / )" />
+          </div>
+          <div>
+            <label>Affaire</label>
+            <input id="pv_affaire" placeholder="Nom affaire (si besoin)" />
+          </div>
         </div>
-      </div>
-    </div>
+      </fieldset>
 
-    <div class="card">
-      <div class="row" style="justify-content:space-between; align-items:center;">
-        <div class="kicker">Assistants</div>
-        <button class="btn ghost" type="button" onclick="addAssistant()">➕ Ajouter un assistant</button>
-      </div>
-      <div id="assistants" class="list"></div>
-    </div>
+      <fieldset>
+        <legend>Assistants (multi)</legend>
+        <div id="assist_list"></div>
+        <button type="button" class="add-btn" onclick="addAssistant()">
+  <i class="fa-solid fa-user-plus"></i> Ajouter un assistant
+</button>
 
-    <div class="card">
-      <div class="row" style="justify-content:space-between; align-items:center;">
-        <div class="kicker">Personnes interpellées (ESI)</div>
-        <button class="btn ghost" type="button" onclick="addESI()">➕ Ajouter un ESI</button>
-      </div>
-      <div id="esis" class="list"></div>
-    </div>
+      </fieldset>
 
-    <div class="card">
-      <label>Observations / comportement / objets saisis (facultatif)</label>
-      <textarea id="observations" placeholder="Renseigner seulement si utile"></textarea>
-    </div>
-
-    <div class="card">
-      <div class="btnbar">
-        <button class="btn" type="button" onclick="goPreview()">➡️ Aperçu du PV</button>
-        <button class="btn secondary" type="button" onclick="saveCurrentPV()">💾 Sauvegarder ce PV</button>
-        <button class="btn warn" type="button" onclick="clearAll()">🗑️ Effacer les données</button>
-      </div>
-      <div class="kicker" style="margin-top:8px;">💡 Astuce : la saisie est <span class="chip">auto-sauvegardée</span> à chaque modification.</div>
-    </div>
-  </div>
-
- <!-- ONGLET 2 : APERÇU / IMPRESSION -->
-<div id="tab-preview" style="display:none;">
-  <div class="sheet" id="sheet">
-<div class="pv-main">
-
-    <!-- Colonne gauche -->
-    <div class="pv-col-gauche">
-  <div class="pv-logo">
-    <img src="logo-rf.png" alt="Logo Gendarmerie">
-    <div class="pv-title">GENDARMERIE NATIONALE</div>
-  </div>
-
-  <div class="pv-info-center">
-    <div class="pv-num">N° PV : ____________</div>
-    <div id="esiInfos" class="esi-list">(Nom(s) ESI + date(s) de naissance)</div>
-  </div>
-</div>
-
-    <!-- Colonne droite -->
-    <div class="pv-col-droite">
-      <div>
-        <h1>PROCÈS-VERBAL D’INTERPELLATION</h1>
-        <div id="pv" class="pv-text">
-          <p class="muted">Clique sur “Aperçu du PV” pour générer le contenu.</p>
+      <fieldset>
+        <legend>Mission</legend>
+        <label>Lieu de mission (texte exact)</label>
+        <input id="mission_lieu" placeholder="ex: la Turbie" />
+        <div class="row">
+          <div>
+            <label>Heure début</label>
+            <input id="mission_hdeb" type="time" />
+          </div>
+          <div>
+            <label>Heure fin</label>
+            <input id="mission_hfin" type="time" />
+          </div>
         </div>
+        <div class="row">
+          <div>
+            <label>Date (lettres)</label>
+            <input id="date_lettres" placeholder="17 Juillet" />
+          </div>
+          <div>
+            <label>Heure avant constatation</label>
+            <input id="heure_lettres" type="time" placeholder="16 heures et 25 minutes" />
       </div>
-      <div class="signature-row" id="signatures" style="visibility:hidden;">
-        <div class="sig-col"><div class="sig-title">L’Officier de Police Judiciaire</div></div>
-        <div class="sig-col"><div class="sig-title">Le Rédacteur</div></div>
-        <div class="sig-col"><div class="sig-title" id="sigAssistTitle">L’Assistant</div></div>
-      </div>
+        </div>
+ 
+      </fieldset>
+
+      <fieldset>
+        <legend>ESI contrôlé</legend>
+        <div class="row">
+          <div>
+            <label>Heure de constatation (lettres)</label>
+            <input id="esi_hconstat" type="time" placeholder="16 heures et 30 minutes" />
+          </div>
+          <div>
+            <label>Véhicule</label>
+            <select id="veh_type">
+              <option>bus</option>
+              <option>train</option>
+              <option>VL</option>
+              <option>PL</option>
+            </select>
+          </div>
+        </div>
+		<label>Marque du véhicule/Compagnie du train</label>
+<input id="veh_marque"placeholder="ex:Mercedes,Renault/Train ex: Tranitalia" />
+
+        <label>Immatriculation / n° de train</label>
+        <input id="veh_immat" 
+       placeholder="AA-123-BB / TGV 6123" 
+       style="text-transform:uppercase" 
+       oninput="this.value=this.value.toUpperCase()" 
+       autocorrect="off" 
+       autocapitalize="characters" 
+       spellcheck="false">
+		<label>Pays d’immatriculation</label>
+<input id="veh_pays" placeholder="ex: Italie" />
+<label>Conducteur / Conductrice</label>
+<select id="conducteur_genre">
+  <option value="m">Conducteur</option>
+  <option value="f">Conductrice</option>
+</select>
+
+        <label>Lieu du contrôle</label>
+        <input id="lieu_controle" placeholder="SUR l'aire de repos /le bas côté/le quai de gare" 
+autocapitalize="off"
+       autocorrect="off"
+       spellcheck="false">
+        <label>Pièce d’identité présentée</label>
+        <input id="piece_id" placeholder="ex: passeport sans visa/ titre de séjour périmé"
+autocapitalize="off"
+       autocorrect="off"
+       spellcheck="false">
+        <div class="row3">
+          <div>
+<small>⚠️SI PAS DE PIECE D'IDENTITÉ NE RIEN ECRIRE⚠️
+            <label>Nom</label>
+            <input id="esi_nom"
+       placeholder="NOM ESI"
+       style="text-transform:uppercase"
+       oninput="this.value=this.value.toUpperCase()"
+       autocorrect="off"
+       autocapitalize="characters"
+       spellcheck="false">
+          </div>
+          <div>
+            <label>Prénom</label>
+            <input id="esi_prenom" placeholder="prénom esi" />
+          </div>
+          <div>
+            <label>Sexe</label>
+            <select id="esi_sexe"><option value="m">Masculin</option><option value="f">Féminin</option></select>
+          </div>
+        </div>
+        <div class="row3">
+          <div>
+            <label>Date de naissance</label>
+            <input id="esi_dnaiss" placeholder="01/01/1992" />
+          </div>
+          <div>
+            <label>Lieu de naissance</label>
+            <input id="esi_lnaiss" placeholder="ex:DAKAR (SENEGAL)"
+style="text-transform:uppercase" 
+       oninput="this.value=this.value.toUpperCase()" 
+       autocorrect="off" 
+       autocapitalize="characters" 
+       spellcheck="false">
+          </div>
+          <div>
+            <label>Nationalité</label>
+            <input id="esi_nat" placeholder="ex: sénégalaise" 
+autocapitalize="off"
+       autocorrect="off"
+       spellcheck="false">
+          </div>
+        </div>
+		<label>Langue parlée</label>
+<select id="esi_langue">
+  <option value="fr_ok">Parle français</option>
+  <option value="fr_approx">Français approximatif</option>
+  <option value="npf">Ne parle pas français</option>
+</select>
+
+        <div class="row3">
+          <div>
+            <label>FPR</label>
+            <select id="fpr"><option>Négatif</option><option>Positif</option></select>
+          </div>
+          <div>
+            <label>AGDREF</label>
+            <select id="agdref"><option>Négatif</option><option>Positif</option></select>
+          </div>
+          <div>
+            <label>Fichiers nationaux (ex:OQTF,RAS,AUTRE)</label>
+            <input id="fichiers_nat" placeholder="OQTF" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Palpation (genre de l’agent qui palpe)</label>
+            <select id="palp_genre"><option value="m">Masculin</option><option value="f">Féminin</option></select>
+          </div>
+          <div>
+            <label>Véhicule de transport</label>
+            <select id="transport_type"><option>GENDARMERIE</option><option>Translation Police</option></select>
+          </div>
+        </div>
+        <label>PAF de présentation (ville)</label>
+        <input id="paf_ville" placeholder="Menton / Nice / Aéroport" />
+		<label>Heure de présentation à la PAF</label>
+<input id="paf_heure" type="time" placeholder="ex: 17 heures et 10 minutes" />
+
+      </fieldset>
+    </div>
+  </div>
+<div id="listePV" style="display:none; padding:20px;">
+  <h2>📁 Mes PV sauvegardés</h2>
+  <div id="listePVcontenu"></div>
+  <button onclick="fermerMesPV()" style="margin-top:10px;">⬅️ Retour</button>
+</div>
+  <!-- ======== FEUILLE IMPRIMABLE (MISE EN PAGE FIXE) ======== -->
+  <div id="sheet">
+    <div class="col-g">
+      <div class="title-left">MINISTERE DE L'INTERIEUR</div>
+      <div style="margin-top:2mm"></div>
+      <hr style="border:none;border-top:1px solid #000;margin:3mm 0 2mm 0">
+      <div class="title-left" style="white-space:pre-line">DIRECTION GENERALE
+DE LA POLICE NATIONALE
+DIRECTION GÉNÉRALE DE LA GENDARMERIE     NATIONALE</div>
+      <div class="num-pv">NUMÉRO DE P.V. : <span id="pv_num_o"></span></div>
+
+      <div style="margin-top:8mm">AFFAIRE :</div>
+      <div style="min-height:10mm"><span id="pv_affaire_o"></span></div>
+      <div style="margin-top:8mm"><span id="esi_civil_left_o">Monsieur</span> <span id="aff_nomcomplet_o">THIAM Mamadou Moustapha</span></div>
+      <div style="margin-top:6mm">OBJET :</div>
+      <div>Rapport de saisine</div>
+      <div style="margin-top:6mm">SAISINE :</div>
+      <div>Interpellation d’étranger en situation irrégulière.</div>
+
+      <div style="margin-top:18mm">L’assistant           L’APJA</div>
     </div>
 
-  </div>
+    <div class="col-d">
+      <div style="text-align:center;font-weight:bold;font-size:1.6em;letter-spacing:1px;">
+  RÉPUBLIQUE FRANÇAISE
 </div>
-  
-<div class="card mobile-only" style="max-width:920px; margin:0 auto 24px auto;">
-  <div class="btnbar">
-    <button class="btn" type="button" onclick="generatePDF()">🖨️ Enregistrer PDF</button>
-    <button class="btn" type="button"
-  <button class="btn" onclick="sendMail()">✉️ Envoyer par mail</button>
-<button class="btn" type="button"
- onclick="saveCurrentPV()">💾 Sauvegarder ce PV</button>
-    <button class="btn" type="button" onclick="goBackToEdit()">⬅️ Revenir à la saisie</button>
-  </div>
+<div style="text-align:center;font-weight:bold;margin-top:3mm;font-size:1.3em;">
+  RAPPORT DE SAISINE
 </div>
+<div style="height:10mm;"></div>
 
-</div>
+      <p>L'an deux mil vingt-cinq,</p>
+      <p>Le <span id="date_lettres_o">17 Juillet</span>, à <span id="heure_lettres_o">16 heures et 25 minutes</span></p>
+      <p>NOUS :</p>
 
-  <!-- ONGLET 3 : PV enregistrés -->
-  <div id="tab-saved" class="saved-tab" style="display:none;">
-    <div class="card">
-      <div class="kicker">Mes PV enregistrés</div>
-      <div id="savedList" class="list"></div>
-      <div class="row" style="justify-content:flex-end; margin-top:8px;">
-        <button class="btn warn" type="button" onclick="wipeSaved()">Vider la liste</button>
+      <p>Soussigné, <span id="esr_grade_o">Grade</span> <span id="esr_nom_o">Nom</span> <span id="esr_prenom_o">Prénom</span>, <span id="esr_qualite_o">Agent de Police Judiciaire Adjoint / APJA</span>, affecté à la <span id="esr_affect_o">CRT 06/1 Nice</span>,</p>
+
+      <p>Assisté<span id="assist_e_o"> </span> du <span id="assist_list_o">Grade Nom Prénom, Agent de Police Judiciaire Adjoint (APJA), affecté à la CRT</span></p>
+
+      <p>En fonction du Groupement de Gendarmerie Départementale des Alpes Maritimes, et détachés pour emplois au profit de Lutte contre l’Immigration Irrégulière et Clandestine, dans le cadre du dispositif Border Force 06</p>
+
+      <p>— Nous trouvant en mission de lutte contre l’immigration irrégulière et clandestine dans le département des Alpes-Maritimes (06) au point de passage autorisé de <span id="mission_lieu_o">la Turbie</span> ce jour de <span id="mission_hdeb_o">15</span> à <span id="mission_hfin_o">23</span> . —</p>
+
+      <p>— Mis temporairement et nominativement à la disposition de Monsieur le Préfet des Alpes-Maritimes, aux fins d'assurer une mission de lutte contre l'immigration irrégulière dans le département des Alpes-Maritimes, —</p>
+
+      <p>— Agissant conformément aux instructions reçues de Madame la Commissaire Divisionnaire Emmanuelle JOUBERT, Cheffe du Service Départemental de la Police aux Frontières des Alpes-Maritimes, —</p>
+
+      <p>— Vu l'article 21-1 du code de procédure pénale, —</p>
+      <p>— Vu les articles 20, D13 D14 et D15 du code de procédure pénale,</p>
+      <p>— Placés sous l'égide de la coordination départementale de la police aux frontières pour assurer la mission de contrôle des points de passage frontaliers, —</p>
+      <p>— Vu le titre II du règlement (UE) 2016/399 du Parlement européen et du Conseil du 9 mars 2016 concernant un code de l’Union relatif au régime de franchissement des frontières par les personnes (code frontière Schengen) JO L 077 du 23 mars 2016, p.1. —</p>
+      <p>— Vu les articles 5 à 8, 14 et 32 de ce règlement. —</p>
+      <p>— Vu la note des autorités françaises notifiant au premier Vice-président de la commission européenne son intention, à compter du 1er mai 2025 et jusqu’au 31 octobre 2025, de prolonger le rétablissement des contrôles aux frontières intérieures de la France avec la Belgique, le Luxembourg, l’Allemagne, l’Italie, l’Espagne, et la confédération Suisse, sur le fondement des articles 25 et 27 du règlement 2016/399 susvisé. —</p>
+      <p>— Revêtus de nos uniformes réglementaires et insignes afférents à notre fonction et munis du gilet réfléchissant GENDARMERIE, —</p>
+      
+      <p>— — À <span id="esi_hconstat_o">16 heures et 30 minutes</span>, nous constatons la présence d’un <span id="veh_type_o">autobus</span> <span id="veh_marque_o">Mercedes</span> immatriculé <span id="veh_pays_o">en Italie</span> sous le numéro <span id="veh_immat_o">GT-503-RE</span> en circulation et arrivant dans notre direction  —
+	  <p>— Faisons signe réglementairement <span id="conducteur_article_o">au</span> <span id="conducteur_label_o">conducteur</span> de stationner son véhicule correctement et en sécurité <span id="lieu_controle_o">sur le parking de l’aire de repos du péage de La Turbie</span>, afin de procéder au contrôle de l’identité des passagers du véhicule. —</p>
+      <p>— <span id="conducteur_article2_o">Le</span> <span id="conducteur_label2_o">conducteur</span> obtempère à notre demande, déclinons notre qualité et le motif de notre contrôle. —</p>
+	  <p>— Procédons au contrôle d'identité des personnes à bord du véhicule.</p>
+
+      <p id="piece_phrase_o">
+— À son bord, <span id="passager_article_o">un</span> <span id="passager_label_o">passager</span>
+<span id="piece_phrase_part_o">est en mesure de nous présenter un passeport</span>.
+<span id="individu_phrase_o">Cet individu</span> n’étant pas en mesure de nous présenter de document d’identité ou de voyage en cours de validité,
+<span id="passager_pronom_o">ce dernier</span> n’est donc pas en règle pour voyager, circuler ou séjourner sur le territoire national français. —
+</p>
+
+      <p>— Il s’agit de : —</p>
+
+      <p id="esi_lang_phrase_o">
+— <span id="esi_civil_o">Monsieur</span> <span id="esi_nom_o">THIAM</span> <span id="esi_prenom_o">Mamadou Moustapha</span> né<span id="esi_nee_o"></span> le <span id="esi_dnaiss_o">01/01/1992</span> à <span id="esi_lnaiss_o">DAKAR (SENEGAL)</span>, de nationalité <span id="esi_nat_o">sénégalaise</span>, de sexe <span id="esi_sexe_o">masculin</span>. <span id="langue_phrase_o">L’individu s’exprime en français approximatif.</span> <span id="identite_phrase_o">Son identité est relevée sur les pièces précitées.</span> —
+</p>
+
+      <p>— Effectuons des recherches concernant cette personne auprès des fichiers de Police mis à notre disposition, à l’aide de notre tablette de service : —</p>
+
+      <p>— FPR : <span id="fpr_o">Négatif</span> —</p>
+      <p>— AGDREF : <span id="agdref_o">Négatif</span> —</p>
+      <p>—Aux fichiers Nationaux il appert qu’à ce jour et sous cette identité : <span id="fichiers_nat_o">il a fait l’objet d’une OQTF</span> —</p>
+      <p>— Rendons immédiatement compte des faits à l’Officier de Police Judiciaire Territorialement Compétent de permanence du poste de la Police Aux Frontières de <span id="paf_ville_o1">Saint Louis à Menton</span>, qui nous donne l’ordre de lui présenter <span id="esi_civil2_o">Monsieur</span> <span id="esi_nom2_o">THIAM</span> <span id="esi_prenom2_o">Mamadou Moustapha</span> dans les plus brefs délais. —</p>
+      <p>— Dès lors, nous nous trouvons en présence <span id="esi_etranger_phrase_o">d’un étranger</span> en situation irrégulière au voyage, à la circulation ou au séjour sur le territoire national français, —</p>
+      <p>— Agissant en vertu des articles L813-1 à L813-16 du Code de l’Entrée et du Séjour des Étrangers et du Droit d’Asile, —</p>
+      <p>— Informons la personne qu’elle se trouve en situation irrégulière sur le territoire national français. —</p>
+      <p>— Invitons <span id="esi_civil3_o">Monsieur</span> <span id="esi_nom3_o">THIAM</span> <span id="esi_prenom3_o">Mamadou Moustapha</span> à nous suivre. —</p>
+      <p>— <span id="palp_phrase_o">Palpé par mesure de sécurité, par un personnel masculin, il n’est trouvé porteur d’aucun objet dangereux pour autrui ou pour lui-même</span>. —</p>
+      <p>— <span id="transport_phrase_o">
+Transportons l’individu sans contrainte ni entraves au poste de la Police Aux Frontières de Saint Louis à Menton, à bord de notre véhicule de service sérigraphié « GENDARMERIE ».
+</span> —</p>
+      <p>— Présentons l’individu devant l’Officier de Police Judiciaire Territorialement Compétent de permanence du poste de la Police Aux Frontières de <span id="paf_ville_o3">Saint Louis à Menton</span> à <span id="paf_heure_o">17 heures et 10 minutes</span>. L’horaire de présentation étant différé eu égard au délai de route. —</p>
+
+		<div class="signzone">
+        <div class="signcell">L’assistant</div>
+        <div class="signcell">L’APJA</div>
       </div>
     </div>
   </div>
-</div>
 
 <script>
-/* =======================
-   Utils dates & formats
-======================= */
-const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-const JOURS = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
-
-function fmtDateFr(dateStr, timeStr){
-  if(!dateStr) return "";
-  const d = new Date(dateStr);
-  const j = JOURS[d.getDay()], day = d.getDate(), m = MOIS[d.getMonth()], y = d.getFullYear();
-  const yTxt = y===2025 ? "deux mille vingt-cinq" : y===2024 ? "deux mille vingt-quatre" : "deux mille " + (y-2000);
-  const heureTxt = timeStr ? ` à ${timeStr.replace(":", " h ")}` : "";
-  return `l’an ${yTxt}, le ${j} ${day} ${m}${heureTxt}`;
-}
-function nonEmpty(s){ return s && s.trim().length>0; }
-function toText(elId){ const el=document.getElementById(elId); return el? (el.value||"").trim() : ""; }
-
-function para(text){ // transforme \\n\\n en paragraphes, garde \\n en br
-  const t = text.trim().replace(/\\n{2,}/g,"</p><p>").replace(/\\n/g,"<br>");
-  return `<p>${t}</p>`;
-}
-
-/* =======================
-   Onglets
-======================= */
-const tabNewBtn = document.getElementById('tabNewBtn');
-const tabPreviewBtn = document.getElementById('tabPreviewBtn');
-const tabSavedBtn = document.getElementById('tabSavedBtn');
-const tabNew = document.getElementById('tab-new');
-const tabPreview = document.getElementById('tab-preview');
-const tabSaved = document.getElementById('tab-saved');
-
-function switchTab(which){
-  tabNewBtn.classList.remove('active');
-  tabPreviewBtn.classList.remove('active');
-  tabSavedBtn.classList.remove('active');
-  tabNew.style.display='none';
-  tabPreview.style.display='none';
-  tabSaved.style.display='none';
-  if(which==='new'){ tabNewBtn.classList.add('active'); tabNew.style.display='block'; }
-  if(which==='preview'){ tabPreviewBtn.classList.add('active'); tabPreview.style.display='block'; }
-  if(which==='saved'){ tabSavedBtn.classList.add('active'); tabSaved.style.display='block'; refreshSavedList(); }
-}
-tabNewBtn.onclick = ()=> switchTab('new');
-tabPreviewBtn.onclick = ()=> { generatePV(); switchTab('preview'); };
-tabSavedBtn.onclick = ()=> switchTab('saved');
-
-function goPreview(){ generatePV(); switchTab('preview'); }
-function goBackToEdit(){ switchTab('new'); }
-
-/* =======================
-   Blocs dynamiques
-======================= */
-let ACOUNT = 0;
-let ECOUNT = 0;
-
-function addAssistant(data={}){
-  ACOUNT++;
-  const wrap = document.getElementById('assistants');
-  const box = document.createElement('div');
-  box.className = 'dyn-block';
-  box.id = `assistant${ACOUNT}`;
-  box.innerHTML = `
-    <div class="grid2">
-      <div>
-        <label>Grade</label>
-        <input type="text" id="aGrade${ACOUNT}" placeholder="ex: Gendarme" value="${data.grade||""}">
-      </div>
-      <div>
-        <label>Nom & prénom</label>
-        <input type="text" id="aNom${ACOUNT}" placeholder="Nom Prénom" value="${data.nom||""}">
-      </div>
-      <div>
-        <label>Qualité</label>
-        <select id="aQual${ACOUNT}">
-          <option value="">-- Choisir --</option>
-          ${["APJ","APJA","OPJ","AFP"].map(q=>`<option ${data.qualite===q?"selected":""}>${q}</option>`).join("")}
-        </select>
-      </div>
-      <div style="display:flex; align-items:flex-end; gap:8px;">
-        <button type="button" class="btn warn" onclick="removeNode('assistant${ACOUNT}')">Supprimer</button>
-      </div>
-    </div>`;
-  wrap.appendChild(box);
-  hookAutosave(box);
-}
-
-function addESI(data={}){
-  ECOUNT++;
-  const wrap = document.getElementById('esis');
-  const id = ECOUNT;
-  const box = document.createElement('div');
-  box.className = 'dyn-block';
-  box.id = `esi${id}`;
-  box.innerHTML = `
-    <div class="grid2">
-      <div><label>Nom & prénom</label><input id="eNom${id}" type="text" value="${data.nom||""}"></div>
-      <div class="minirow">
-        <div class="w-1-3">
-          <label>Né le (jour)</label><input id="eJour${id}" type="number" min="1" max="31" value="${data.jour||""}">
-        </div>
-        <div class="w-1-3">
-          <label>Mois</label><input id="eMois${id}" type="text" placeholder="ex: mars" value="${data.mois||""}">
-        </div>
-        <div class="w-1-3">
-          <label>Année</label><input id="eAnnee${id}" type="number" min="1900" max="2100" value="${data.annee||""}">
-        </div>
-      </div>
-      <div><label>Lieu de naissance</label><input id="eLieu${id}" type="text" value="${data.lieu||""}"></div>
-      <div><label>Pays de naissance</label><input id="ePays${id}" type="text" value="${data.pays||""}"></div>
-      <div><label>Adresse (si adresse inconnue ne rien écrire)</label><input id="eAdresse${id}" type="text" value="${data.adresse||""}"></div>
-    </div>
-
-    <div class="grid2">
-      <div>
-        <label>Heure du contrôle</label><input id="eHctrl${id}" type="time" value="${data.hctrl||""}">
-      </div>
-      <div>
-        <label>Heure de remise à la PAF</label><input id="eHint${id}" type="time" value="${data.hint||""}">
-      </div>
-    </div>
-
-    <div style="margin-top:8px;">
-      <span class="kicker">Documents présentés</span>
+  let assistIndex = 0;
+  function addAssistant(){
+    assistIndex++;
+    const wrap = document.getElementById('assist_list');
+    const div = document.createElement('div');
+    div.style.marginBottom = '8px';
+    div.innerHTML = `
       <div class="row">
-        <label class="chip"><input type="checkbox" id="ePasseport${id}" ${data.passeport?"checked":""}> Passeport sans visa</label>
-        <label class="chip"><input type="checkbox" id="eTitre${id}" ${data.titre?"checked":""}> Titre de séjour périmé</label>
-        <label class="chip"><input type="checkbox" id="eAsile${id}" ${data.asile?"checked":""}> Demande d’asile périmée</label>
-        <label class="chip"><input type="checkbox" id="eAucun${id}" ${data.aucun?"checked":""}> Aucun document</label>
-        <label class="chip"><input type="checkbox" id="eAutre${id}" ${data.autreTxt?"checked":""} onchange="toggleOther(${id})"> Autre</label>
+        <div>
+          <label>Grade</label>
+          <input id="a_grade_${assistIndex}" placeholder="ex: Gendarme" />
+        </div>
+        <div>
+          <label>Nom</label>
+          <input id="a_nom_${assistIndex}" 
+       placeholder="NOM"
+       style="text-transform:uppercase"
+       oninput="this.value=this.value.toUpperCase()"
+       autocorrect="off"
+       autocapitalize="characters"
+       spellcheck="false">
+        </div>
       </div>
-      <input type="text" id="eAutreTxt${id}" placeholder="Préciser" style="margin-top:6px; ${data.autreTxt?'':'display:none;'}" value="${data.autreTxt||""}">
-    </div>
+      <label>Prénom</label>
+      <input id="a_prenom_${assistIndex}" placeholder="Prénom" />
+     <label>Qualité</label>
+<select id="a_qual_${assistIndex}">
+  <option value="">— Sélectionner —</option>
+  <option value="APJA">APJA</option>
+  <option value="APJ">APJ</option>
+  <option value="OPJ">OPJ</option>
+  <option value="AFP">AFP</option>
+</select>
 
-    <div style="margin-top:8px;">
-      <button type="button" class="btn warn" onclick="removeNode('esi${id}')">Supprimer cet ESI</button>
-    </div>
-  `;
-  wrap.appendChild(box);
-  hookAutosave(box);
-}
 
-function toggleOther(i){
-  const chk = document.getElementById(`eAutre${i}`);
-  const fld = document.getElementById(`eAutreTxt${i}`);
-  if(chk && fld){ fld.style.display = chk.checked ? "block" : "none"; autosave(); }
-}
+      <label>Affectation</label>
+      <input id="a_affect_${assistIndex}" placeholder="ex: CRT 06/2 Cannes" />
+      <hr style="margin:10px 0;border:none;border-top:1px dashed #ddd">`;
+    wrap.appendChild(div);
+  }
+  // Un assistant par défaut
+  addAssistant();
 
-function removeNode(id){ const el=document.getElementById(id); if(el){ el.remove(); autosave(); }}
+  function setTxt(id, v){ const el=document.getElementById(id); if(el) el.textContent = v || ''; }
 
-/* =======================
-   Génération du PV
-======================= */
-function generatePV(){
-  const poste = toText('poste');
-  const dateTxt = fmtDateFr(toText('datepv'), toText('heurepv'));
-  const hdeb = toText('hdeb'), hfin = toText('hfin');
-
-  const agentGrade = toText('agentGrade');
-  const agentNom = toText('agentNom');
-  const agentQual = toText('agentQualite');
-
-  // Assistants
-  const assistants = [];
-  for(const child of document.querySelectorAll('#assistants > .dyn-block')){
-    const id = child.id.replace('assistant','');
-    const g = toText(`aGrade${id}`);
-    const n = toText(`aNom${id}`);
-    const q = toText(`aQual${id}`);
-    if(nonEmpty(n)){
-      assistants.push(`${nonEmpty(g)?g+' ':''}${n}${nonEmpty(q)?' en qualité de '+q:''}`);
-    }
+  function accordAssistEsr(esrSexe, count){
+    // renvoie la chaîne à insérer après "Assisté"
+    if(count>1) return 's';
+    return esrSexe==='f' ? 'e' : '';
   }
 
-  // ESI
-  const esis = [];
-  const esiHeaderList = [];
-  for(const child of document.querySelectorAll('#esis > .dyn-block')){
-    const id = child.id.replace('esi','');
-    const nom = toText(`eNom${id}`);
-    if(!nonEmpty(nom)) continue;
-    const jour = toText(`eJour${id}`), mois = toText(`eMois${id}`), annee = toText(`eAnnee${id}`);
-    const lieu = toText(`eLieu${id}`), pays = toText(`ePays${id}`), adr = toText(`eAdresse${id}`);
-    const hctrl = toText(`eHctrl${id}`), hint = toText(`eHint${id}`);
+  function civilFromSexe(sexe){ return sexe==='f' ? 'Madame' : 'Monsieur'; }
+  function sexeLabel(sexe){ return sexe==='f' ? 'féminin' : 'masculin'; }
+  function neeFromSexe(sexe){ return sexe==='f' ? 'e' : ''; }
 
-    // documents
-    const docs = [];
-    const any = (sel)=> document.getElementById(sel)?.checked;
-    if(any(`eAucun${id}`)) docs.push("aucun document");
-    else{
-      if(any(`ePasseport${id}`)) docs.push("passeport sans visa");
-      if(any(`eTitre${id}`)) docs.push("titre de séjour périmé");
-      if(any(`eAsile${id}`)) docs.push("demande d’asile périmée");
-      if(any(`eAutre${id}`)){
-        const extra = toText(`eAutreTxt${id}`);
-        if(nonEmpty(extra)) docs.push("autre : " + extra);
-      }
-    }
-
-    // Header list (nom + DDN)
-    const ddn = [jour,mois,annee].filter(nonEmpty).join(" ");
-    esiHeaderList.push(ddn ? `${nom} (${ddn})` : nom);
-
-    // Texte reformulé
-    let flow = "";
-    if(hctrl){
-      flow += `À ${hctrl.replace(":", " h ")}, au contrôle d’un individu, ${nom}`;
-
-      const naissance = [];
-      if (jour || mois || annee) naissance.push(`né(e) le ${[jour,mois,annee].filter(nonEmpty).join(" ")}`);
-      if (lieu || pays) naissance.push(`à ${lieu}${pays ? ` (${pays})` : ''}`);
-      if (naissance.length) flow += `, ${naissance.join(", ")}`;
-
-      if (adr && adr.trim() !== "") flow += `, domicilié au ${adr}`;
-      else flow += `, domicilié à une adresse inconnue`;
-
-      const docLine = docs.length ? `, documents présentés : ${docs.join(", ")}` : `, documents présentés : aucun document`;
-      flow += `${docLine}. `;
-    }
-    if(hint){
-      flow += `Après vérification, la personne a été remise à l’OPJ territorialement compétent, conformément aux dispositions en vigueur, pour suites à donner à ${hint.replace(":", " h ")}.`;
-    }
-    esis.push(flow.trim());
+// === Conversion automatique des abréviations de qualité ===
+function qualiteLongue(code) {
+  switch ((code || '').toUpperCase()) {
+    case 'APJA': return 'Agent de Police Judiciaire Adjoint (APJA)';
+    case 'APJ':  return 'Agent de Police Judiciaire (APJ)';
+    case 'OPJ':  return 'Officier de Police Judiciaire (OPJ)';
+    case 'AFP':  return 'Agent de la Force Publique (AFP)';
+    default:     return code;
   }
+}
 
-  // Construction
-  let html = "";
+  function generatePV(){
   
-  const introParts = [];
-  if(dateTxt) introParts.push(`${dateTxt},`);
-  const redac = `Nous, le ${[agentGrade,agentNom].filter(nonEmpty).join(" ")}`;
-  introParts.push(redac + (agentQual?`, militaire de la gendarmerie nationale, en agissant en qualité d' ${agentQual} conformément aux articles 21 et 21-1 du Code de procédure pénale`:"") + (poste?`, en fonction au poste de  contrôle de ${poste}`:"") + ((hdeb||hfin)?` de ${hdeb||"__"} à ${hfin||"__"}`:""));
-  if(assistants.length) introParts.push(assistants.length>1 ? `assistés de ${assistants.join(", ")}` : `assisté du ${assistants[0]}`);
-  html += para(introParts.join(" ") + ".");
+  // Fonction utilitaire : convertir HH:MM en texte
+function heureEnLettres(hhmm) {
+  if (!hhmm) return "";
+  const [h, m] = hhmm.split(":").map(Number);
+  let txt = `${h} heure${h > 1 ? 's' : ''}`;
+  if (m > 0) txt += ` et ${m} minute${m > 1 ? 's' : ''}`;
+  return txt;
+}
 
-  html += para("Sous le contrôle de l’Officier de police judiciaire territorialement compétent de la SPAFT des Alpes-Maritimes.Vu les articles 20 et 21-1 du Code de Procédure Pénale.Vu l’article L.421-1 du Code de la sécurité intérieure, Vu les articles L.812-1 et L.812-2, L.813-1 à L.813-16 du Code de l’entrée et du séjour des étrangers et du droit d’asile, Vu l’article L.3211-3 du Code de la défense,");
+    // ESR
+    const esr_grade = document.getElementById('esr_grade').value.trim();
+    const esr_nom   = document.getElementById('esr_nom').value.trim();
+    const esr_prenom= document.getElementById('esr_prenom').value.trim();
+    const esr_sexe  = document.getElementById('esr_sexe').value;
+    const esr_qual  = document.getElementById('esr_qualite').value.trim();
+	const esr_qual_long = qualiteLongue(esr_qual);
+    const esr_aff   = document.getElementById('esr_affect').value.trim();
 
-html += para(`Rendons compte avoir, dans l’exercice de nos fonctions, procédé ce jour,`);
 
-
-  if(esis.length){
-    html += para(esis.join("\\n\\n"));
-  }
-
-  const obs = toText('observations');
-  if(nonEmpty(obs)){ html += para("Observations :\\n" + obs); }
-
-    /* if(poste || toText('datepv')){
-    let sigLine = "Fait";
-    if(poste) sigLine += ` à ${poste}`;
-    if(toText('datepv')){
-      const d = new Date(toText('datepv'));
-      sigLine += `, le ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    // Assistants
+    const assistants=[];
+    for(let i=1;i<=assistIndex;i++){
+      const g=document.getElementById('a_grade_'+i)?.value.trim();
+      const n=document.getElementById('a_nom_'+i)?.value.trim();
+      const p=document.getElementById('a_prenom_'+i)?.value.trim();
+      const q=document.getElementById('a_qual_'+i)?.value.trim();
+      const a=document.getElementById('a_affect_'+i)?.value.trim();
+      if(g&&n&&p) assistants.push({g,n,p,q,a});
     }
-    html += para(sigLine + ".");
-  } */
 
-  document.getElementById('pv').innerHTML = html;
-  document.getElementById('sigAssistTitle').textContent = assistants.length>1 ? "Les Assistants" : "L’Assistant";
-  document.getElementById('signatures').style.visibility = "visible";
+    // Mission
+    const pv_num = document.getElementById('pv_num').value.trim();
+    const pv_aff = document.getElementById('pv_affaire').value.trim();
+    const mission_lieu = document.getElementById('mission_lieu').value.trim();
+    const hdeb = document.getElementById('mission_hdeb').value.trim();
+    const hfin = document.getElementById('mission_hfin').value.trim();
+    const dateL = document.getElementById('date_lettres').value.trim();
+    const heureL= document.getElementById('heure_lettres').value.trim();
 
-  // Inject header ESI
-  const headerEl = document.getElementById('esiInfos');
-  if(headerEl){
-    headerEl.textContent = esiHeaderList.length ? esiHeaderList.join(" — ") : "(Nom(s) ESI + date(s) de naissance)";
+    // ESI
+    const esi_hc = document.getElementById('esi_hconstat').value.trim();
+    const veh_type = document.getElementById('veh_type').value;
+    const veh_immat= document.getElementById('veh_immat').value.trim();
+    const lieu_ctrl = document.getElementById('lieu_controle').value.trim();
+	const veh_marque = document.getElementById('veh_marque').value.trim();
+    const veh_pays = document.getElementById('veh_pays').value.trim();
+    const piece_id = document.getElementById('piece_id').value.trim();
+	const conducteur_genre = document.getElementById('conducteur_genre').value;
+    const esi_nom = document.getElementById('esi_nom').value.trim();
+    const esi_prenom = document.getElementById('esi_prenom').value.trim();
+    const esi_sexe = document.getElementById('esi_sexe').value;
+    const esi_dnaiss = document.getElementById('esi_dnaiss').value.trim();
+    const esi_lnaiss = document.getElementById('esi_lnaiss').value.trim();
+    const esi_nat = document.getElementById('esi_nat').value.trim();
+    const fpr = document.getElementById('fpr').value;
+    const agdref = document.getElementById('agdref').value;
+    const fichiersNat = document.getElementById('fichiers_nat').value.trim();
+    const palp_genre = document.getElementById('palp_genre').value;
+    const transport_type = document.getElementById('transport_type').value;
+    const paf_ville = document.getElementById('paf_ville').value.trim();
+	const paf_heure = document.getElementById('paf_heure').value.trim();
+
+	// Conversion en lettres
+const hdeb_txt = heureEnLettres(hdeb);
+const hfin_txt = heureEnLettres(hfin);
+const hc_txt = heureEnLettres(esi_hc);
+const paf_txt = heureEnLettres(paf_heure);
+const heureL_txt = heureEnLettres(heureL);
+
+    // Remplissage colonne gauche
+    setTxt('pv_num_o', pv_num);
+    setTxt('pv_affaire_o', pv_aff);
+
+    // Nom complet affaire / entête si tu veux l’afficher
+    setTxt('aff_nomcomplet_o', (esi_nom+" "+esi_prenom).trim());
+
+    // En-tête centre
+    setTxt('date_lettres_o', dateL);
+    setTxt('heure_lettres_o', heureL_txt);
+
+    // ESR
+    setTxt('esr_grade_o', esr_grade||'');
+    setTxt('esr_nom_o', esr_nom||'');
+    setTxt('esr_prenom_o', esr_prenom||'');
+    setTxt('esr_qualite_o', esr_qual_long || '');
+    setTxt('esr_affect_o', esr_aff||'');
+
+    // Assistants rendu
+    const assistSuffix = accordAssistEsr(esr_sexe, assistants.length);
+    setTxt('assist_e_o', assistSuffix); // affiche e / s / vide
+   const assistTxt = assistants.length
+  ? assistants.map(a=>{
+      const qlong = qualiteLongue(a.q || '');
+      return `${a.g} ${a.n} ${a.p}${qlong?`, ${qlong}`:''}${a.a?`, affecté à la ${a.a}`:''}`;
+    }).join('; ')
+  : 'Grade Nom Prénom, Agent de Police Judiciaire Adjoint (APJA), affecté à la CRT';
+
+    setTxt('assist_list_o', assistTxt);
+
+    // Mission
+    setTxt('mission_lieu_o', mission_lieu);
+    setTxt('mission_hdeb_o', hdeb_txt);
+	setTxt('mission_hfin_o', hfin_txt);
+
+    // Véhicule / constatation
+    setTxt('esi_hconstat_o', hc_txt);
+    setTxt('veh_type_o', veh_type==='train'?'train':(veh_type==='VL'?'véhicule léger':(veh_type==='PL'?'poids lourd':'autobus')));
+    setTxt('veh_pays_o', veh_pays ? 'en ' + veh_pays : '');
+    setTxt('veh_marque_o', veh_marque);
+    setTxt('veh_immat_o', veh_immat);
+    setTxt('lieu_controle_o', lieu_ctrl);
+    setTxt('piece_id_o', piece_id);
+// Accord conducteur / conductrice
+if (conducteur_genre === 'f') {
+  setTxt('conducteur_article_o', 'à la');
+  setTxt('conducteur_label_o', 'conductrice');
+} else {
+  setTxt('conducteur_article_o', 'au');
+  setTxt('conducteur_label_o', 'conducteur');
+}
+// Deuxième accord (Le conducteur / La conductrice)
+if (conducteur_genre === 'f') {
+  setTxt('conducteur_article2_o', 'La');
+  setTxt('conducteur_label2_o', 'conductrice');
+} else {
+  setTxt('conducteur_article2_o', 'Le');
+  setTxt('conducteur_label2_o', 'conducteur');
+}
+
+    // Identité ESI
+    const civil = civilFromSexe(esi_sexe);
+    const nee = neeFromSexe(esi_sexe);
+    setTxt('esi_civil_o', civil);
+	setTxt('esi_civil_left_o', civil);
+    setTxt('esi_nom_o', esi_nom);
+    setTxt('esi_prenom_o', esi_prenom);
+    setTxt('esi_nee_o', nee);
+    setTxt('esi_dnaiss_o', esi_dnaiss);
+    setTxt('esi_lnaiss_o', esi_lnaiss);
+    setTxt('esi_nat_o', esi_nat);
+    setTxt('esi_sexe_o', sexeLabel(esi_sexe));
+
+
+    // Fichiers
+    setTxt('fpr_o', fpr);
+    setTxt('agdref_o', agdref);
+    setTxt('fichiers_nat_o', fichiersNat);
+
+    // PAF / suites
+    setTxt('paf_ville_o1', paf_ville);
+    setTxt('paf_ville_o2', paf_ville);
+    setTxt('paf_ville_o3', paf_ville);
+
+    // Suites – civilités répétées
+    setTxt('esi_civil2_o', civil);
+    setTxt('esi_nom2_o', esi_nom);
+    setTxt('esi_prenom2_o', esi_prenom);
+
+    setTxt('esi_civil3_o', civil);
+    setTxt('esi_nom3_o', esi_nom);
+    setTxt('esi_prenom3_o', esi_prenom);
+
+    // Palpation & transport
+    setTxt('palp_genre_o', palp_genre==='f'?'féminin':'masculin');
+	// Accord complet de la phrase de palpation selon le sexe de l’ESI
+(() => {
+  const target = document.getElementById('palp_phrase_o');
+  if (!target) return;
+
+  const agentGenre = palp_genre === 'f' ? "féminin" : "masculin";
+
+  if (esi_sexe === 'f') {
+    target.textContent = `Palpée par mesure de sécurité, par un personnel ${agentGenre}, elle n’est trouvée porteuse d’aucun objet dangereux pour autrui ou pour elle-même`;
+  } else {
+    target.textContent = `Palpé par mesure de sécurité, par un personnel ${agentGenre}, il n’est trouvé porteur d’aucun objet dangereux pour autrui ou pour lui-même`;
   }
+})();
+
+    // Phrase de transport selon le type choisi
+let phraseTransport = '';
+if (transport_type === 'GENDARMERIE') {
+  phraseTransport = `Transportons l’individu sans contrainte ni entraves au poste de la Police Aux Frontières de ${paf_ville}, à bord de notre véhicule de service sérigraphié « GENDARMERIE ».`;
+} else {
+  phraseTransport = `Transportons l’individu sans contrainte ni entraves au poste de la Police Aux Frontières de ${paf_ville}, à bord de notre véhicule de service de translation mis à disposition par la Police Nationale.`;
+}
+setTxt('transport_phrase_o', phraseTransport);
+setTxt('paf_heure_o', paf_txt);
+// Accord passager / pronom selon le sexe de l'ESI
+if (esi_sexe === 'f') {
+  setTxt('passager_article_o', 'une');
+  setTxt('passager_label_o', 'passagère');
+  setTxt('individu_phrase_o', 'Cet individu'); // reste neutre administratif
+  setTxt('passager_pronom_o', 'cette dernière');
+} else {
+  setTxt('passager_article_o', 'un');
+  setTxt('passager_label_o', 'passager');
+  setTxt('individu_phrase_o', 'Cet individu');
+  setTxt('passager_pronom_o', 'ce dernier');
 }
 
-/* =======================
-   Autosave + Sauvegardes
-======================= */
-const AUTO_KEY = "pv_autosave_v2";
-const LIST_KEY = "pv_saved_list_v2";
-
-function serializeForm(){
-  const data = {
-    poste: toText('poste'), datepv: toText('datepv'), heurepv: toText('heurepv'),
-    hdeb: toText('hdeb'), hfin: toText('hfin'),
-    agentGrade: toText('agentGrade'), agentNom: toText('agentNom'), agentQualite: toText('agentQualite'),
-    observations: toText('observations'),
-    assistants: [], esis: []
-  };
-  document.querySelectorAll('#assistants > .dyn-block').forEach(block=>{
-    const id = block.id.replace('assistant','');
-    data.assistants.push({
-      grade: toText(`aGrade${id}`),
-      nom: toText(`aNom${id}`),
-      qualite: toText(`aQual${id}`)
-    });
-  });
-  document.querySelectorAll('#esis > .dyn-block').forEach(block=>{
-    const id = block.id.replace('esi','');
-    data.esis.push({
-      nom: toText(`eNom${id}`),
-      jour: toText(`eJour${id}`), mois: toText(`eMois${id}`), annee: toText(`eAnnee${id}`),
-      lieu: toText(`eLieu${id}`), pays: toText(`ePays${id}`), adresse: toText(`eAdresse${id}`),
-      hctrl: toText(`eHctrl${id}`), hint: toText(`eHint${id}`),
-      passeport: document.getElementById(`ePasseport${id}`)?.checked || false,
-      titre: document.getElementById(`eTitre${id}`)?.checked || false,
-      asile: document.getElementById(`eAsile${id}`)?.checked || false,
-      aucun: document.getElementById(`eAucun${id}`)?.checked || false,
-      autreTxt: document.getElementById(`eAutre${id}`)?.checked ? toText(`eAutreTxt${id}`) : ""
-    });
-  });
-  return data;
-}
-function loadForm(data){
-  document.getElementById('assistants').innerHTML = "";
-  document.getElementById('esis').innerHTML = "";
-  ACOUNT = 0; ECOUNT = 0;
-  ['poste','datepv','heurepv','hdeb','hfin','agentGrade','agentNom','agentQualite','observations'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.value=data[id]||"";
-  });
-  (data.assistants||[]).forEach(a=> addAssistant(a));
-  (data.esis||[]).forEach(e=> addESI(e));
-}
-function autosave(){
-  localStorage.setItem(AUTO_KEY, JSON.stringify(serializeForm()));
-}
-function restoreAutosave(){
-  const raw = localStorage.getItem(AUTO_KEY);
-  if(!raw) return addESI(); // au moins un ESI
-  try{ const data = JSON.parse(raw); loadForm(data); }catch(e){ addESI(); }
-}
-function hookAutosave(root=document){
-  root.querySelectorAll('input,select,textarea').forEach(el=>{
-    el.addEventListener('input', autosave, {passive:true});
-    el.addEventListener('change', autosave, {passive:true});
-  });
-}
-function clearAll(){
-  localStorage.removeItem(AUTO_KEY);
-  document.getElementById('assistants').innerHTML="";
-  document.getElementById('esis').innerHTML="";
-  ACOUNT=0; ECOUNT=0;
-  ['poste','datepv','heurepv','hdeb','hfin','agentGrade','agentNom','agentQualite','observations'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.value="";
-  });
-  addESI();
-}
-
-function saveCurrentPV(){
-  const data = serializeForm();
-  const list = JSON.parse(localStorage.getItem(LIST_KEY)||"[]");
-  const meta = {
-    id: Date.now(),
-    when: new Date().toISOString(),
-    poste: data.poste||"",
-    esicount: (data.esis||[]).filter(e=>e.nom && e.nom.trim()).length,
-    title: `PV du ${data.datepv||'—'} ${data.heurepv||''} — ${data.poste||'Sans poste'}`
-  };
-  list.unshift({ meta, data });
-  localStorage.setItem(LIST_KEY, JSON.stringify(list));
-  alert("PV enregistré dans la liste ✅");
-}
-/* =======================
-   Suppression complète des PV enregistrés
-======================= */
-function wipeSaved() {
-  if (confirm("Voulez-vous vraiment effacer toute la liste des PV enregistrés ?")) {
-    localStorage.removeItem(LIST_KEY);
-    refreshSavedList();
-    alert("✅ Liste des PV vidée avec succès !");
-  }
-}
-
-function refreshSavedList(){
-  const listEl = document.getElementById('savedList');
-  listEl.innerHTML = "";
-  const list = JSON.parse(localStorage.getItem(LIST_KEY)||"[]");
-  if(list.length===0){
-    listEl.innerHTML = '<div class="muted">Aucun PV enregistré pour le moment.</div>';
+// === Phrase dynamique selon la pièce d’identité ===
+(() => {
+  const pieceInput = document.getElementById('piece_id');
+  const target = document.getElementById('piece_phrase_part_o');
+  if (!pieceInput || !target) {
+    console.warn("⚠️ Élément manquant pour la phrase d'identité.");
     return;
   }
-  list.forEach((item, idx)=>{
-    const div = document.createElement('div');
-    div.className = 'item';
-    const d = new Date(item.meta.when);
-    const left = document.createElement('div');
-    left.className='meta';
-    left.innerHTML = `
-      <div class="title">${item.meta.title}</div>
-      <div class="sub">${d.toLocaleString()} • Poste : ${item.meta.poste||'—'} • ${item.meta.esicount} ESI</div>
-    `;
-    const right = document.createElement('div');
-    right.className='row';
-    const loadBtn = document.createElement('button');
-    loadBtn.className='btn secondary';
-    loadBtn.textContent='Ouvrir';
-    loadBtn.onclick = ()=>{
-      loadForm(item.data); autosave();
-      switchTab('new'); window.scrollTo({top:0, behavior:'smooth'});
-    };
-    const delBtn = document.createElement('button');
-    delBtn.className='btn warn';
-    delBtn.textContent='Supprimer';
-    delBtn.onclick = ()=>{
-      const list2 = JSON.parse(localStorage.getItem(LIST_KEY)||"[]");
-      list2.splice(idx,1);
-      localStorage.setItem(LIST_KEY, JSON.stringify(list2));
-      refreshSavedList();
-    };
-    right.appendChild(loadBtn); right.appendChild(delBtn);
-    div.appendChild(left); div.appendChild(right);
-    listEl.appendChild(div);
-  });
+
+  const piece_id = pieceInput.value.trim();
+  const phrase = piece_id
+    ? `est en mesure de nous présenter une pièce d'identité de type: ${piece_id}`
+    : `n’est pas en mesure de nous présenter un document pouvant justifier de son identité`;
+  
+  target.textContent = phrase;
+})();
+
+// === Langue parlée et relevé d'identité ===
+(() => {
+  const langueSelect = document.getElementById('esi_langue');
+  const pieceInput = document.getElementById('piece_id');
+  const langueSpan = document.getElementById('langue_phrase_o');
+  const identiteSpan = document.getElementById('identite_phrase_o');
+
+  if (!langueSelect || !langueSpan || !identiteSpan) {
+    console.warn("⚠️ Élément manquant pour la langue ou l'identité.");
+    return;
+  }
+
+  const langue = langueSelect.value;
+  const pieceTxt = pieceInput ? pieceInput.value.trim() : '';
+
+  // Phrase sur la langue
+  let languePhrase = '';
+  if (langue === 'fr_ok') {
+    languePhrase = "L’individu parle français.";
+  } else if (langue === 'fr_approx') {
+    languePhrase = "L’individu s’exprime en français approximatif.";
+  } else if (langue === 'npf') {
+    languePhrase = "L’individu ne parle pas français.";
+  }
+
+  // Phrase sur le relevé d'identité
+  let identitePhrase = '';
+  if (pieceTxt) {
+    identitePhrase = "Son identité est relevée sur les pièces précitées.";
+  } else {
+    identitePhrase = "Son identité est relevée sur sa déclaration verbale.";
+  }
+
+  // Injection dans le PV
+  langueSpan.textContent = languePhrase;
+  identiteSpan.textContent = identitePhrase;
+})();
+
+// Accord pour "étranger / étrangère"
+(() => {
+  const target = document.getElementById('esi_etranger_phrase_o');
+  if (!target) return;
+  target.textContent = esi_sexe === 'f' ? "d’une étrangère" : "d’un étranger";
+})();
+
+
+    // Affiche la feuille
+    document.getElementById('sheet').style.display='grid';
+    // Scroll vers la feuille pour aperçu
+    document.getElementById('sheet').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+ function openPrintPreview() {
+  generatePV();
+
+  setTimeout(() => {
+    const sheet = document.getElementById('sheet');
+    if (!sheet) {
+      alert("⚠️ Impossible de trouver le contenu du PV.");
+      return;
+    }
+
+    // 🪟 Ouvre une nouvelle fenêtre pour l'impression
+    const printWindow = window.open('', '_blank', 'width=900,height=1000');
+    printWindow.document.write(`
+      <html>
+      <head>
+        <title>Procès-verbal</title>
+        <style>
+          @page {
+            size: A4;
+            margin: 10mm 10mm 20mm 10mm;
+          }
+		  @page :first {
+  margin-top: 20mm;
+  margin-bottom: 20mm;
+}
+@page :not(:first) {
+  margin-top: 15mm;
+  margin-bottom: 15mm;
+}
+          body {
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: black;
+            font-family: "Times New Roman", serif;
+          }
+          #sheet {
+            width: 210mm;
+            height: 297mm;
+            display: grid;
+            grid-template-columns: 58mm 1fr;
+            gap: 8mm;
+            padding: 10mm 10mm 10mm 10mm;
+            margin: auto;
+            box-sizing: border-box;
+          }
+          #sheet .col-g {
+            border-right: 1px solid #aaa;
+            padding-right: 5mm;
+          }
+          #sheet .col-d {
+            padding-left: 4mm;
+            text-align: justify;
+            line-height: 1.42;
+          }
+          .logo {
+            width: 60mm;
+            margin: 0 0 8mm 0;
+          }
+          .title-left { font-weight: bold; }
+          .num-pv { margin-top: 8mm; font-style: italic; }
+          .signzone {
+            margin-top: 16mm;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          }
+          .signcell {
+            min-height: 28mm;
+            border-top: 1px solid #aaa;
+            padding-top: 4mm;
+          }
+          @media print {
+            body {
+              margin: 0;
+            }
+            #sheet {
+              display: grid !important;
+              position: static;
+              margin: 0 auto;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        ${sheet.outerHTML}
+      </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.onload = () => printWindow.print();
+  }, 600);
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  hookAutosave();
-  restoreAutosave();
-});
-</script>
+// === 💾 SAUVEGARDE AUTOMATIQUE AVEC DEBOUNCE (inclut les assistants dynamiques) ===
+let saveTimeout;
 
+// Fonction principale de sauvegarde
+function savePV() {
+  const data = {};
+
+  // Champs fixes
+  const champsFixes = [
+    'esr_grade','esr_nom','esr_prenom','esr_sexe','esr_qualite','esr_affect',
+    'pv_num','pv_affaire','mission_lieu','mission_hdeb','mission_hfin',
+    'date_lettres','heure_lettres','esi_hconstat','veh_type','veh_marque',
+    'veh_immat','veh_pays','conducteur_genre','lieu_controle','piece_id',
+    'esi_nom','esi_prenom','esi_sexe','esi_dnaiss','esi_lnaiss','esi_nat',
+    'esi_langue','fpr','agdref','fichiers_nat','palp_genre','transport_type',
+    'paf_ville','paf_heure'
+  ];
+
+  champsFixes.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) data[id] = el.value;
+  });
+
+  // Champs dynamiques (assistants)
+  const assistants = [];
+  document.querySelectorAll('#assist_list > div').forEach((div, index) => {
+    const a = {
+      grade: div.querySelector(`[id^="a_grade_"]`)?.value || '',
+      nom: div.querySelector(`[id^="a_nom_"]`)?.value || '',
+      prenom: div.querySelector(`[id^="a_prenom_"]`)?.value || '',
+      qualite: div.querySelector(`[id^="a_qual_"]`)?.value || '',
+      affect: div.querySelector(`[id^="a_affect_"]`)?.value || ''
+    };
+    assistants.push(a);
+  });
+  data.assistants = assistants;
+
+  // Sauvegarde dans le localStorage
+  localStorage.setItem('pv_interpellation_data', JSON.stringify(data));
+  console.log("✅ PV sauvegardé automatiquement");
+}
+
+// Fonction debounce (attend 3 secondes après la dernière saisie)
+function debounceSave() {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(savePV, 3000);
+}
+
+// Attache l’écouteur à tous les champs existants
+function attachListeners() {
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.removeEventListener('input', debounceSave);
+    el.addEventListener('input', debounceSave);
+  });
+}
+attachListeners();
+
+// === RECHARGEMENT AUTOMATIQUE DES DONNÉES ===
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('pv_interpellation_data');
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+
+    // Champs fixes
+    Object.keys(data).forEach(id => {
+      const el = document.getElementById(id);
+      if (el && typeof data[id] === 'string') el.value = data[id];
+    });
+
+    // Assistants dynamiques
+    if (Array.isArray(data.assistants) && data.assistants.length > 0) {
+      document.getElementById('assist_list').innerHTML = ''; // Nettoyage avant recharge
+      assistIndex = 0;
+      data.assistants.forEach(a => {
+        addAssistant();
+        const div = document.querySelector(`#assist_list > div:last-child`);
+        div.querySelector(`[id^="a_grade_"]`).value = a.grade;
+        div.querySelector(`[id^="a_nom_"]`).value = a.nom;
+        div.querySelector(`[id^="a_prenom_"]`).value = a.prenom;
+        div.querySelector(`[id^="a_qual_"]`).value = a.qualite;
+        div.querySelector(`[id^="a_affect_"]`).value = a.affect;
+      });
+    }
+
+    console.log("♻️ PV restauré avec les assistants sauvegardés");
+  } catch(e) {
+    console.error('Erreur chargement PV sauvegardé', e);
+  }
+});
+
+// === GESTION MULTI-PV ===
+let pvCourantId = null; // identifiant du PV en cours d'édition
+
+// 🔹 Sauvegarde manuelle
+function sauvegarderPV() {
+  const data = {};
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    data[el.id] = el.value;
+  });
+
+  const nomESI = document.getElementById('esi_nom').value.trim() || "Inconnu";
+  const dateMission = document.getElementById('date_lettres').value.trim() || "Date ?";
+  
+  // 🆔 Si on est en train de modifier un PV existant, on garde le même id
+  const id = pvCourantId || Date.now();
+
+  const list = JSON.parse(localStorage.getItem('pv_list') || "[]");
+  const index = list.findIndex(pv => pv.id === id);
+  const newPV = { id, nomESI, dateMission, data };
+
+  if (index >= 0) {
+    list[index] = newPV; // on remplace le PV existant
+    alert("🔄 PV mis à jour !");
+  } else {
+    list.push(newPV); // sinon on crée un nouveau
+    alert("✅ PV sauvegardé !");
+	 pvCourantId = id;
+  }
+
+  localStorage.setItem('pv_list', JSON.stringify(list));
+  
+  // On vide le flag pour éviter les doublons si on veut créer un nouveau PV ensuite
+  pvCourantId = null;
+}
+
+
+// 🔹 Affichage de la page "Mes PV"
+function ouvrirMesPV() {
+  const conteneur = document.getElementById('listePVcontenu');
+  const list = JSON.parse(localStorage.getItem('pv_list') || "[]");
+
+  if (!conteneur) return alert("⚠️ Conteneur introuvable !");
+
+  if (list.length === 0) {
+    conteneur.innerHTML = "<p style='color:#555;text-align:center;'>Aucun PV sauvegardé pour le moment.</p>";
+  } else {
+    conteneur.innerHTML = list.map(pv => `
+      <div style="
+        border:1px solid #ccc;
+        padding:12px;
+        margin-bottom:10px;
+        border-radius:10px;
+        background:#f8f9fb;
+        box-shadow:0 2px 4px rgba(0,0,0,0.1);
+      ">
+        <strong>${pv.nomESI}</strong> — 
+        <em>${pv.dateMission}</em><br>
+        <div style="margin-top:8px;">
+          <button onclick="chargerPV(${pv.id})" style="background:#0d6efd;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">✏️ Modifier</button>
+          <button onclick="supprimerPV(${pv.id})" style="background:#b33;color:white;border:none;padding:6px 10px;border-radius:6px;margin-left:6px;cursor:pointer;">🗑️ Effacer</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.querySelector('.wrap').style.display = "none";
+  document.getElementById('sheet').style.display = "none";
+  document.getElementById('listePV').style.display = "block";
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function fermerMesPV() {
+  document.getElementById('listePV').style.display = "none";
+  document.querySelector('.wrap').style.display = "block";
+}
+
+function chargerPV(id) {
+  const list = JSON.parse(localStorage.getItem('pv_list') || "[]");
+  const pv = list.find(p => p.id === id);
+  if (!pv) return alert("PV introuvable !");
+  
+  // Réinjecte toutes les données dans les champs
+  Object.keys(pv.data).forEach(k => {
+    const el = document.getElementById(k);
+    if (el) el.value = pv.data[k];
+  });
+
+  // Sauvegarde l'ID du PV actuellement ouvert
+  pvCourantId = id;
+
+  fermerMesPV();
+   pvCourantId = id;
+  alert("✅ PV chargé pour modification");
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+function supprimerPV(id) {
+  if (!confirm("Supprimer ce PV ?")) return;
+  let list = JSON.parse(localStorage.getItem('pv_list') || "[]");
+  list = list.filter(pv => pv.id !== id);
+  localStorage.setItem('pv_list', JSON.stringify(list));
+  ouvrirMesPV();
+}
+</script>
 <!-- Service Worker registration -->
 <script>
 if ('serviceWorker' in navigator) {
@@ -1062,114 +1197,5 @@ if ('serviceWorker' in navigator) {
 }
 
 </script>
-<script>
-function printPV() {
-  try {
-    // 1️⃣ Génère ou met à jour le PV
-    if (typeof generatePV === 'function') {
-      generatePV();
-    }
-
-    // 2️⃣ Récupère la feuille à imprimer
-    const sheet = document.getElementById('sheet');
-
-    // 3️⃣ Attendre un peu que le DOM se mette à jour (important)
-    setTimeout(() => {
-      if (sheet && sheet.innerHTML.trim() !== '') {
-        // 4️⃣ S'assurer que le contenu est bien visible à l'écran
-        sheet.scrollIntoView({ behavior: 'instant', block: 'start' });
-        // 5️⃣ Lancer l'impression
-        window.print();
-      } else {
-        alert("⚠️ Le procès-verbal n'est pas encore prêt ou vide. Générez-le d'abord !");
-      }
-    }, 600);
-
-  } catch (e) {
-    console.error("Erreur dans printPV:", e);
-    alert("Une erreur est survenue pendant la préparation du PDF.");
-  }
-}
-</script>
-
-<script>
-function generatePDF() {
-  // Met à jour le PV avant export
-  if (typeof generatePV === 'function') generatePV();
-
-  const element = document.getElementById('sheet');
-  if (!element) {
-    alert("❌ Impossible de trouver le contenu du PV (#sheet).");
-    return;
-  }
-
-  // Recherche automatique du premier champ ESI saisi
-const firstEsiInput = document.querySelector('input[id^="eNom"]');
-const nomEsi = (firstEsiInput && firstEsiInput.value.trim()
-  ? firstEsiInput.value.trim()
-  : 'ESI')
-  .replace(/[^\p{L}\p{N}\-_ ]/gu, '')
-  .replace(/\s+/g, '_');
-  const d = new Date();
-  const fileName = `PV_${nomEsi}_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.pdf`;
-
-  // Options précises pour html2pdf
-  const opt = {
-    margin: [10, 10, 10, 10],
-    filename: fileName,
-    image: { type: 'jpeg', quality: 1 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      scrollY: 0,
-      windowWidth: element.scrollWidth
-    },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-
-  // ✅ Désactive tout ce qui est en dehors du PV pendant la capture
-  const tabbar = document.getElementById('tabbar');
-  const tabcontent = document.getElementById('tab-content');
-  const oldDisplayBar = tabbar?.style.display;
-  const oldDisplayContent = tabcontent?.style.display;
-  if (tabbar) tabbar.style.display = 'none';
-  if (tabcontent) tabcontent.style.display = 'none';
-  element.style.display = 'block';
-element.scrollIntoView({ behavior: 'instant', block: 'start' });
-
-  // Lance la génération
-  html2pdf()
-    .set(opt)
-    .from(element)
-    .save()
-    .then(() => {
-      // Réaffiche l’interface après génération
-      if (tabbar) tabbar.style.display = oldDisplayBar || '';
-      if (tabcontent) tabcontent.style.display = oldDisplayContent || '';
-      alert(`✅ PV enregistré sous ${fileName}`);
-    })
-    .catch(err => {
-      console.error(err);
-      alert("❌ Erreur pendant la génération du PDF.");
-      if (tabbar) tabbar.style.display = oldDisplayBar || '';
-      if (tabcontent) tabcontent.style.display = oldDisplayContent || '';
-    });
-}
-
-// ====== Envoi par mail (ouvre le client de messagerie) ======
-function sendMail() {
-  try {
-    const d = new Date();
-    const subject = `Procès-verbal du ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-    const body = encodeURIComponent("Bonjour,\n\nVeuillez trouver ci-joint le procès-verbal généré via l'application.\n\nCordialement,\n");
-    // Ouvre le client de messagerie par défaut
-    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${body}`;
-  } catch (err) {
-    alert("❌ Impossible d'ouvrir la messagerie.");
-    console.error("Erreur sendMail:", err);
-  }
-}
-</script>
-
 </body>
 </html>
