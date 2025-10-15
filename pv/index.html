@@ -252,6 +252,17 @@
      <button class="secondary" onclick="openPrintPreview()">🖨️ Imprimer / PDF</button>
 	<button onclick="sauvegarderPV()">💾 Sauvegarder le PV</button>
   <button onclick="ouvrirMesPV()">📁 Mes PV sauvegardés</button>
+		<button onclick="saveAsPDF()" style="
+  background:#003366;
+  color:white;
+  border:none;
+  padding:10px 20px;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+">
+  💾 Enregistrer en PDF
+</button>
 	</div>
 
     <div class="grid">
@@ -560,17 +571,6 @@ Transportons l’individu sans contrainte ni entraves au poste de la Police Aux 
       </div>
     </div>
   </div>
-<button onclick="saveAsPDF()" style="
-  background:#003366;
-  color:white;
-  border:none;
-  padding:10px 20px;
-  border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
-">
-  💾 Enregistrer en PDF
-</button>
 
 <script>
   let assistIndex = 0;
