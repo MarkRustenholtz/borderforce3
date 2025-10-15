@@ -4,9 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>PV Interpellation — ESI</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="../manifest.json">
 <meta name="theme-color" content="#003366" />
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="../icons/icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="../icons/icon-512.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <style>
   :root {
@@ -1186,14 +1187,6 @@ function supprimerPV(id) {
   list = list.filter(pv => pv.id !== id);
   localStorage.setItem('pv_list', JSON.stringify(list));
   ouvrirMesPV();
-}
-</script>
-<!-- Service Worker registration -->
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-    .then(() => console.log("✅ Service Worker enregistré"))
-    .catch(err => console.error("Erreur SW :", err));
 }
 
 </script>
