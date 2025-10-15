@@ -1199,25 +1199,147 @@ function supprimerPV(id) {
   localStorage.setItem('pv_list', JSON.stringify(list));
   ouvrirMesPV();
 }
-</script>
-	<script>
+
 function saveAsPDF() {
   try {
-    // 1️⃣ S’assurer que le PV est bien généré (si tu as une fonction generatePV)
+    // 1️⃣ On régénère le PV si besoin
     if (typeof generatePV === 'function') {
       generatePV();
     }
 
-    // 2️⃣ Petit délai pour laisser le DOM se mettre à jour
-    setTimeout(() => {
-      window.print(); // 3️⃣ Ouvre la boîte “Enregistrer en PDF”
-    }, 500);
+    // 2️⃣ On récupère la partie à imprimer
+    const sheet = document.getElementById('sheet');
+    if (!sheet) {
+      alert("Impossible de trouver la zone du PV (#sheet).");
+      return;
+    }
+
+    // 3️⃣ On ouvre une nouvelle fenêtre temporaire
+    const win = window.open('', '_blank');
+    win.document.write(`
+      <html>
+      <head>
+        <title>Procès-Verbal</title>
+        <style>
+          @page { size: A4; margin: 15mm; }
+          body { font-family: "Times New Roman", serif; margin: 0; }
+        </style>
+      </head>
+      <body>${sheet.innerHTML}</body>
+      </html>
+    `);
+    win.document.close();
+
+    // 4️⃣ Quand tout est chargé, on lance l’impression
+    win.onload = () => {
+      win.print();
+      win.onafterprint = () => win.close(); // ferme la fenêtre après PDF
+    };
 
   } catch (e) {
-    alert("Erreur lors de la génération du PDF : " + e.message);
+    alert("Erreur pendant la génération du PDF : " + e.message);
+    console.error(e);
   }
 }
+	
+// ===============================
+// 🔹 Sauvegarde du PV
+// ===============================
+function savePV() {
+  try {
+    const data = {};
+
+    // Exemple : récupère le contenu du PV généré
+    const sheet = document.getElementById('sheet');
+    if (sheet) data.html = sheet.innerHTML;
+
+    // Tu peux aussi sauvegarder d’autres champs si tu veux :
+    // data.nom = document.getElementById('nom').value || "";
+
+    // Enregistre en localStorage
+    localStorage.setItem('pv_data', JSON.stringify(data));
+    alert("✅ PV sauvegardé avec succès !");
+  } catch (e) {
+    alert("❌ Erreur lors de la sauvegarde du PV : " + e.message);
+    console.error(e);
+  }
+}
+
+// ===============================
+// 🔹 Chargement du PV sauvegardé
+// ===============================
+function loadPV() {
+  try {
+    const data = localStorage.getItem('pv_data');
+    if (!data) {
+      alert("ℹ️ Aucun PV sauvegardé trouvé.");
+      return;
+    }
+    const parsed = JSON.parse(data);
+    if (parsed.html) {
+      document.getElementById('sheet').innerHTML = parsed.html;
+      alert("✅ PV restauré !");
+    }
+  } catch (e) {
+    alert("❌ Erreur lors du chargement : " + e.message);
+    console.error(e);
+  }
+}
+
+// ===============================
+// 🔹 Suppression du PV sauvegardé
+// ===============================
+function deletePV() {
+  if (confirm("🗑️ Supprimer le PV sauvegardé ?")) {
+    localStorage.removeItem('pv_data');
+    alert("✅ PV supprimé !");
+  }
+}
+
+// ===============================
+// 🔹 Enregistrement en PDF (propre)
+// ===============================
+function saveAsPDF() {
+  try {
+    if (typeof generatePV === 'function') {
+      generatePV();
+    }
+
+    const sheet = document.getElementById('sheet');
+    if (!sheet) {
+      alert("❌ Impossible de trouver la zone du PV (#sheet)");
+      return;
+    }
+
+    // Ouvre le contenu dans une nouvelle fenêtre propre
+    const win = window.open('', '_blank');
+    win.document.write(`
+      <html>
+      <head>
+        <title>Procès-Verbal</title>
+        <style>
+          @page { size: A4; margin: 15mm; }
+          body { font-family: "Times New Roman", serif; margin: 0; }
+        </style>
+      </head>
+      <body>${sheet.innerHTML}</body>
+      </html>
+    `);
+    win.document.close();
+    win.onload = () => {
+      win.print();
+      win.onafterprint = () => win.close();
+    };
+
+  } catch (e) {
+    alert("❌ Erreur lors de la création du PDF : " + e.message);
+    console.error(e);
+  }
+}
+
+
 </script>
+
 
 </body>
 </html>
