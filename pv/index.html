@@ -560,6 +560,17 @@ Transportons l’individu sans contrainte ni entraves au poste de la Police Aux 
       </div>
     </div>
   </div>
+<button onclick="saveAsPDF()" style="
+  background:#003366;
+  color:white;
+  border:none;
+  padding:10px 20px;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+">
+  💾 Enregistrer en PDF
+</button>
 
 <script>
   let assistIndex = 0;
@@ -1188,7 +1199,25 @@ function supprimerPV(id) {
   localStorage.setItem('pv_list', JSON.stringify(list));
   ouvrirMesPV();
 }
-
 </script>
+	<script>
+function saveAsPDF() {
+  try {
+    // 1️⃣ S’assurer que le PV est bien généré (si tu as une fonction generatePV)
+    if (typeof generatePV === 'function') {
+      generatePV();
+    }
+
+    // 2️⃣ Petit délai pour laisser le DOM se mettre à jour
+    setTimeout(() => {
+      window.print(); // 3️⃣ Ouvre la boîte “Enregistrer en PDF”
+    }, 500);
+
+  } catch (e) {
+    alert("Erreur lors de la génération du PDF : " + e.message);
+  }
+}
+</script>
+
 </body>
 </html>
