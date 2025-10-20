@@ -1098,6 +1098,24 @@ if (esi_sexe === 'f') {
     printWindow.onload = () => printWindow.print();
   }, 600);
 }
+function savePDF() {
+  const sheet = document.getElementById('sheet');
+  if (!sheet) {
+    alert("⚠️ Impossible de trouver le contenu du PV.");
+    return;
+  }
+
+  // Options PDF
+  const opt = {
+    margin: [10, 10],
+    filename: 'PV_Interpellation.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(sheet).save();
+}
 
 // === 💾 SAUVEGARDE AUTOMATIQUE AVEC DEBOUNCE (inclut les assistants dynamiques) ===
 let saveTimeout;
@@ -1599,6 +1617,7 @@ function generatePDF() {
 
 </body>
 </html>
+
 
 
 
