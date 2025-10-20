@@ -5,7 +5,8 @@ const urlsToCache = [
   './pv/index.html',
   './icon-192.png',
   './icon-512.png',
-  'https://unpkg.com/html5-qrcode'
+   './libs/html5-qrcode.min.js'
+  './libs/html2pdf.bundle.min.js'
 ];
 
 // Installation : on met en cache les fichiers de base
