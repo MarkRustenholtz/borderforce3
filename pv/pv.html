@@ -1592,31 +1592,53 @@ if (typeof generatePV === "function" && !window._signaturesBound) {
 }
 
 <!-- Librairie PDF -->
-<script src="../libs/html2pdf.bundle.min.js"></script>
+<script src="libs/html2pdf.bundle.min.js"></script>
 
 <script>
-function generatePDF() {
-  const element = document.getElementById("sheet"); // ta zone PV à imprimer
-  if (!element) {
-    alert("❌ Contenu du PV introuvable !");
-    return;
+async function generatePDF() {
+  try {
+    // 1) Génère/maj le contenu du PV
+    if (typeof generatePV === 'function') generatePV();
+
+    // 2) Laisse le DOM respirer un court instant
+    await new Promise(r => setTimeout(r, 350));
+
+    // 3) Récupère la feuille
+    const sheet = document.getElementById('sheet');
+    if (!sheet) {
+      alert("❌ Contenu du PV introuvable (#sheet).");
+      return;
+    }
+
+    // 4) S’assure qu’elle est visible (html2canvas n’aime pas display:none)
+    const wasHidden = getComputedStyle(sheet).display === 'none';
+    if (wasHidden) sheet.style.display = 'grid';
+
+    // 5) Options + rendu PDF
+    const opt = {
+      margin: [10, 10],
+      filename: 'PV_Interpellation.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    await html2pdf().set(opt).from(sheet).save();
+
+    // 6) On remet l’état initial si on l’avait forcé
+    if (wasHidden) sheet.style.display = 'none';
+
+  } catch (e) {
+    console.error("Erreur generatePDF:", e);
+    alert("⚠️ Échec de génération PDF. Regarde la console pour le détail.");
   }
-
-  const opt = {
-    margin: [10, 10],
-    filename: 'PV_Interpellation.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).save();
 }
 </script>
 
 
+
 </body>
 </html>
+
 
 
 
