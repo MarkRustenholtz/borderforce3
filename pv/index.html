@@ -1375,12 +1375,7 @@ function nouveauPV() {
 
  
 </script>
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-    .then(() => console.log('✅ Service Worker PV ESI enregistré !'))
-    .catch(err => console.error('❌ Erreur SW:', err));
-}
+
 </script>
 <script>
 // === Texte piéton neutre et complet (avec identification automatique) ===
@@ -1577,4 +1572,5 @@ if (typeof generatePV === "function" && !window._signaturesBound) {
 
 </body>
 </html>
+
 
