@@ -658,84 +658,110 @@ function autoResize(el) {
       debounceSave();
     }
 
-    // QR features (kept as in original)
-    state.scannedNigends = state.scannedNigends || [];
-    state.scansAgg = state.scansAgg || {train:{v:0,cv:0,cf:0}, bus:{v:0,cv:0,cf:0}, vl:{v:0,cv:0,cf:0}, pl:{v:0,cv:0,cf:0}};
-    state.resumeEsr = state.resumeEsr || '';
+    // === QR features ===
+state.scannedNigends = state.scannedNigends || [];
+state.scansAgg = state.scansAgg || {train:{v:0,cv:0,cf:0}, bus:{v:0,cv:0,cf:0}, vl:{v:0,cv:0,cf:0}, pl:{v:0,cv:0,cf:0}};
+state.resumeEsr = state.resumeEsr || '';
 
-    let html5QrCode = null;
-    let isScanning = false;
+let html5QrCode = null;
+let isScanning = false;
 
-    window.closeQrModal = function() {
-      if(html5QrCode && isScanning){
-        html5QrCode.stop().then(() => { isScanning = false; }).catch(() => {});
-      }
-      document.getElementById('qrModal').style.display = 'none';
-    };
+window.closeQrModal = async function() {
+  if (html5QrCode && isScanning) {
+    try {
+      await html5QrCode.stop();
+      html5QrCode.clear();
+    } catch(e) { console.warn(e); }
+    isScanning = false;
+  }
+  document.getElementById('qrModal').style.display = 'none';
+};
 
-    function openQrModal() {
-      document.getElementById('qrModal').style.display = 'flex';
-      if (!html5QrCode) html5QrCode = new Html5Qrcode("qr-reader");
-      html5QrCode.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        onScanSuccess,
-        (err) => { console.error("Erreur scan :", err); }
-      );
-      isScanning = true;
+async function openQrModal() {
+  const modal = document.getElementById('qrModal');
+  const reader = document.getElementById('qr-reader');
+
+  modal.style.display = 'flex';
+
+  // si déjà initialisé, on le nettoie avant
+  if (html5QrCode && isScanning) {
+    try { await html5QrCode.stop(); } catch(e) {}
+    html5QrCode.clear();
+    isScanning = false;
+  }
+
+  html5QrCode = new Html5Qrcode("qr-reader");
+
+  try {
+    await html5QrCode.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+      onScanSuccess
+    );
+    isScanning = true;
+  } catch (err) {
+    console.error("Erreur caméra :", err);
+    alert("⚠️ Impossible d’accéder à la caméra. Vérifie les permissions.");
+  }
+}
+
+async function onScanSuccess(decodedText) {
+  try {
+    const parsed = parseQrPayload(decodedText);
+    if (!parsed) return;
+
+    const { nigend, counts, pretty } = parsed;
+
+    if (state.scannedNigends.includes(nigend)) {
+      logScan('NIGEND ' + nigend + ' déjà scanné, ignoré.');
+      return;
     }
 
-    function onScanSuccess(decodedText) {
-      try {
-        const parsed = parseQrPayload(decodedText);
-        if (!parsed) return;
-        const { nigend, counts, pretty } = parsed;
-        if (state.scannedNigends.includes(nigend)) {
-          logScan('NIGEND ' + nigend + ' déjà scanné, ignoré.');
-          return;
-        }
-        state.scannedNigends.push(nigend);
-        ['train','bus','vl','pl'].forEach(k=>{
-          state.scansAgg[k].v  += counts[k].v;
-          state.scansAgg[k].cv += counts[k].cv;
-          state.scansAgg[k].cf += counts[k].cf;
-        });
-        const dejaEsr = (state.esrList || []).some(e => e.nigend === parsed.nigend);
-        if (!dejaEsr && parsed.grade && parsed.nom && parsed.nigend && parsed.crt) {
-          state.esrList.push({
-            grade: parsed.grade,
-            nom: parsed.nom,
-            nigend: parsed.nigend,
-            crt: parsed.crt
-          });
-          renderEsrList();
-          populateEsrSelects();
-          debounceSave();
-        }
-        state.resumeEsr += `NIGEND ${nigend}\n${pretty}\n\n`;
-        updateResumeEsrUI();
-        debounceSave();
-        logScan('QR ajouté : ' + nigend);
+    state.scannedNigends.push(nigend);
+    ['train','bus','vl','pl'].forEach(k => {
+      state.scansAgg[k].v  += counts[k].v;
+      state.scansAgg[k].cv += counts[k].cv;
+      state.scansAgg[k].cf += counts[k].cf;
+    });
 
-        // pause 2s then resume
-        if (html5QrCode && isScanning) {
-          isScanning = false;
-          html5QrCode.stop().then(() => {
-            setTimeout(() => {
-              if (document.getElementById('qrModal').style.display !== 'none') {
-                html5QrCode.start(
-                  { facingMode: "environment" },
-                  { fps: 10, qrbox: 250 },
-                  onScanSuccess
-                ).then(()=>{ isScanning=true; }).catch(()=>{});
-              }
-            }, 2000);
-          }).catch(()=>{});
-        }
-      } catch(e) {
-        console.error(e);
-      }
+    const dejaEsr = (state.esrList || []).some(e => e.nigend === parsed.nigend);
+    if (!dejaEsr && parsed.grade && parsed.nom && parsed.nigend && parsed.crt) {
+      state.esrList.push({
+        grade: parsed.grade,
+        nom: parsed.nom,
+        nigend: parsed.nigend,
+        crt: parsed.crt
+      });
+      renderEsrList();
+      populateEsrSelects();
+      debounceSave();
     }
+
+    state.resumeEsr += `NIGEND ${nigend}\n${pretty}\n\n`;
+    updateResumeEsrUI();
+    debounceSave();
+    logScan('QR ajouté : ' + nigend);
+
+    // Attente courte puis reprise du scan
+    if (html5QrCode && isScanning) {
+      await html5QrCode.stop();
+      isScanning = false;
+      setTimeout(() => {
+        if (document.getElementById('qrModal').style.display !== 'none') {
+          html5QrCode.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            onScanSuccess
+          ).then(()=>{ isScanning=true; }).catch(()=>{});
+        }
+      }, 1000);
+    }
+
+  } catch(e) {
+    console.error("Erreur décodage QR :", e);
+  }
+}
+
 
     function parseQrPayload(raw){
       const lines = String(raw).split(/\n+/).map(l=>l.trim()).filter(Boolean);
