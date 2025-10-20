@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="../libs/html2pdf.bundle.min.js"></script>
+
 <style>
 :root {
   --brand:#003366;
@@ -1575,7 +1575,31 @@ if (typeof generatePV === "function" && !window._signaturesBound) {
 }
 
 </script>
+<!-- Librairie PDF locale -->
+<script src="../libs/html2pdf.bundle.min.js"></script>
+
+<script>
+function generatePDF() {
+  const sheet = document.getElementById('sheet');
+  if (!sheet) {
+    alert("❌ Contenu du PV introuvable !");
+    return;
+  }
+
+  // ✅ Crée un PDF à partir de la zone #sheet
+  const opt = {
+    margin: [10, 10],
+    filename: 'PV_Interpellation.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(sheet).save();
+}
+</script>
 
 </body>
 </html>
+
 
