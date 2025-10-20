@@ -3,7 +3,7 @@
   "short_name": "CRGendarmerie",
   "description": "Application PWA pour générer les comptes rendus de missions",
   "start_url": "./index.html",
-   "scope": "./"
+   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2c3e50",
@@ -20,4 +20,5 @@
     }
   ]
 }
+
 
