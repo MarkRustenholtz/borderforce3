@@ -1573,19 +1573,17 @@ if (typeof generatePV === "function" && !window._signaturesBound) {
   window._signaturesBound = true;
 }
 
-</script>
-<!-- Librairie PDF locale -->
-<script src="libs/html2pdf.bundle.min.js"></script>
+<!-- Librairie PDF -->
+<script src="../libs/html2pdf.bundle.min.js"></script>
 
 <script>
 function generatePDF() {
-  const sheet = document.getElementById('sheet');
-  if (!sheet) {
+  const element = document.getElementById("sheet"); // ta zone PV à imprimer
+  if (!element) {
     alert("❌ Contenu du PV introuvable !");
     return;
   }
 
-  // ✅ Crée un PDF à partir de la zone #sheet
   const opt = {
     margin: [10, 10],
     filename: 'PV_Interpellation.pdf',
@@ -1594,12 +1592,14 @@ function generatePDF() {
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  html2pdf().set(opt).from(sheet).save();
+  html2pdf().set(opt).from(element).save();
 }
 </script>
 
+
 </body>
 </html>
+
 
 
 
