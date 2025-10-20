@@ -2,7 +2,7 @@ const CACHE_NAME = 'cr-gendarmerie-cache-v18'; // ⚠️ change le numéro à ch
 const urlsToCache = [
   './',
   './index.html',
-  './manifest.json',
+  './pv/index.html',
   './icon-192.png',
   './icon-512.png',
   'https://unpkg.com/html5-qrcode'
