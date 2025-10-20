@@ -503,6 +503,7 @@ autocapitalize="off"
   <a href="#" class="back-btn" onclick="backHome()">⬅ Retour</a>
     <button onclick="generatePV()">🧾 Générer le PV</button>
     <button class="secondary" onclick="openPrintPreview()">🖨️ Imprimer / PDF</button>
+	 <button onclick="generatePDF()">💾 Enregistrer en PDF</button> 
     <button onclick="sauvegarderPV()">💾 Sauvegarder le PV</button>
     <button onclick="ouvrirMesPV()">📁 Mes PV sauvegardés</button>
     <button onclick="nouveauPV()">🆕 Nouveau PV</button>
@@ -1591,8 +1592,6 @@ if (typeof generatePV === "function" && !window._signaturesBound) {
   window._signaturesBound = true;
 }
 
-<!-- Librairie PDF -->
-<script src="libs/html2pdf.bundle.min.js"></script>
 
 <script>
 async function generatePDF() {
@@ -1634,10 +1633,13 @@ async function generatePDF() {
 }
 </script>
 
+<!-- Librairie PDF -->
+<script src="libs/html2pdf.bundle.min.js"></script>
 
 
 </body>
 </html>
+
 
 
 
