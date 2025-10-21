@@ -1430,4 +1430,28 @@ function confirmCallCORG() {
   };
 }
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(registration => {
+    // 🔍 Détection des mises à jour du SW
+    registration.addEventListener('updatefound', () => {
+      const newWorker = registration.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // 🆕 Nouvelle version détectée
+          if (confirm("🆕 Nouvelle version disponible — Recharger maintenant ?")) {
+            newWorker.postMessage({ action: 'skipWaiting' });
+            window.location.reload();
+          }
+        }
+      });
+    });
+  });
+
+  // 💬 Réception du message 'skipWaiting' depuis le SW
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    console.log('✅ Nouvelle version du service worker activée.');
+  });
+}
+
+
       
