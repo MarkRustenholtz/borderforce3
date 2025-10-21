@@ -55,3 +55,10 @@ self.addEventListener('fetch', event => {
       })
   );
 });
+// 🔁 Écoute du message 'skipWaiting' depuis la page
+self.addEventListener('message', (event) => {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
+
