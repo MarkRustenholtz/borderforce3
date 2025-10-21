@@ -5,7 +5,7 @@ const urlsToCache = [
   './pv/index.html',
   './icon-192.png',
   './icon-512.png',
-   './libs/html5-qrcode.min.js'
+   './libs/html5-qrcode.min.js',
   './libs/html2pdf.bundle.min.js'
 ];
 
