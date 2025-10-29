@@ -59,10 +59,10 @@
     };
     
     const siteConfig = {
-      "La Turbie": ["vl", "bus", "pl"],
-      "Breil": ["train", "bus"]
-		"DSI Tende": ["train", "bus", "vl", "pl"]
-    };
+  "La Turbie": ["vl", "bus", "pl"],
+  "Breil": ["train", "bus"],
+  "DSI Tende": ["train", "bus", "vl", "pl"]
+};
 
     let saveTimeout = null;
     function debounceSave() {
