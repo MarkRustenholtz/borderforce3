@@ -59,7 +59,7 @@
     };
     
     const siteConfig = {
-  "La Turbie": ["vl", "bus", "pl"],
+  "La Turbie": ["bus", "vl", "pl"],
   "Breil": ["train", "bus"],
   "DSI Tende": ["train", "bus", "vl", "pl"]
 };
