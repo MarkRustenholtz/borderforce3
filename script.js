@@ -801,11 +801,16 @@ Pl: ${counts.pl.v} / ${counts.pl.cv} CV / ${counts.pl.cf} CF`;
 
     // patch generate to include scans
     const oldGenerate = generateCompteRendu;
-generateCompteRendu = function(){
+generateCompteRendu = function() {
   oldGenerate();
+
+  // On récupère la config du site
+  const typesAAfficher = siteConfig[state.site] || ['train','bus','vl','pl'];
+
   let totalVeh = 0, totalPers = 0;
   const lines = [];
-  ['train','bus','vl','pl'].forEach(type=>{
+
+  typesAAfficher.forEach(type => {
     const v  = (state.vehicules[type] || 0) + (state.scansAgg[type]?.v || 0);
     const cv = (state.cv[type] || 0) + (state.scansAgg[type]?.cv || 0);
     const cf = (state.cf[type] || 0) + (state.scansAgg[type]?.cf || 0);
@@ -813,11 +818,14 @@ generateCompteRendu = function(){
     totalPers += cv + cf;
     lines.push(`- ${type.charAt(0).toUpperCase() + type.slice(1)}: ${v} / ${cv} CV / ${cf} CF`);
   });
+
   let cr = document.getElementById('compteRendu').value || '';
   const regex = /1 - MOYENS \/ PERSONNES:[\s\S]*?TOTAL MOYENS :.*\nTOTAL PERSONNES :.*\n/;
   const newSection = `1 - MOYENS / PERSONNES:\n${lines.join('\n')}\n\nTOTAL MOYENS : ${totalVeh}\nTOTAL PERSONNES : ${totalPers}\n`;
-  if(regex.test(cr)) cr = cr.replace(regex, newSection);
+
+  if (regex.test(cr)) cr = cr.replace(regex, newSection);
   else cr += "\n" + newSection;
+
   document.getElementById('compteRendu').value = cr;
 };
 
