@@ -1477,5 +1477,66 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+function formatHeureHhmm(heureValue){
+  if(!heureValue) return "";
+  const [h, m] = heureValue.split(":");
+  return `${parseInt(h,10)}h${m}`;
+}
+function plural(nb, s, p){
+  const n = Number(nb);
+  return (n === 1) ? s : p;
+}
+function buildSuffixComptage(nbCtrl, nbDesc){
+  const parts = [];
+  const n1 = nbCtrl === "" ? NaN : parseInt(nbCtrl, 10);
+  const n2 = nbDesc === "" ? NaN : parseInt(nbDesc, 10);
+  if(!Number.isNaN(n1)) parts.push(`${n1} ${plural(n1,"personne contrôlée","personnes contrôlées")}`);
+  if(!Number.isNaN(n2)) parts.push(`${n2} ${plural(n2,"descendu","descendus")} sur le quai`);
+  return parts.length ? " — " + parts.join(", ") : "";
+}
+function triJoin(parts){ return parts.filter(Boolean).join(" — "); }
+function majAffichageComptage(){
+  const action = (document.getElementById("type_action").value || "").toLowerCase();
+  const libre  = (document.getElementById("texte_libre").value || "").toLowerCase();
+  const show = action.includes("train") || libre.includes("train");
+  const bloc = document.getElementById("bloc_comptage");
+  if(bloc) bloc.style.display = show ? "block" : "none";
+}
+function ajouterDeroulementFlex(){
+  const zone = document.getElementById("deroulement");
+  if(!zone){ alert("⚠️ Zone 'Déroulement' introuvable."); return; }
+
+  const heure = document.getElementById("heure_action").value;
+  const esi   = (document.getElementById("esi_select").value || "").trim();
+  const act   = (document.getElementById("type_action").value || "").trim();
+  const libre = (document.getElementById("texte_libre").value || "").trim();
+  const nbCtrl = document.getElementById("nb_controles").value;
+  const nbDesc = document.getElementById("nb_descendus").value;
+
+  const hStr = formatHeureHhmm(heure);
+  const corps = triJoin([esi, act, libre]);
+  const suffix = buildSuffixComptage(nbCtrl, nbDesc);
+
+  if(!hStr && !corps && !suffix){
+    alert("Renseigne au moins l’heure ou une action (ESI, prédéfinie ou texte libre).");
+    return;
+  }
+
+  const ligne = triJoin([hStr, corps]) + suffix;
+
+  // Ajout propre + autosize conservé
+  zone.value = zone.value.trim() ? (zone.value + "\n" + ligne) : ligne;
+  zone.dispatchEvent(new Event('input')); // conserve ton auto-redimensionnement
+
+  // Reset des champs
+  document.getElementById("heure_action").value = "";
+  document.getElementById("esi_select").value = "";
+  document.getElementById("type_action").value = "";
+  document.getElementById("texte_libre").value = "";
+  document.getElementById("nb_controles").value = "";
+  document.getElementById("nb_descendus").value = "";
+
+  majAffichageComptage();
+}
 
       
