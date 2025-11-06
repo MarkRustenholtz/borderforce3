@@ -511,4 +511,12 @@ fieldset {
   
 }
 
+#temps_action input[type="time"],
+#temps_action input[type="number"],
+#temps_action input#texte_libre,
+#temps_action select{
+  width:100%; box-sizing:border-box; padding:6px; border:1px solid #ccc; border-radius:6px;
+}
+#temps_action label{ font-weight:600; }
+
 
