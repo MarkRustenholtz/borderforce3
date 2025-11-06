@@ -1477,6 +1477,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+
 function formatHeureHhmm(heureValue){
   if(!heureValue) return "";
   const [h, m] = heureValue.split(":");
@@ -1491,17 +1492,20 @@ function buildSuffixComptage(nbCtrl, nbDesc){
   const n1 = nbCtrl === "" ? NaN : parseInt(nbCtrl, 10);
   const n2 = nbDesc === "" ? NaN : parseInt(nbDesc, 10);
   if(!Number.isNaN(n1)) parts.push(`${n1} ${plural(n1,"personne contrôlée","personnes contrôlées")}`);
-  if(!Number.isNaN(n2)) parts.push(`${n2} ${plural(n2,"descendu","descendus")} sur le quai`);
+  if(!Number.isNaN(n2)) parts.push(`${n2} ${plural(n2,"descendu","descendus")} du véhicule`);
   return parts.length ? " — " + parts.join(", ") : "";
 }
 function triJoin(parts){ return parts.filter(Boolean).join(" — "); }
+
 function majAffichageComptage(){
   const action = (document.getElementById("type_action").value || "").toLowerCase();
   const libre  = (document.getElementById("texte_libre").value || "").toLowerCase();
-  const show = action.includes("train") || libre.includes("train");
+  // ✅ Affiche les champs de comptage pour "bus" ou "train"
+  const show = action.includes("bus") || libre.includes("bus") || action.includes("train") || libre.includes("train");
   const bloc = document.getElementById("bloc_comptage");
   if(bloc) bloc.style.display = show ? "block" : "none";
 }
+
 function ajouterDeroulementFlex(){
   const zone = document.getElementById("deroulement");
   if(!zone){ alert("⚠️ Zone 'Déroulement' introuvable."); return; }
@@ -1524,11 +1528,9 @@ function ajouterDeroulementFlex(){
 
   const ligne = triJoin([hStr, corps]) + suffix;
 
-  // Ajout propre + autosize conservé
   zone.value = zone.value.trim() ? (zone.value + "\n" + ligne) : ligne;
-  zone.dispatchEvent(new Event('input')); // conserve ton auto-redimensionnement
+  zone.dispatchEvent(new Event('input')); // garde ton auto-redimensionnement
 
-  // Reset des champs
   document.getElementById("heure_action").value = "";
   document.getElementById("esi_select").value = "";
   document.getElementById("type_action").value = "";
@@ -1538,5 +1540,4 @@ function ajouterDeroulementFlex(){
 
   majAffichageComptage();
 }
-
       
