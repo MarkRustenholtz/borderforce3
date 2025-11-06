@@ -413,6 +413,57 @@
 Autres…"></textarea>
 </div>
 </div>
+<!-- Saisie rapide Heure + Actions -->
+<section id="temps_action" style="margin-bottom:12px">
+  <fieldset style="border:2px solid var(--bleuFonce,#003366);border-radius:10px;padding:10px">
+    <legend style="padding:0 6px">Heure & actions</legend>
+
+    <label style="display:block;margin-top:6px">Heure</label>
+    <input type="time" id="heure_action" />
+
+    <label style="display:block;margin-top:6px">ESI (optionnel)</label>
+    <select id="esi_select">
+      <option value="">— Aucun —</option>
+      <option>ESI 1</option><option>ESI 2</option><option>ESI 3</option>
+      <option>ESI 4</option><option>ESI 5</option><option>ESI 6</option>
+      <option>ESI 7</option><option>ESI 8</option><option>ESI 9</option>
+      <option>ESI 10</option>
+    </select>
+
+    <label style="display:block;margin-top:6px">Action prédéfinie (optionnel)</label>
+    <select id="type_action" onchange="majAffichageComptage()">
+      <option value="">— Sélectionner —</option>
+      <option>Départ de la caserne Ausseur</option>
+      <option>Arrivée à la caserne Ausseur</option>
+      <option>Départ en mission</option>
+      <option>Retour de mission</option>
+      <option>Contrôle routier</option>
+      <option>Train italien</option>
+      <option>Train français</option>
+    </select>
+
+    <label style="display:block;margin-top:6px">Texte libre (optionnel)</label>
+    <input id="texte_libre" placeholder="Ex. Train italien / Patrouille pédestre…" oninput="majAffichageComptage()" />
+
+    <div id="bloc_comptage" style="display:none;margin-top:8px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div>
+          <label>Personnes contrôlées</label>
+          <input type="number" id="nb_controles" min="0" placeholder="Ex. 48" />
+        </div>
+        <div>
+          <label>Descendus sur le quai</label>
+          <input type="number" id="nb_descendus" min="0" placeholder="Ex. 18" />
+        </div>
+      </div>
+    </div>
+
+    <button type="button" onclick="ajouterDeroulementFlex()" style="margin-top:10px;background:#003366;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer">
+      Ajouter au déroulement
+    </button>
+  </fieldset>
+</section>
+
 <!-- Page Déroulement -->
 <div class="page" id="deroulementPage">
 <div class="page-header">
