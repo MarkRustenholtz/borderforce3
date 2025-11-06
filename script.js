@@ -1492,7 +1492,7 @@ function buildSuffixComptage(nbCtrl, nbDesc){
   const n1 = nbCtrl === "" ? NaN : parseInt(nbCtrl, 10);
   const n2 = nbDesc === "" ? NaN : parseInt(nbDesc, 10);
   if(!Number.isNaN(n1)) parts.push(`${n1} ${plural(n1,"personne contrôlée","personnes contrôlées")}`);
-  if(!Number.isNaN(n2)) parts.push(`${n2} ${plural(n2,"descendu","descendus")} du véhicule`);
+  if(!Number.isNaN(n2)) parts.push(`${n2} ${plural(n2,"descendu","descendus")}`);
   return parts.length ? " — " + parts.join(", ") : "";
 }
 function triJoin(parts){ return parts.filter(Boolean).join(" — "); }
