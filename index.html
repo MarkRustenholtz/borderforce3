@@ -413,6 +413,7 @@
 Autres…"></textarea>
 </div>
 </div>
+
 <!-- Saisie rapide Heure + Actions -->
 <section id="temps_action" style="margin-bottom:12px">
   <fieldset style="border:2px solid var(--bleuFonce,#003366);border-radius:10px;padding:10px">
@@ -433,17 +434,32 @@ Autres…"></textarea>
     <label style="display:block;margin-top:6px">Action prédéfinie (optionnel)</label>
     <select id="type_action" onchange="majAffichageComptage()">
       <option value="">— Sélectionner —</option>
-      <option>Départ de la caserne Ausseur</option>
-      <option>Arrivée à la caserne Ausseur</option>
-      <option>Départ en mission</option>
-      <option>Retour de mission</option>
-      <option>Contrôle routier</option>
-      <option>Train italien</option>
-      <option>Train français</option>
+
+      <optgroup label="Déplacements / mission">
+        <option>Départ de la caserne Ausseur</option>
+        <option>Arrivée à la caserne Ausseur</option>
+        <option>Départ en mission</option>
+        <option>Retour de mission</option>
+        <option>Contrôle routier</option>
+        <option>Train</option>
+        <option>Bus</option>
+      </optgroup>
+
+      <optgroup label="Prise en compte">
+        <option>Prise en compte armement</option>
+        <option>Prise en compte véhicule</option>
+        <option>Prise en compte matériel</option>
+      </optgroup>
+
+      <optgroup label="Restitution">
+        <option>Restitution armement</option>
+        <option>Restitution véhicule</option>
+        <option>Restitution matériel</option>
+      </optgroup>
     </select>
 
     <label style="display:block;margin-top:6px">Texte libre (optionnel)</label>
-    <input id="texte_libre" placeholder="Ex. Train italien / Patrouille pédestre…" oninput="majAffichageComptage()" />
+    <input id="texte_libre" placeholder="Ex. Bus / Patrouille pédestre…" oninput="majAffichageComptage()" />
 
     <div id="bloc_comptage" style="display:none;margin-top:8px">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -452,7 +468,7 @@ Autres…"></textarea>
           <input type="number" id="nb_controles" min="0" placeholder="Ex. 48" />
         </div>
         <div>
-          <label>Descendus sur le quai</label>
+          <label>Descendus du véhicule</label>
           <input type="number" id="nb_descendus" min="0" placeholder="Ex. 18" />
         </div>
       </div>
@@ -463,6 +479,7 @@ Autres…"></textarea>
     </button>
   </fieldset>
 </section>
+     
 
 <!-- Page Déroulement -->
 <div class="page" id="deroulementPage">
