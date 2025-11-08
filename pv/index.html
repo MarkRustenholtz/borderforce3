@@ -1630,49 +1630,68 @@ function supprimerPV(id) {
 }
 
 function nouveauPV() {
-  if (!confirm("Créer un nouveau PV vierge ? Les champs (hors rédacteur) seront effacés.")) return;
+  // On repart sur un NOUVEAU PV
+  if (typeof pvCourantId !== 'undefined') {
+    pvCourantId = null;
+  }
 
-  // Champs à préserver (ESR / rédacteur)
+  // Champs à préserver (ESR / rédacteur + n° PV)
   const preserve = new Set([
-    'esr_grade','esr_nom','esr_prenom','esr_sexe','esr_qualite','esr_affect','pv_num'
+    'esr_grade',
+    'esr_nom',
+    'esr_prenom',
+    'esr_sexe',
+    'esr_qualite',
+    'esr_affect',
+    'pv_num'
   ]);
 
   // Efface tous les champs sauf ceux du rédacteur
   document.querySelectorAll('input, select, textarea').forEach(el => {
-    if (!preserve.has(el.id)) {
-      if (el.tagName === 'SELECT') el.selectedIndex = 0;
-      else el.value = '';
+    if (!el.id) return;
+    if (preserve.has(el.id)) return;
+
+    if (el.tagName === 'SELECT') {
+      el.selectedIndex = 0;
+    } else {
+      el.value = '';
     }
   });
 
-  // Réinitialise les assistants (1 bloc vide)
+  // Réinitialise les assistants : 1 bloc propre
   const assistList = document.getElementById('assist_list');
   if (assistList) {
     assistList.innerHTML = '';
-    if (typeof assistIndex !== 'undefined') assistIndex = 0;
-    if (typeof addAssistant === 'function') addAssistant();
+  }
+  if (typeof assistIndex !== 'undefined') {
+    assistIndex = 0;
+  }
+  if (typeof addAssistant === 'function') {
+    addAssistant();
   }
 
-  // Cache la feuille générée si affichée
+  // Cache la liste "Mes PV" si ouverte
+  const listePV = document.getElementById('listePV');
+  if (listePV) {
+    listePV.style.display = 'none';
+  }
+
+  // Cache la feuille PV générée
   const sheet = document.getElementById('sheet');
-  if (sheet) sheet.style.display = 'none';
-
-  // On repart sur un nouveau PV (pas de mise à jour sur l’ancien)
-  if (typeof pvCourantId !== 'undefined') pvCourantId = null;
-
-  // (Optionnel) Incrément auto du numéro de fiche si tu utilises #fiche_id
-  const ficheField = document.getElementById('fiche_id');
-  if (ficheField) {
-    let last = parseInt(localStorage.getItem('dernier_num_fiche') || '0', 10) + 1;
-    localStorage.setItem('dernier_num_fiche', String(last));
-    ficheField.value = `FICHE-${String(last).padStart(3, '0')}`;
+  if (sheet) {
+    sheet.style.display = 'none';
   }
 
-  // Sauvegarde immédiate si ta fonction existe (facultatif)
-  if (typeof savePV === 'function') savePV();
+  // Nettoie le brouillon auto-sauvegardé
+  localStorage.removeItem('pv_interpellation_data');
 
+  // Indication visuelle (au lieu de alert, compatible sandbox)
+  if (typeof showToast === 'function') {
+    showToast("Nouveau PV vierge prêt");
+  }
+
+  // Remonte en haut
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  alert("✅ Nouveau PV vierge prêt (infos rédacteur conservées).");
 }
 
  
