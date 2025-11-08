@@ -388,6 +388,36 @@ fieldset textarea {
   display: none;
 }
 
+@page {
+  size: A4;
+  margin: 10mm 10mm 20mm 10mm;
+}
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #000000;
+    font-family: "Times New Roman", serif;
+  }
+
+  /* On masque toute l'interface, on garde uniquement le PV */
+  body > *:not(#sheet) {
+    display: none !important;
+  }
+
+  #sheet {
+    display: grid !important;
+    position: static !important;
+    margin: 0 auto !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
 
 </style>
 </head>
@@ -1257,124 +1287,39 @@ majPalpation();
 }
 
  function openPrintPreview() {
-  generatePV();
-
-  setTimeout(() => {
-    const sheet = document.getElementById('sheet');
-    if (!sheet) {
-      alert("⚠️ Impossible de trouver le contenu du PV.");
-      return;
+  // On génère / met à jour le PV
+  try {
+    generatePV();
+  } catch (e) {
+    console.error("Erreur generatePV:", e);
+    if (typeof showToast === 'function') {
+      showToast("Erreur lors de la génération du PV");
+    } else {
+      alert("Erreur lors de la génération du PV");
     }
+    return;
+  }
 
-    // 🪟 Ouvre une nouvelle fenêtre pour l'impression
-    const printWindow = window.open('', '_blank', 'width=900,height=1000');
-    printWindow.document.write(`
-      <html>
-      <head>
-        <title>Procès-verbal</title>
-        <style>
-          @page {
-            size: A4;
-            margin: 10mm 10mm 20mm 10mm;
-          }
-		  @page :first {
-  margin-top: 20mm;
-  margin-bottom: 20mm;
-}
-@page :not(:first) {
-  margin-top: 15mm;
-  margin-bottom: 15mm;
-}
-          body {
-            margin: 0;
-            padding: 0;
-            background: white;
-            color: black;
-            font-family: "Times New Roman", serif;
-          }
-          #sheet {
-            width: 210mm;
-            height: 297mm;
-            display: grid;
-            grid-template-columns: 58mm 1fr;
-            gap: 8mm;
-            padding: 10mm 10mm 10mm 10mm;
-            margin: auto;
-            box-sizing: border-box;
-          }
-          #sheet .col-g {
-            border-right: 1px solid #aaa;
-            padding-right: 5mm;
-          }
-          #sheet .col-d {
-            padding-left: 4mm;
-            text-align: justify;
-            line-height: 1.42;
-          }
+  const sheet = document.getElementById('sheet');
+  if (!sheet) {
+    if (typeof showToast === 'function') {
+      showToast("Zone PV introuvable (#sheet)");
+    } else {
+      alert("Zone PV introuvable (#sheet)");
+    }
+    return;
+  }
 
-          .logo {
-            width: 60mm;
-            margin: 0 0 8mm 0;
-          }
-          .title-left { font-weight: bold; }
-          .num-pv { margin-top: 8mm; font-style: italic; }
-         /* .signzone {
-            margin-top: 16mm;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-          }
-          .signcell {
-            min-height: 28mm;
-            border-top: 1px solid #aaa;
-            padding-top: 4mm;
-          } */
-		  
-		  /* 🖋️ Zone des signatures */
-.signzone {
-  margin-top: 16mm;
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* deux colonnes */
-  gap: 20mm; /* ⬅️ espace horizontal entre les deux signatures */
-  width: 90%; /* pour recentrer un peu la zone */
-  margin-left: auto;
-  margin-right: auto;
+  // S'assurer que le PV est visible avant impression
+  sheet.style.display = 'grid';
+  sheet.style.margin = '30px auto';
+
+  // Petit délai pour laisser le DOM appliquer les changements
+  setTimeout(() => {
+    window.print(); // 👉 ouvre l'impression native (dont PDF sur Chrome)
+  }, 200);
 }
 
-.signcell {
-  min-height: 28mm;
-  border-top: 1px solid #000;
-  padding-top: 4mm;
-  text-align: center;
-  font-weight: bold;
-  font-size: 0.95em;
-}
-          @media print {
-            body {
-              margin: 0;
-            }
-            #sheet {
-              display: grid !important;
-              position: static;
-              margin: 0 auto;
-            }
-          }
-		  #sign_col_g {
-  letter-spacing: 1px;
-  word-spacing: 20px;
-}
-        </style>
-      </head>
-      <body>
-        ${sheet.outerHTML}
-      </body>
-      </html>
-    `);
-
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.onload = () => printWindow.print();
-  }, 600);
-}
 
 // === 💾 SAUVEGARDE AUTOMATIQUE AVEC DEBOUNCE (inclut les assistants dynamiques) ===
 let saveTimeout;
