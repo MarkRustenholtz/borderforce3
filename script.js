@@ -1585,42 +1585,63 @@ function attachNatAutocomplete(input) {
   list.style.display = 'none';
   wrapper.appendChild(list);
 
+  // Normalisation : minuscules + suppression accents + trim
+  const normalize = (s) =>
+    (s || "")
+      .toString()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+
   input.addEventListener('input', () => {
-    const val = input.value.trim().toLowerCase();
+    const search = normalize(input.value);
     list.innerHTML = '';
 
-    if (!val) {
+    if (!search) {
       list.style.display = 'none';
       return;
     }
 
-    // Normalisation : enlève les accents pour la comparaison
-const normalize = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-
-const matches = NATIONALITES.filter(nat =>
-  normalize(nat).startsWith(normalize(val))
-).slice(0, 20);
+    // Prépare une liste [label + version normalisée]
+    const matches = NATIONALITES
+      .map(label => ({
+        label,
+        norm: normalize(label)
+      }))
+      // garde celles qui CONTIENNENT le texte tapé
+      .filter(item => item.norm.includes(search))
+      // priorité à celles qui COMMENCENT par ce que tu tapes
+      .sort((a, b) => {
+        const aStarts = a.norm.startsWith(search);
+        const bStarts = b.norm.startsWith(search);
+        if (aStarts && !bStarts) return -1;
+        if (!aStarts && bStarts) return 1;
+        return a.label.localeCompare(b.label);
+      })
+      .slice(0, 20);
 
     if (!matches.length) {
       list.style.display = 'none';
       return;
     }
 
-    matches.forEach(nat => {
-      const item = document.createElement('div');
-      item.className = 'nat-item';
-      item.textContent = nat;
-      item.addEventListener('click', () => {
-        input.value = nat;
+    matches.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'nat-item';
+      div.textContent = item.label;
+      div.addEventListener('click', () => {
+        input.value = item.label;
         list.innerHTML = '';
         list.style.display = 'none';
       });
-      list.appendChild(item);
+      list.appendChild(div);
     });
 
     list.style.display = 'block';
   });
 
+  // ferme si clic à l'extérieur
   document.addEventListener('click', (e) => {
     if (!wrapper.contains(e.target)) {
       list.style.display = 'none';
