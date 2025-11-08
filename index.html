@@ -673,28 +673,10 @@ Autres…"></textarea>
 </div>
 </div>
     <!-- PAGE PROCÈS-VERBAL -->
-<div id="pvPage" class="page">
-  <div class="page-header">
-    <button class="back-button" onclick="showPage('homePage')">
-      <i class="fas fa-arrow-left"></i> Retour
-    </button>
-    <div class="page-title">Procès-verbal</div>
-  </div>
-
-  <iframe
-    id="pvFrame"
-    src="./pv/index.html"
-    style="
-      width: 100%;
-      height: 85vh;
-      border: none;
-      background: white;
-      overflow: auto;
-    "
-    sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads"
-    allow="clipboard-write; clipboard-read; fullscreen">
-  </iframe>
+<div class="menu-btn" onclick="window.location.href='pv/index.html'">
+  <i class="fa-solid fa-file-lines"></i><span>Procès-verbal</span>
 </div>
+
 
 </body>
 </html>
