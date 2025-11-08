@@ -360,7 +360,12 @@
 <option value="Femme">Femme</option>
 </select>
 <input id="esiAgeNum" min="0" oninput="majEsiStatut()" placeholder="Âge (chiffre)" style="width: 100px;" type="number">
-<input id="esiNationalite" placeholder="Nationalité" type="text">
+
+<input id="esiNationalite"
+       class="nat-autocomplete"
+       placeholder="Nationalité"
+       type="text"
+       autocomplete="off">
 <input id="esiLieu" placeholder="Lieu interpellation" type="text">
 <label for="esiHeure">Heure interpellation :</label>
 <input id="esiHeure" type="time">
