@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cr-gendarmerie-cache-v47'; // ⚠️ change le numéro à chaque mise à jour
+const CACHE_NAME = 'cr-gendarmerie-cache-v48'; // ⚠️ change le numéro à chaque mise à jour
 const urlsToCache = [
   './',
   './index.html',
