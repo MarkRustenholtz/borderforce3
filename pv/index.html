@@ -1256,22 +1256,42 @@ if (scrollBtn) scrollBtn.style.display = "block";
 majPalpation();
 }
 
+function isStandaloneMode() {
+  return (
+    window.matchMedia &&
+    window.matchMedia('(display-mode: standalone)').matches
+  ) || window.navigator.standalone === true;
+}
+
  function openPrintPreview() {
+  // Génère / met à jour le PV
   try {
     generatePV();
   } catch (e) {
     console.error("Erreur generatePV:", e);
-    showToast("Erreur génération PV");
+    if (typeof showToast === 'function') showToast("Erreur génération PV");
     return;
   }
 
   const sheet = document.getElementById('sheet');
   if (!sheet) {
-    showToast("Zone PV introuvable");
+    if (typeof showToast === 'function') showToast("Zone PV introuvable");
     return;
   }
 
-  // 👉 Tentative 1 : comme ta version d'origine (popup)
+  // S'assurer que le PV est visible
+  sheet.style.display = 'grid';
+  sheet.style.margin = '30px auto';
+
+  // 🟦 CAS 1 : PWA / standalone → pas de popup, impression native directe
+  if (isStandaloneMode()) {
+    setTimeout(() => {
+      window.print();
+    }, 200);
+    return;
+  }
+
+  // 🟦 CAS 2 : Navigateur normal → on tente la popup comme avant
   let printWindow = null;
   try {
     printWindow = window.open('', '_blank', 'width=900,height=1000');
@@ -1279,9 +1299,10 @@ majPalpation();
     printWindow = null;
   }
 
-  if (printWindow && !printWindow.closed) {
-    // Ancien comportement (PC, navigateur normal)
-    printWindow.document.write(`
+  // Si la popup est dispo → ancien comportement PC
+  if (printWindow && printWindow.document) {
+    try {
+      printWindow.document.write(`
       <html>
       <head>
         <title>Procès-verbal</title>
@@ -1383,16 +1404,16 @@ majPalpation();
       </html>
     `);
 
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.onload = () => printWindow.print();
-     return;
+     printWindow.document.close();
+      printWindow.focus();
+      printWindow.onload = () => printWindow.print();
+      return;
+    } catch (e) {
+      console.error("Erreur impression popup :", e);
+    }
   }
 
-  // 👉 Tentative 2 : fallback pour PWA / sandbox (pas de popup)
-  sheet.style.display = 'grid';
-  sheet.style.margin = '30px auto';
-
+  // 🟦 CAS 3 : si popup impossible / cassée → fallback impression native
   setTimeout(() => {
     window.print();
   }, 200);
