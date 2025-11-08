@@ -1594,9 +1594,12 @@ function attachNatAutocomplete(input) {
       return;
     }
 
-    const matches = NATIONALITES.filter(nat =>
-      nat.toLowerCase().startsWith(val)
-    ).slice(0, 20);
+    // Normalisation : enlève les accents pour la comparaison
+const normalize = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+const matches = NATIONALITES.filter(nat =>
+  normalize(nat).startsWith(normalize(val))
+).slice(0, 20);
 
     if (!matches.length) {
       list.style.display = 'none';
