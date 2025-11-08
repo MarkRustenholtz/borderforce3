@@ -1541,3 +1541,90 @@ function ajouterDeroulementFlex(){
   majAffichageComptage();
 }
       
+
+const NATIONALITES = [
+  "Afghane","Albanaise","Algérienne","Allemande","Américaine","Andorrane","Angolaise","Argentine",
+  "Arménienne","Australienne","Autrichienne","Azerbaïdjanaise",
+  "Belge","Béninoise","Biélorusse","Bolivienne","Bosnienne","Botswanaise","Brésilienne","Britannique","Bulgare","Burkinabè","Burundaise",
+  "Cambodgienne","Camerounaise","Canadienne","Cap-verdienne","Centrafricaine","Chilienne","Chinoise","Colombienne","Comorienne","Congolaise",
+  "Croate","Cubaine","Chypriote","Tchèque",
+  "Danoise","Djiboutienne","Dominicaine","Dominiquaise",
+  "Égyptienne","Émirienne","Équatorienne","Érythréenne","Espagnole","Estonienne","Éthiopienne",
+  "Finlandaise","Française",
+  "Gabonaise","Gambienne","Géorgienne","Ghanéenne","Grecque","Guatémaltèque","Guinéenne","Guinéenne-Bissau","Guyanaise",
+  "Haïtienne","Hondurienne","Hongroise",
+  "Indienne","Indonésienne","Irakienne","Iranienne","Irlandaise","Islandaise","Israélienne","Italienne",
+  "Ivoirienne",
+  "Japonaise","Jordanienne",
+  "Kazakhstanaise","Kenyane","Kirghize","Kosovare","Koweïtienne",
+  "Laotienne","Libanaise","Libérienne","Libyenne","Liechtensteinoise","Lituanienne","Luxembourgeoise",
+  "Macédonienne","Malagasy","Malaisienne","Malawienne","Malienne","Maltaise","Marocaine","Mauricienne","Mauritanienne","Mexicaine",
+  "Moldave","Monégasque","Mongole","Monténégrine","Mozambicaine",
+  "Namibienne","Néerlandaise","Néo-zélandaise","Népalaise","Nigériane","Nigérienne","Nord-coréenne","Norvégienne",
+  "Omanaise",
+  "Pakistanaise","Palestinienne","Panaméenne","Paraguayenne","Péruvienne","Philippine","Polonaise","Portugaise",
+  "Qatarienne",
+  "Roumaine","Russe","Rwandaise",
+  "Saoudienne","Sénégalaise","Serbe","Singapourienne","Slovaque","Slovène","Somalienne","Soudanaise","Sri-lankaise",
+  "Sud-africaine","Sud-coréenne","Sud-soudanaise","Suédoise","Suisse","Syrienne",
+  "Tadjike","Tanzanienne","Tchadienne","Thaïlandaise","Togolaise","Tunisienne","Turque",
+  "Ukrainienne","Uruguayenne","Uzbekistanaise",
+  "Vénézuélienne","Vietnamienne",
+  "Yéménite",
+  "Zambienne","Zimbabwéenne"
+];
+
+function attachNatAutocomplete(input) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'nat-wrapper';
+  input.parentNode.insertBefore(wrapper, input);
+  wrapper.appendChild(input);
+
+  const list = document.createElement('div');
+  list.className = 'nat-list';
+  list.style.display = 'none';
+  wrapper.appendChild(list);
+
+  input.addEventListener('input', () => {
+    const val = input.value.trim().toLowerCase();
+    list.innerHTML = '';
+
+    if (!val) {
+      list.style.display = 'none';
+      return;
+    }
+
+    const matches = NATIONALITES.filter(nat =>
+      nat.toLowerCase().startsWith(val)
+    ).slice(0, 20);
+
+    if (!matches.length) {
+      list.style.display = 'none';
+      return;
+    }
+
+    matches.forEach(nat => {
+      const item = document.createElement('div');
+      item.className = 'nat-item';
+      item.textContent = nat;
+      item.addEventListener('click', () => {
+        input.value = nat;
+        list.innerHTML = '';
+        list.style.display = 'none';
+      });
+      list.appendChild(item);
+    });
+
+    list.style.display = 'block';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!wrapper.contains(e.target)) {
+      list.style.display = 'none';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.nat-autocomplete').forEach(attachNatAutocomplete);
+});
