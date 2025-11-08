@@ -4,8 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>PV Interpellation — ESI</title>
+
 <meta name="theme-color" content="#003366" />
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="../icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -256,10 +257,130 @@ fieldset textarea {
   letter-spacing: 1px;
   word-spacing: 20px;
 }
+
+/* 🧭 Menu déroulant mobile-friendly */
+/*#optionsMenu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* 2 colonnes sur PC, 1 sur mobile */
+  gap: 12px;
+  width: 100%;
+}*/
+#optionsMenu {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* ⬅️ FORCÉ : 2 colonnes fixes */
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+
+/* 🎨 Style des boutons */
+#optionsMenu button {
+  min-height: 64px;
+  padding: 14px 20px;
+  background: linear-gradient(180deg, #0d6efd, #003366);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.50em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+#optionsMenu button i {
+  font-size: 1.4em;
+}
+
+#optionsMenu button:hover {
+  background: linear-gradient(180deg, #0055cc, #002b66);
+}
+
+#optionsMenu button:active {
+  transform: scale(0.96);
+}
+
+/* 🔙 Bouton retour */
+.back-btn {
+  background: white;
+  color: #003366;
+  border: 2px solid #003366;
+  border-radius: 10px;
+  padding: 10px 18px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s;
+}
+.back-btn:hover {
+  background: #003366;
+  color: white;
+}
+
+#scrollTopBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  background: linear-gradient(180deg, #0d6efd, #003366);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.25);
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+#scrollTopBtn:hover {
+  transform: scale(1.08);
+  background: linear-gradient(180deg, #0055cc, #002b66);
+}
+
+.btn-fermer {
+  position: relative;       /* ancré dans le flux du PV */
+  float: left;              /* 🔹 colle le bouton à gauche du PV */
+  margin-top: 10px;         /* 🔹 espace avec le haut */
+  margin-left: 10px;        /* 🔹 léger retrait du bord gauche */
+  margin-bottom: 15px;      /* 🔹 espace sous le bouton avant le PV */
+  background: #b00000;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;              /* passe au-dessus du contenu du PV */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+.btn-fermer:hover {
+  background: #d00000;
+}
+
+
+/* petit effet fondu à l’apparition/disparition */
+.btn-fermer[style*="display: none"] {
+  opacity: 0;
+}
+
+
+
 </style>
 </head>
 
-<body>
+<body>
+
 
 <!-- MENU PRINCIPAL -->
 <div id="homePage">
@@ -385,8 +506,8 @@ fieldset textarea {
 </select>
           </div>
         </div>
-		<label>Marque du véhicule/Compagnie du train</label>
-<input id="veh_marque"placeholder="ex:Mercedes,Renault/Train ex: Tranitalia" />
+		<label>Marque du véhicule/Compagnie du train/bus</label>
+<input id="veh_marque"placeholder="ex:Renault/Tranitalia/Flixbus" />
 
         <label>Immatriculation / n° de train</label>
         <input id="veh_immat" 
@@ -396,8 +517,11 @@ fieldset textarea {
        autocorrect="off" 
        autocapitalize="characters" 
        spellcheck="false">
-		<label>Pays d’immatriculation</label>
-<input id="veh_pays" placeholder="ex: Italie" />
+
+		<label for="veh_pays">Pays d’immatriculation</label>
+<input id="veh_pays" placeholder="ex: en Italie"
+oninput="if(this.value) this.value = this.value.charAt(0).toLowerCase() + this.value.slice(1)">
+
 <label>Conducteur / Conductrice</label>
 <select id="conducteur_genre">
   <option value="m">Conducteur</option>
@@ -405,7 +529,7 @@ fieldset textarea {
 </select>
 
         <label>Lieu du contrôle</label>
-        <input id="lieu_controle" placeholder="SUR l'aire de repos /le bas côté/le quai de gare" 
+        <input id="lieu_controle" placeholder="ex: sur le bas côté" 
 autocapitalize="off"
        autocorrect="off"
        spellcheck="false">
@@ -437,8 +561,9 @@ autocapitalize="off"
         </div>
         <div class="row3">
           <div>
-            <label>Date de naissance</label>
-            <input id="esi_dnaiss" placeholder="01/01/1992" />
+           <label>Date de naissance</label>
+<input id="esi_dnaiss" type="text" maxlength="10" placeholder="jj/mm/aaaa" oninput="formatDateNaissance(this)">
+
           </div>
           <div>
             <label>Lieu de naissance</label>
@@ -479,10 +604,21 @@ autocapitalize="off"
           </div>
         </div>
         <div class="row">
-          <div>
-            <label>Palpation (genre de l’agent qui palpe)</label>
-            <select id="palp_genre"><option value="m">Masculin</option><option value="f">Féminin</option></select>
-          </div>
+         <div>
+  <label>Palpation (genre de l’agent qui palpe)</label>
+  <select id="palp_genre" onchange="majPalpation()">
+    <option value="">— Sélectionner —</option>
+    <option value="m">Masculin</option>
+    <option value="f">Féminin</option>
+    <option value="impossible">Impossible (pas de personnel du même sexe)</option>
+  </select>
+</div>
+
+<div>
+  <label>Objets trouvés sur l’individu</label>
+  <input type="text" id="objets_trouves" placeholder="ex : couteau pliant, briquet" oninput="majPalpation()">
+</div>
+<small>⚠️SI PAS D'OBJET NE RIEN ECRIRE⚠️
           <div>
             <label>Véhicule de transport</label>
             <select id="transport_type"><option>GENDARMERIE</option><option>Translation Police</option></select>
@@ -498,16 +634,28 @@ autocapitalize="off"
 
 <!-- SECTION OPTIONS -->
 <section id="options">
-  <div class="toolbar" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
-  <a href="#" class="back-btn" onclick="backHome()">⬅ Retour</a>
-    <button onclick="generatePV()">🧾 Générer le PV</button>
-    <button class="secondary" onclick="openPrintPreview()">🖨️ Imprimer / PDF</button>
-    <button onclick="sauvegarderPV()">💾 Sauvegarder le PV</button>
-    <button onclick="ouvrirMesPV()">📁 Mes PV sauvegardés</button>
-    <button onclick="nouveauPV()">🆕 Nouveau PV</button>
-	 
+  <div class="toolbar" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;flex-direction:column;align-items:center;">
+    <a href="#" class="back-btn" onclick="backHome()">⬅ Retour</a>
+
+    <!-- 🔽 Bouton principal -->
+    <button id="toggleOptions" style="background:#003366;color:white;border:none;border-radius:10px;padding:12px 20px;font-size:1.1em;cursor:pointer;">
+      ⚙️ MENU
+    </button>
+
+   <!-- 🔽 Menu déroulant masqué par défaut -->
+<div id="optionsMenu" style="display:none;flex-direction:column;gap:8px;margin-top:10px;">
+  <button onclick="generatePV()"><i class="fa-solid fa-file-lines"></i> Générer le PV</button>
+  <button class="secondary" onclick="openPrintPreview()"><i class="fa-solid fa-print"></i> Imprimer / PDF</button>
+  <button id="sendMailBtn"><i class="fa-solid fa-envelope"></i> Envoyer par mail</button>
+  <button onclick="sauvegarderPV()"><i class="fa-solid fa-floppy-disk"></i> Sauvegarder le PV</button>
+  <button onclick="ouvrirMesPV()"><i class="fa-solid fa-folder-open"></i> Mes PV sauvegardés</button>
+  <button onclick="nouveauPV()"><i class="fa-solid fa-plus"></i> Nouveau PV</button>
+</div>
   </div>
-   <h2>Procès-verbal généré</h2>
+ <button id="closePVBtn" class="btn-fermer" onclick="fermerPV()" style="display:none;">❌ Fermer</button>
+
+
+   <h2>Procès-verbal généré:</h2>
    <div id="sheet">
     <div class="col-g">
       <div class="title-left">MINISTERE DE L'INTERIEUR</div>
@@ -560,13 +708,13 @@ DIRECTION GÉNÉRALE DE LA GENDARMERIE     NATIONALE</div>
       <p>— Placés sous l'égide de la coordination départementale de la police aux frontières pour assurer la mission de contrôle des points de passage frontaliers, —</p>
       <p>— Vu le titre II du règlement (UE) 2016/399 du Parlement européen et du Conseil du 9 mars 2016 concernant un code de l’Union relatif au régime de franchissement des frontières par les personnes (code frontière Schengen) JO L 077 du 23 mars 2016, p.1. —</p>
       <p>— Vu les articles 5 à 8, 14 et 32 de ce règlement. —</p>
-      <p>— Vu la note des autorités françaises notifiant au premier Vice-président de la commission européenne son intention, à compter du 1er mai 2025 et jusqu’au 31 octobre 2025, de prolonger le rétablissement des contrôles aux frontières intérieures de la France avec la Belgique, le Luxembourg, l’Allemagne, l’Italie, l’Espagne, et la confédération Suisse, sur le fondement des articles 25 et 27 du règlement 2016/399 susvisé. —</p>
+      <p>— Vu la note des autorités françaises notifiant au premier Vice-président de la commission européenne son intention, à compter du 1er novembre 2025 et jusqu’au 30 avril 2026, de prolonger le rétablissement des contrôles aux frontières intérieures de la France avec la Belgique, le Luxembourg, l’Allemagne, l’Italie, l’Espagne, et la confédération Suisse, sur le fondement des articles 25 et 27 du règlement 2016/399 susvisé. —</p>
       <p>— Revêtus de nos uniformes réglementaires et insignes afférents à notre fonction et munis du gilet réfléchissant GENDARMERIE, —</p>
       <div id="texte-vehicule">
-      <p>— À <span id="esi_hconstat_o">(Heure de constatation)</span>, nous constatons la présence d’un <span id="veh_type_o">(véhicule)</span> <span id="veh_marque_o">(Marque du vehicule)</span> immatriculé <span id="veh_pays_o">(pays d'immatriculation)</span> sous le numéro <span id="veh_immat_o">(immatriculation)</span> en circulation et arrivant dans notre direction  —</p>
-	  <p>— Faisons signe réglementairement <span id="conducteur_article_o">au</span> <span id="conducteur_label_o">(conducteur)</span> de stationner son véhicule correctement et en sécurité <span id="lieu_controle_o">sur le parking de l’aire de repos du péage de La Turbie</span>, afin de procéder au contrôle de l’identité des passagers du véhicule. —</p>
+      <p id="constatation_o">— À <span id="esi_hconstat_o">(Heure de constatation)</span>, nous constatons la présence d’un <span id="veh_type_o">(véhicule)</span> <span id="veh_marque_o">(Marque du vehicule)</span> immatriculé <span id="veh_pays_o">(pays d'immatriculation)</span> sous le numéro <span id="veh_immat_o">(immatriculation)</span> en circulation et arrivant dans notre direction  —</p>
+	  <p id="signe_o">— Faisons signe réglementairement <span id="conducteur_article_o">au</span> <span id="conducteur_label_o">(conducteur)</span> de stationner son véhicule correctement et en sécurité <span id="lieu_controle_o">sur le parking de l’aire de repos du péage de La Turbie</span>, afin de procéder au contrôle de l’identité des passagers du véhicule. —</p>
       <p>— <span id="conducteur_article2_o">Le</span> <span id="conducteur_label2_o">conducteur</span> obtempère à notre demande, déclinons notre qualité et le motif de notre contrôle. —</p>
-	  <p>— Procédons au contrôle d'identité des personnes à bord du véhicule.</p>
+	  <p id="phrase_controle_o">— Procédons au contrôle d'identité des personnes à bord du véhicule.</p>
 
       <p id="piece_phrase_o">
 — À son bord, <span id="passager_article_o">un</span> <span id="passager_label_o">passager</span>
@@ -578,11 +726,11 @@ DIRECTION GÉNÉRALE DE LA GENDARMERIE     NATIONALE</div>
 <!-- === TEXTE PIÉTON (neutre complet avec identification ESI) === -->
 <div id="texte-pieton" style="display:none">
 
-  <p>— À <span id="heure_pieton_o">[heure]</span>, nous constatons la présence d’un individu circulant à pied sur <span id="lieu_pieton_o">[lieu]</span> et venant dans notre direction. —</p>
+  <p>— À <span id="heure_pieton_o">[heure]</span>, nous constatons la présence d’un individu circulant à pied <span id="lieu_pieton_o">[lieu]</span> et venant dans notre direction. —</p>
 
   <p>— À son approche, nous déclinons notre qualité ainsi que le motif de notre contrôle. —</p>
 
-  <p>— Nous lui demandons de présenter un document pouvant justifier de son identité, conformément aux dispositions de l’article 78-2 du Code de procédure pénale. —</p>
+  <p>— Nous l’invitons à justifier de son identité, conformément aux dispositions de l’article 78-2 du Code de procédure pénale. —</p>
 
   <p id="piece_pieton_o">— L’intéressé(e) obtempère et est en mesure de nous présenter un document de type : <span id="piece_type_o">[pièce d'identité présentée]</span>. —</p>
 
@@ -603,12 +751,13 @@ DIRECTION GÉNÉRALE DE LA GENDARMERIE     NATIONALE</div>
       <p>— Agissant en vertu des articles L813-1 à L813-16 du Code de l’Entrée et du Séjour des Étrangers et du Droit d’Asile, —</p>
       <p>— Informons la personne qu’elle se trouve en situation irrégulière sur le territoire national français. —</p>
       <p>— Invitons <span id="esi_civil3_o">Monsieur</span> <span id="esi_nom3_o">THIAM</span> <span id="esi_prenom3_o">Mamadou Moustapha</span> à nous suivre. —</p>
-      <p>— <span id="palp_phrase_o">Palpé par mesure de sécurité, par un personnel masculin, il n’est trouvé porteur d’aucun objet dangereux pour autrui ou pour lui-même</span>. —</p>
+      <p>— <span id="palpation_text" style="white-space:pre-line; color:#000;"></span> —</p>
       <p>— <span id="transport_phrase_o">
 Transportons l’individu sans contrainte ni entraves au poste de la Police Aux Frontières de Saint Louis à Menton, à bord de notre véhicule de service sérigraphié « GENDARMERIE ».
 </span> —</p>
       <p>— Présentons l’individu devant l’Officier de Police Judiciaire Territorialement Compétent de permanence du poste de la Police Aux Frontières de <span id="paf_ville_o3">Saint Louis à Menton</span> à <span id="paf_heure_o">17 heures et 10 minutes</span>. L’horaire de présentation étant différé eu égard au délai de route. —</p>
-
+		<p> <span id="conf_paf_text" style="white-space:pre-line; color:#000;"></span> </p>
+		
 		<div class="signzone">
         
         <div class="signcell">L’APJA</div>
@@ -623,8 +772,13 @@ Transportons l’individu sans contrainte ni entraves au poste de la Police Aux 
     <div id="listePVcontenu" style="background:white;padding:10px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,0.2);"></div>
     <button class="back-btn" onclick="fermerMesPV()">⬅ Retour au PV</button>
   </div>
-  <a href="#" class="back-btn" onclick="backHome()">⬅ Retour</a>
+  <!-- 🔼 Bouton remonter en haut -->
+<button id="scrollTopBtn" title="Remonter en haut" style="display:none;">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
 </section>
+
 
 
 <script>
@@ -818,22 +972,104 @@ const heureL_txt = heureEnLettres(heureL);
     setTxt('esi_hconstat_o', hc_txt);
     setTxt(
   'veh_type_o',
-  veh_type === 'train'
+  veh_type.toLowerCase() === 'train'
     ? 'train'
-    : veh_type === 'vl'
+    : veh_type.toLowerCase() === 'vl'
     ? 'véhicule léger'
-    : veh_type === 'pl'
+    : veh_type.toLowerCase() === 'pl'
     ? 'poids lourd'
-    : veh_type === 'personne'
+    : veh_type.toLowerCase() === 'personne'
     ? 'individu circulant à pied'
-    : 'autobus'
+    : veh_type.toLowerCase() === 'bus'
+    ? 'autobus'
+    : 'véhicule'
 );
+
 
     setTxt('veh_pays_o', veh_pays ? 'en ' + veh_pays : '');
     setTxt('veh_marque_o', veh_marque);
     setTxt('veh_immat_o', veh_immat);
     setTxt('lieu_controle_o', lieu_ctrl);
     setTxt('piece_id_o', piece_id);
+
+// === Adaptation du texte selon le type de véhicule ===
+(() => {
+  const type = (veh_type || "").toLowerCase();
+
+  // 🚶‍♂️ Cas piéton → on ne modifie rien
+  if (type === "personne") return;
+
+  const constat = document.getElementById("constatation_o");
+  const signe = document.getElementById("signe_o");
+  const reponse = document.getElementById("conducteur_reponse_o");
+  const controle = document.getElementById("phrase_controle_o");
+
+  // === Cas TRAIN ===
+if (type === "train") {
+  // 1️⃣ Phrase de constatation
+  if (constat) {
+    constat.textContent = `— À ${hc_txt}, nous constatons la présence d’un train ${veh_marque || ""} immatriculé ${veh_pays || ""} sous le numéro ${veh_immat || ""}, en circulation et arrivant en gare dans notre direction. —`;
+  }
+
+  // 2️⃣ Phrase de contact conducteur/conductrice
+  if (signe) {
+    const article = document.getElementById("conducteur_article_o")?.textContent?.trim() || "au";
+    const label = document.getElementById("conducteur_label_o")?.textContent?.trim() || "conducteur";
+    signe.innerHTML = `— À l’arrêt du train, faisons signe <span id="conducteur_article_o">${document.getElementById("conducteur_article_o")?.textContent || "au"}</span> <span id="conducteur_label_o">${document.getElementById("conducteur_label_o")?.textContent || "conducteur"}</span> afin de lui indiquer que nous allons procéder à un contrôle. —`;
+  }
+
+  // 3️⃣ Phrase d’obtempération (adaptée au genre)
+  if (reponse) {
+    const article2 = document.getElementById("conducteur_article2_o")?.textContent?.trim() || "Le";
+    const label2 = document.getElementById("conducteur_label2_o")?.textContent?.trim() || "conducteur";
+    reponse.innerHTML = `— ${article2} ${label2} obtempère à notre demande, nous déclinons notre qualité et le motif de notre contrôle. —`;
+  }
+
+  // 4️⃣ Phrase de contrôle
+  if (controle) {
+    controle.textContent = "— Procédons au contrôle d’identité des passagers à bord du train. —";
+  }
+
+  return;
+}
+
+
+  // === 🔹 CAS BUS / VL / PL / AUTRE ===
+  const texteConstatStd = `— À ${hc_txt}, nous constatons la présence d’un ${type === "vl" ? "véhicule léger" : type === "pl" ? "poids lourd" : type === "bus" ? "autobus" : "véhicule"} ${veh_marque || ""} immatriculé ${veh_pays ? " " + veh_pays : ""} sous le numéro ${veh_immat || ""} en circulation et arrivant dans notre direction. —`;
+  if (constat) constat.textContent = texteConstatStd;
+
+  // 🧩 Ici on garde les spans dynamiques pour les accords de genre
+  if (signe) {
+    let lieu = lieu_ctrl || "sur le bas-côté";
+    if (type === "bus") lieu = lieu_ctrl || "sur le quai de la gare";
+
+    signe.innerHTML = `— Faisons signe réglementairement <span id="conducteur_article_o">${document.getElementById("conducteur_article_o")?.textContent || "au"}</span> <span id="conducteur_label_o">${document.getElementById("conducteur_label_o")?.textContent || "conducteur"}</span> de stationner son véhicule correctement et en sécurité ${lieu}, afin de procéder au contrôle de l’identité des passagers du véhicule. —`;
+  }
+
+  if (reponse) {
+    reponse.innerHTML = `— <span id="conducteur_article2_o">${document.getElementById("conducteur_article2_o")?.textContent || "Le"}</span> <span id="conducteur_label2_o">${document.getElementById("conducteur_label2_o")?.textContent || "conducteur"}</span> obtempère à notre demande, déclinons notre qualité et le motif de notre contrôle. —`;
+  }
+
+  if (controle) {
+    let phrase = "";
+    switch (type) {
+      case "bus":
+        phrase = "— Procédons au contrôle d’identité des passagers à bord du bus. —";
+        break;
+      case "vl":
+        phrase = "— Procédons au contrôle d’identité des passagers à bord du véhicule léger. —";
+        break;
+      case "pl":
+        phrase = "— Procédons au contrôle d’identité des passagers à bord du poids lourd. —";
+        break;
+      default:
+        phrase = "— Procédons au contrôle d’identité des passagers à bord du véhicule. —";
+    }
+    controle.textContent = phrase;
+  }
+})();
+
+
 // Accord conducteur / conductrice
 if (conducteur_genre === 'f') {
   setTxt('conducteur_article_o', 'à la');
@@ -884,21 +1120,21 @@ if (conducteur_genre === 'f') {
     setTxt('esi_nom3_o', esi_nom);
     setTxt('esi_prenom3_o', esi_prenom);
 
-    // Palpation & transport
-    setTxt('palp_genre_o', palp_genre==='f'?'féminin':'masculin');
-	// Accord complet de la phrase de palpation selon le sexe de l’ESI
-(() => {
-  const target = document.getElementById('palp_phrase_o');
-  if (!target) return;
+  // === PALPATION & TRANSPORT ===
+setTxt('palp_genre_o', 
+  palp_genre === 'f' ? 'féminin' :
+  palp_genre === 'm' ? 'masculin' :
+  palp_genre === 'impossible' ? 'impossible' : ''
+);
 
-  const agentGenre = palp_genre === 'f' ? "féminin" : "masculin";
+// === PALPATION & TRANSPORT ===
+setTxt('palp_genre_o', 
+  palp_genre === 'f' ? 'féminin' :
+  palp_genre === 'm' ? 'masculin' :
+  palp_genre === 'impossible' ? 'impossible' : ''
+);
 
-  if (esi_sexe === 'f') {
-    target.textContent = `Palpée par mesure de sécurité, par un personnel ${agentGenre}, elle n’est trouvée porteuse d’aucun objet dangereux pour autrui ou pour elle-même`;
-  } else {
-    target.textContent = `Palpé par mesure de sécurité, par un personnel ${agentGenre}, il n’est trouvé porteur d’aucun objet dangereux pour autrui ou pour lui-même`;
-  }
-})();
+
 
     // Phrase de transport selon le type choisi
 let phraseTransport = '';
@@ -990,14 +1226,23 @@ if (esi_sexe === 'f') {
     // Scroll vers la feuille pour aperçu
     document.getElementById('sheet').scrollIntoView({behavior:'smooth',block:'start'});
   }*/
-   const sheet = document.getElementById('sheet');
-    if(sheet){
-      sheet.style.display = 'grid';
-      sheet.style.margin = '30px auto';
-      sheet.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-  }
-  
+  const sheet = document.getElementById('sheet');
+if (sheet) {
+  sheet.style.display = 'grid';
+  sheet.style.margin = '30px auto';
+  sheet.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ✅ Affiche les boutons liés à l’affichage du PV
+const closeBtn = document.getElementById("closePVBtn");
+if (closeBtn) closeBtn.style.display = "inline-block";
+
+const scrollBtn = document.getElementById("scrollTopBtn");
+if (scrollBtn) scrollBtn.style.display = "block";
+
+majPalpation();
+}
+
  function openPrintPreview() {
   generatePV();
 
@@ -1060,7 +1305,7 @@ if (esi_sexe === 'f') {
           }
           .title-left { font-weight: bold; }
           .num-pv { margin-top: 8mm; font-style: italic; }
-          .signzone {
+         /* .signzone {
             margin-top: 16mm;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1069,7 +1314,27 @@ if (esi_sexe === 'f') {
             min-height: 28mm;
             border-top: 1px solid #aaa;
             padding-top: 4mm;
-          }
+          } */
+		  
+		  /* 🖋️ Zone des signatures */
+.signzone {
+  margin-top: 16mm;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* deux colonnes */
+  gap: 20mm; /* ⬅️ espace horizontal entre les deux signatures */
+  width: 90%; /* pour recentrer un peu la zone */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.signcell {
+  min-height: 28mm;
+  border-top: 1px solid #000;
+  padding-top: 4mm;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.95em;
+}
           @media print {
             body {
               margin: 0;
@@ -1112,7 +1377,7 @@ function savePV() {
     'date_lettres','heure_lettres','esi_hconstat','veh_type','veh_marque',
     'veh_immat','veh_pays','conducteur_genre','lieu_controle','piece_id',
     'esi_nom','esi_prenom','esi_sexe','esi_dnaiss','esi_lnaiss','esi_nat',
-    'esi_langue','fpr','agdref','fichiers_nat','palp_genre','transport_type',
+    'esi_langue','fpr','agdref','fichiers_nat','palp_genre','objets_trouves','transport_type',
     'paf_ville','paf_heure'
   ];
 
@@ -1292,8 +1557,21 @@ function ouvrirMesPV() {
 function fermerMesPV() {
   const listePV = document.getElementById('listePV');
   const sheet = document.getElementById('sheet');
+  const closeBtn = document.getElementById('closePVBtn'); // ✅ ton bouton Fermer
+
+  // 🔹 On cache la liste des PV
   if (listePV) listePV.style.display = 'none';
-  if (sheet) sheet.style.display = 'block';
+
+  // 🔹 On réaffiche le PV avec sa mise en page d’origine
+  if (sheet) {
+    sheet.style.display = 'grid'; // ✅ garde la mise en forme correcte
+    sheet.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // 🔹 On rend visible le bouton Fermer
+  if (closeBtn) closeBtn.style.display = 'inline-block';
+  const scrollBtn = document.getElementById("scrollTopBtn");
+if (scrollBtn) scrollBtn.style.display = "block"; // ✅ réaffiche quand retour PV
 }
 
 
@@ -1375,7 +1653,6 @@ function nouveauPV() {
  
 </script>
 
-</script>
 <script>
 // === Texte piéton neutre et complet (avec identification automatique) ===
 (function(){
@@ -1568,8 +1845,163 @@ if (typeof generatePV === "function" && !window._signaturesBound) {
 }
 
 </script>
+<script>
+document.getElementById('sendMailBtn').addEventListener('click', () => {
+  // 🔹 Récupération des infos du PV
+  const nomESI = document.getElementById('esi_nom')?.value.trim() || "ESI";
+  const date = document.getElementById('date_lettres')?.value.trim() || "Date";
+
+  // 🔹 Récupération des infos du rédacteur
+  const grade = document.getElementById('esr_grade')?.value.trim() || "";
+  const nomRedacteur = document.getElementById('esr_nom')?.value.trim().toUpperCase() || "";
+  const prenom = document.getElementById('esr_prenom')?.value.trim() || "";
+  const affect = document.getElementById('esr_affect')?.value.trim() || "";
+
+  // 🔹 Adresse mail laissée vide (utilisateur choisit le destinataire)
+  const destinataire = "";
+
+  // 🔹 Création de la signature formatée
+  let signature = "Cordialement,\n\n";
+  if (grade || nomRedacteur) {
+    signature += `${grade} ${nomRedacteur}`;
+    if (prenom) signature += ` ${prenom}`;
+    signature += "\n";
+  }
+  if (affect) signature += `${affect}\n`;
+  signature += "Border Force 06\n";
+
+  // 🔹 Objet et corps du message
+  const subject = encodeURIComponent(`Transmission du PV - ${nomESI} (${date})`);
+  const body = encodeURIComponent(
+    "Bonjour,\n\n" +
+    "Veuillez trouver ci-joint le procès-verbal généré et enregistré depuis l’application Border Force / App PV.\n\n" +
+    "📎 Sélectionnez le fichier PDF que vous avez enregistré précédemment (dans le dossier Téléchargements ou Documents de votre appareil).\n\n" +
+    signature
+  );
+
+  // 🔹 Ouvre la messagerie avec les champs préremplis
+  window.location.href = `mailto:${destinataire}?subject=${subject}&body=${body}`;
+});
+</script>
+<script>
+// === Menu déroulant Options ===
+document.getElementById('toggleOptions').addEventListener('click', () => {
+  const menu = document.getElementById('optionsMenu');
+  menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'flex' : 'none';
+});
+</script>
+<script>
+function majPalpation() {
+  const zonePalp = document.getElementById("palpation_text");
+  const zoneConf = document.getElementById("conf_paf_text");
+  if (!zonePalp) return;
+
+  const palpGenre = (document.getElementById("palp_genre")?.value || "").toLowerCase();
+  const esiSexe   = (document.getElementById("esi_sexe")?.value || "").toLowerCase();
+  const objets    = (document.getElementById("objets_trouves")?.value || "").trim();
+
+  let texte = "";
+  let texteConf = "";
+
+  if (palpGenre === "impossible") {
+    texte = "La palpation de sécurité n’a pas pu être réalisée sur place à défaut de personnel du même sexe.";
+  } 
+  else if (palpGenre === "m" || palpGenre === "f") {
+    const personnel = palpGenre === "m" ? "personnel masculin" : "personnel féminin";
+
+    // Gestion sécurisée du genre de l’ESI
+    let debut, pronom, e, porteur;
+    if (esiSexe.startsWith("f")) {
+      debut = "Palpée";
+      pronom = "elle";
+      e = "e";
+      porteur = "porteuse";
+    } else if (esiSexe.startsWith("m")) {
+      debut = "Palpé";
+      pronom = "il";
+      e = "";
+      porteur = "porteur";
+    } else {
+      // Cas neutre (si sexe non renseigné) 
+      debut = "Palpé(e)";
+      pronom = "la personne";
+      e = "";
+      porteur = "porteuse/porteur";
+    }
+
+    if (!objets) {
+      texte = `${debut} par mesure de sécurité, par un ${personnel}, ${pronom} n’est trouvé${e} ${porteur} d’aucun objet dangereux pour autrui ou pour ${pronom === "elle" ? "elle-même" : pronom === "il" ? "lui-même" : "elle/lui-même"}.`;
+    } 
+    else {
+      const liste = objets.split(/[,;]+/).map(x => x.trim()).filter(Boolean);
+      const pluriel = liste.length > 1;
+      const objetsTxt = liste.join(", ");
+      const motObjet = pluriel ? "objets" : "objet";
+      const suivants = pluriel ? "suivants" : "suivant";
+      const deDes = pluriel ? "des" : "de l’";
+      const ceCes = pluriel ? "Ces" : "Cet";
+      const ont = pluriel ? "sont" : "est";
+      const confisques = pluriel ? "confisqués" : "confisqué";
+      const confies = pluriel ? "confiés" : "confié";
+      const lesOuL = pluriel ? "Les" : "L’";
+
+      // Phrase principale
+      texte = `${debut} par mesure de sécurité, par un ${personnel}, ${pronom} est trouvé${e} ${porteur} ${deDes} ${motObjet} ${suivants} : ${objetsTxt}. `
+            + `${ceCes} ${motObjet} ${ont} ${confisques} pendant le transport.`;
+
+      // Phrase finale déplacée à la fin du PV
+      texteConf = `— ${lesOuL} ${motObjet} ${confisques} ${ont} ${confies} au personnel de la Police aux Frontières. — `;
+    }
+  }
+
+  zonePalp.textContent = texte;
+  if (zoneConf) zoneConf.textContent = texteConf;
+}
+
+
+</script>
+<script>
+function formatDateNaissance(input) {
+  let v = input.value.replace(/\D/g, ""); // supprime tout sauf les chiffres
+  if (v.length >= 5) {
+    input.value = v.slice(0, 2) + "/" + v.slice(2, 4) + "/" + v.slice(4, 8);
+  } else if (v.length >= 3) {
+    input.value = v.slice(0, 2) + "/" + v.slice(2, 4);
+  } else {
+    input.value = v;
+  }
+}
+</script>
+<script>
+// Fonction pour remonter en haut de la page
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'  // 👈 défilement fluide
+  });
+}
+
+// Détecte le clic sur le bouton
+document.getElementById("scrollTopBtn").addEventListener("click", scrollToTop);
+</script>
+<script>
+function fermerPV() {
+  const sheet = document.getElementById("sheet");
+  if (sheet) sheet.style.display = "none";
+
+  const closeBtn = document.getElementById("closePVBtn");
+  if (closeBtn) closeBtn.style.display = "none";
+  
+   const scrollBtn = document.getElementById("scrollTopBtn");
+  if (scrollBtn) scrollBtn.style.display = "none"; // 👈 cache le bouton quand on ferme le PV
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+
+
+
+
 
 </body>
 </html>
-
-
