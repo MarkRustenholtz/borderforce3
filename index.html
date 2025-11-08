@@ -394,7 +394,11 @@
 <option value="Femme">Femme</option>
 </select>
 <input id="passeurAgeNum" min="0" placeholder="Âge (chiffre)" style="width: 100px;" type="number">
-<input id="passeurNationalite" placeholder="Nationalité" type="text"/>
+<input id="passeurNationalite"
+       class="nat-autocomplete"
+       placeholder="Nationalité"
+       type="text"
+       autocomplete="off">
 <input id="passeurLieu" placeholder="Lieu interpellation" type="text"/>
 <label for="passeurHeure">Heure interpellation :</label>
 <input id="passeurHeure" type="time"/>
