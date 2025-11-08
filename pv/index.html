@@ -374,6 +374,19 @@ fieldset textarea {
   opacity: 0;
 }
 
+#toast {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 8px 14px;
+  font-size: 12px;
+  border-radius: 8px;
+  z-index: 9999;
+  display: none;
+}
 
 
 </style>
@@ -1480,37 +1493,34 @@ if (typeof majTextePieton === "function") majTextePieton();
 // === GESTION MULTI-PV ===
 let pvCourantId = null; // identifiant du PV en cours d'édition
 
-// 🔹 Sauvegarde manuelle
+// 🔹 Sauvegarde manuelle (version compatible sandbox + notification)
 function sauvegarderPV() {
   const data = {};
   document.querySelectorAll('input, select, textarea').forEach(el => {
-    data[el.id] = el.value;
+    if (el.id) data[el.id] = el.value;
   });
 
-  const nomESI = document.getElementById('esi_nom').value.trim() || "Inconnu";
-  const dateMission = document.getElementById('date_lettres').value.trim() || "Date ?";
-  
-  // 🆔 Si on est en train de modifier un PV existant, on garde le même id
-  const id = pvCourantId || Date.now();
+  const nomESI = (document.getElementById('esi_nom')?.value || "Inconnu").trim();
+  const dateMission = (document.getElementById('date_lettres')?.value || "Date ?").trim();
 
-  const list = JSON.parse(localStorage.getItem('pv_list') || "[]");
-  const index = list.findIndex(pv => pv.id === id);
+  let list = JSON.parse(localStorage.getItem('pv_list') || "[]");
+  let id = pvCourantId || Date.now();
+
+  const index = list.findIndex(pv => String(pv.id) === String(id));
   const newPV = { id, nomESI, dateMission, data };
 
   if (index >= 0) {
-    list[index] = newPV; // on remplace le PV existant
-    alert("🔄 PV mis à jour !");
+    list[index] = newPV;
+    showToast("🔄 PV mis à jour");
   } else {
-    list.push(newPV); // sinon on crée un nouveau
-    alert("✅ PV sauvegardé !");
-	 pvCourantId = id;
+    list.push(newPV);
+    showToast("✅ PV sauvegardé");
   }
 
+  pvCourantId = id;
   localStorage.setItem('pv_list', JSON.stringify(list));
-  
-  // On vide le flag pour éviter les doublons si on veut créer un nouveau PV ensuite
-  pvCourantId = null;
 }
+
 
 
 // 🔹 Affichage de la page "Mes PV"
@@ -1574,36 +1584,51 @@ function fermerMesPV() {
 if (scrollBtn) scrollBtn.style.display = "block"; // ✅ réaffiche quand retour PV
 }
 
-
 function chargerPV(id) {
   const list = JSON.parse(localStorage.getItem('pv_list') || "[]");
-  const pv = list.find(p => p.id === id);
-  if (!pv) return alert("PV introuvable !");
-  
-  // Réinjecte toutes les données dans les champs
-  Object.keys(pv.data).forEach(k => {
-    const el = document.getElementById(k);
-    if (el) el.value = pv.data[k];
-  });
 
-  // Sauvegarde l'ID du PV actuellement ouvert
-  pvCourantId = id;
+  // 🔍 on compare en string pour être sûr (évite les bugs number/string)
+  const pv = list.find(p => String(p.id) === String(id));
 
+  if (!pv) {
+    showToast("PV introuvable");
+    return;
+  }
+
+  // ♻️ Réinjecte toutes les données dans les champs
+  if (pv.data && typeof pv.data === 'object') {
+    Object.keys(pv.data).forEach(k => {
+      const el = document.getElementById(k);
+      if (el) el.value = pv.data[k];
+    });
+  }
+
+  // 🆔 On mémorise l'ID du PV chargé pour le prochain sauvegarderPV()
+  pvCourantId = pv.id;
+
+  // 🔙 On ferme la liste et revient sur le PV
   fermerMesPV();
-   pvCourantId = id;
-  alert("✅ PV chargé pour modification");
+
+  // ✅ Petit message non bloquant
+  showToast("PV chargé");
+
+  // 🔼 Remonte en haut + régénère le PV avec les nouvelles valeurs
   window.scrollTo({ top: 0, behavior: 'smooth' });
-    generatePV();
+  generatePV();
 }
 
 
 function supprimerPV(id) {
-  if (!confirm("Supprimer ce PV ?")) return;
+  // En sandbox, confirm() est bloqué → on supprime directement
   let list = JSON.parse(localStorage.getItem('pv_list') || "[]");
-  list = list.filter(pv => pv.id !== id);
+
+  list = list.filter(pv => String(pv.id) !== String(id));
+
   localStorage.setItem('pv_list', JSON.stringify(list));
   ouvrirMesPV();
+  showToast("PV supprimé");
 }
+
 function nouveauPV() {
   if (!confirm("Créer un nouveau PV vierge ? Les champs (hors rédacteur) seront effacés.")) return;
 
@@ -1998,10 +2023,21 @@ function fermerPV() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 </script>
+<script>
+function showToast(message) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = message;
+  t.style.display = 'block';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => {
+    t.style.display = 'none';
+  }, 1500);
+}
+</script>
 
 
 
-
-
+<div id="toast"></div>
 </body>
 </html>
