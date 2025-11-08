@@ -387,13 +387,51 @@ fieldset textarea {
   z-index: 9999;
   display: none;
 }
+/* === En-tête haut du PV === */
+#pv-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #003366;           /* bleu gendarmerie */
+  color: white;
+  padding: 10px 14px;
+  font-family: sans-serif;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+#pv-header h1 {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+#btn-retour {
+  background: #0055aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#btn-retour:hover {
+  background: #0070cc;
+}
 
 
 </style>
 </head>
 
 <body>
-
+<header id="pv-header">
+  <button id="btn-retour" onclick="window.location.href='../index.html'">
+    ⬅️ Retour
+  </button>
+  <h1>Procès-verbal</h1>
+</header>
 
 <!-- MENU PRINCIPAL -->
 <div id="homePage">
