@@ -420,21 +420,6 @@ fieldset textarea {
 #btn-retour:hover {
   background: #0070cc;
 }
-/* Couleur à l'écran pour les valeurs dynamiques */
-.pv-var {
-  color: #0055cc;
-  font-weight: 600;
-}
-
-/* À l'impression / en PDF : tout repasse en noir */
-@media print {
-  .pv-var {
-    color: #000 !important;
-    font-weight: normal !important;
-    background: none !important;
-  }
-}
-
 
 </style>
 </head>
@@ -538,7 +523,7 @@ fieldset textarea {
     <div class="row">
       <div>
         <label>Date (lettres)</label>
-        <input id="date_lettres" placeholder="17 Juillet" />
+        <input id="date_lettres" placeholder="ex: samedi huit novembre" />
       </div>
       <div>
         <label>Heure avant constatation</label>
@@ -719,7 +704,6 @@ autocapitalize="off"
   </div>
  <button id="closePVBtn" class="btn-fermer" onclick="fermerPV()" style="display:none;">❌ Fermer</button>
 
-
    <h2>Procès-verbal généré:</h2>
    <div id="sheet">
     <div class="col-g">
@@ -730,11 +714,11 @@ autocapitalize="off"
 DE LA POLICE NATIONALE
 
 DIRECTION GÉNÉRALE DE LA GENDARMERIE     NATIONALE</div>
-      <div class="num-pv">NUMÉRO DE P.V. : <span id="pv_num_o" class="pv-var"></span></div>
+      <div class="num-pv">NUMÉRO DE P.V. : <span id="pv_num_o"></span></div>
 
       <div style="margin-top:8mm">AFFAIRE :</div>
      
-      <div style="margin-top:8mm"><span id="esi_civil_left_o" class="pv-var">Monsieur</span> <span id="aff_nomcomplet_o" class="pv-var">Nom Prénom</span></div>
+      <div style="margin-top:8mm"><span id="esi_civil_left_o">Monsieur</span> <span id="aff_nomcomplet_o">Nom Prénom</span></div>
       <div style="margin-top:6mm">OBJET :</div>
       <div>Rapport de saisine</div>
       <div style="margin-top:6mm">SAISINE :</div>
@@ -753,16 +737,16 @@ DIRECTION GÉNÉRALE DE LA GENDARMERIE     NATIONALE</div>
 <div style="height:10mm;"></div>
 
       <p>L'an deux mil vingt-cinq,</p>
-      <p>Le <span id="date_lettres_o" class="pv-var">17 Juillet</span>, à <span id="heure_lettres_o" class="pv-var">16 heures et 25 minutes</span></p>
+      <p>Le <span id="date_lettres_o">17 Juillet</span>, à <span id="heure_lettres_o">16 heures et 25 minutes</span></p>
       <p>NOUS :</p>
 
-      <p>Soussigné, <span id="esr_grade_o" class="pv-var">Grade</span> <span id="esr_nom_o" class="pv-var">Nom</span> <span id="esr_prenom_o" class="pv-var">Prénom</span>, <span id="esr_qualite_o" class="pv-var">Agent de Police Judiciaire Adjoint / APJA</span>, affecté à la <span id="esr_affect_o" class="pv-var">CRT 06/1 Nice</span>,</p>
+      <p>Soussigné, <span id="esr_grade_o">Grade</span> <span id="esr_nom_o">Nom</span> <span id="esr_prenom_o">Prénom</span>, <span id="esr_qualite_o">Agent de Police Judiciaire Adjoint / APJA</span>, affecté à la <span id="esr_affect_o">CRT 06/1 Nice</span>,</p>
 
-      <p>Assisté<span id="assist_e_o" class="pv-var"> </span> du <span id="assist_list_o" class="pv-var">Grade Nom Prénom, Agent de Police Judiciaire Adjoint (APJA), affecté à la CRT</span></p>
+      <p>Assisté<span id="assist_e_o"> </span> du <span id="assist_list_o">Grade Nom Prénom, Agent de Police Judiciaire Adjoint (APJA), affecté à la CRT</span></p>
 
       <p>En fonction du Groupement de Gendarmerie Départementale des Alpes Maritimes, et détachés pour emplois au profit de Lutte contre l’Immigration Irrégulière et Clandestine, dans le cadre du dispositif Border Force 06</p>
 
-      <p>— Nous trouvant en mission de lutte contre l’immigration irrégulière et clandestine dans le département des Alpes-Maritimes (06) au point de passage autorisé de <span id="mission_lieu_o" class="pv-var">la Turbie</span> ce jour de <span id="mission_hdeb_o" class="pv-var">15</span> à <span id="mission_hfin_o" class="pv-var">23</span> . —</p>
+      <p>— Nous trouvant en mission de lutte contre l’immigration irrégulière et clandestine dans le département des Alpes-Maritimes (06) au point de passage autorisé de <span id="mission_lieu_o">la Turbie</span> ce jour de <span id="mission_hdeb_o">15</span> à <span id="mission_hfin_o">23</span> . —</p>
 
       <p>— Mis temporairement et nominativement à la disposition de Monsieur le Préfet des Alpes-Maritimes, aux fins d'assurer une mission de lutte contre l'immigration irrégulière dans le département des Alpes-Maritimes, —</p>
 
@@ -776,51 +760,51 @@ DIRECTION GÉNÉRALE DE LA GENDARMERIE     NATIONALE</div>
       <p>— Vu la note des autorités françaises notifiant au premier Vice-président de la commission européenne son intention, à compter du 1er novembre 2025 et jusqu’au 30 avril 2026, de prolonger le rétablissement des contrôles aux frontières intérieures de la France avec la Belgique, le Luxembourg, l’Allemagne, l’Italie, l’Espagne, et la confédération Suisse, sur le fondement des articles 25 et 27 du règlement 2016/399 susvisé. —</p>
       <p>— Revêtus de nos uniformes réglementaires et insignes afférents à notre fonction et munis du gilet réfléchissant GENDARMERIE, —</p>
       <div id="texte-vehicule">
-      <p id="constatation_o" class="pv-var">— À <span id="esi_hconstat_o" class="pv-var">(Heure de constatation)</span>, nous constatons la présence d’un <span id="veh_type_o" class="pv-var">(véhicule)</span> <span id="veh_marque_o" class="pv-var">(Marque du vehicule)</span> immatriculé <span id="veh_pays_o" class="pv-var">(pays d'immatriculation)</span> sous le numéro <span id="veh_immat class="pv-var">(immatriculation)</span> en circulation et arrivant dans notre direction  —</p>
-	  <p id="signe_o" class="pv-var">— Faisons signe réglementairement <span id="conducteur_article_o" class="pv-var">au</span> <span id="conducteur_label_o" class="pv-var">(conducteur)</span> de stationner son véhicule correctement et en sécurité <span id="lieu_controle_o" class="pv-var">sur le parking de l’aire de repos du péage de La Turbie</span>, afin de procéder au contrôle de l’identité des passagers du véhicule. —</p>
-      <p>— <span id="conducteur_article2_o" class="pv-var">Le</span> <span id="conducteur_label2_o" class="pv-var">conducteur</span> obtempère à notre demande, déclinons notre qualité et le motif de notre contrôle. —</p>
-	  <p id="phrase_controle_o" class="pv-var">— Procédons au contrôle d'identité des personnes à bord du véhicule.</p>
+      <p id="constatation_o">— À <span id="esi_hconstat_o">(Heure de constatation)</span>, nous constatons la présence d’un <span id="veh_type_o">(véhicule)</span> <span id="veh_marque_o">(Marque du vehicule)</span> immatriculé <span id="veh_pays_o">(pays d'immatriculation)</span> sous le numéro <span id="veh_immat_o">(immatriculation)</span> en circulation et arrivant dans notre direction  —</p>
+	  <p id="signe_o">— Faisons signe réglementairement <span id="conducteur_article_o">au</span> <span id="conducteur_label_o">(conducteur)</span> de stationner son véhicule correctement et en sécurité <span id="lieu_controle_o">sur le parking de l’aire de repos du péage de La Turbie</span>, afin de procéder au contrôle de l’identité des passagers du véhicule. —</p>
+      <p>— <span id="conducteur_article2_o">Le</span> <span id="conducteur_label2_o">conducteur</span> obtempère à notre demande, déclinons notre qualité et le motif de notre contrôle. —</p>
+	  <p id="phrase_controle_o">— Procédons au contrôle d'identité des personnes à bord du véhicule.</p>
 
-      <p id="piece_phrase_o" class="pv-var">
-— À son bord, <span id="passager_article_o" class="pv-var">un</span> <span id="passager_label_o" class="pv-var">passager</span>
-<span id="piece_phrase_part_o" class="pv-var">est en mesure de nous présenter un passeport</span>.
-<span id="individu_phrase_o" class="pv-var">Cet individu</span> n’étant pas en mesure de nous présenter de document d’identité ou de voyage en cours de validité,
-<span id="passager_pronom_o" class="pv-var">ce dernier</span> n’est donc pas en règle pour voyager, circuler ou séjourner sur le territoire national français. —
+      <p id="piece_phrase_o">
+— À son bord, <span id="passager_article_o">un</span> <span id="passager_label_o">passager</span>
+<span id="piece_phrase_part_o">est en mesure de nous présenter un passeport</span>.
+<span id="individu_phrase_o">Cet individu</span> n’étant pas en mesure de nous présenter de document d’identité ou de voyage en cours de validité,
+<span id="passager_pronom_o">ce dernier</span> n’est donc pas en règle pour voyager, circuler ou séjourner sur le territoire national français. —
 </p>
 </div>
 <!-- === TEXTE PIÉTON (neutre complet avec identification ESI) === -->
 <div id="texte-pieton" style="display:none">
 
-  <p>— À <span id="heure_pieton_o" class="pv-var">[heure]</span>, nous constatons la présence d’un individu circulant à pied <span id="lieu_pieton_o" class="pv-var">[lieu]</span> et venant dans notre direction. —</p>
+  <p>— À <span id="heure_pieton_o">[heure]</span>, nous constatons la présence d’un individu circulant à pied <span id="lieu_pieton_o">[lieu]</span> et venant dans notre direction. —</p>
 
   <p>— À son approche, nous déclinons notre qualité ainsi que le motif de notre contrôle. —</p>
 
   <p>— Nous l’invitons à justifier de son identité, conformément aux dispositions de l’article 78-2 du Code de procédure pénale. —</p>
 
-  <p id="piece_pieton_o" class="pv-var">— L’intéressé(e) obtempère et est en mesure de nous présenter un document de type : <span id="piece_type_o" class="pv-var">[pièce d'identité présentée]</span>. —</p>
+  <p id="piece_pieton_o">— L’intéressé(e) obtempère et est en mesure de nous présenter un document de type : <span id="piece_type_o">[pièce d'identité présentée]</span>. —</p>
 
 </div>
       <p>— Il s’agit de : —</p>
 
-      <p id="esi_lang_phrase_o" class="pv-var">
-— <span id="esi_civil_o" class="pv-var">Monsieur</span> <span id="esi_nom_o" class="pv-var">Nom</span> <span id="esi_prenom_o" class="pv-var">Prénom</span> né<span id="esi_nee_o" class="pv-var"></span> le <span id="esi_dnaiss_o" class="pv-var">(date de naissance)</span> à <span id="esi_lnaiss_o" class="pv-var">Ville de naissance</span>, de nationalité <span id="esi_nat_o" class="pv-var">(nationalité)</span>, de sexe <span id="esi_sexe_o" class="pv-var">masculin</span>. <span id="langue_phrase_o" class="pv-var">L’individu s’exprime en français approximatif.</span> <span id="identite_phrase class="pv-var">Son identité est relevée sur les pièces précitées.</span> —
+      <p id="esi_lang_phrase_o">
+— <span id="esi_civil_o">Monsieur</span> <span id="esi_nom_o">Nom</span> <span id="esi_prenom_o">Prénom</span> né<span id="esi_nee_o"></span> le <span id="esi_dnaiss_o">(date de naissance)</span> à <span id="esi_lnaiss_o">Ville de naissance</span>, de nationalité <span id="esi_nat_o">(nationalité)</span>, de sexe <span id="esi_sexe_o">masculin</span>. <span id="langue_phrase_o">L’individu s’exprime en français approximatif.</span> <span id="identite_phrase_o">Son identité est relevée sur les pièces précitées.</span> —
 </p>
 
 
       <p>— Effectuons des recherches concernant cette personne auprès des fichiers de Police mis à notre disposition, à l’aide de notre tablette de service : —</p>
-	  <p>— FPR : <span id="fpr_o" class="pv-var">Négatif</span> —</p>
-      <p>— AGDREF : <span id="agdref_o" class="pv-var">Négatif</span> —</p>
-      <p>—Aux fichiers Nationaux il appert qu’à ce jour et sous cette identité : <span id="fichiers_nat_o" class="pv-var">il a fait l’objet d’une OQTF</span> —</p>
-      <p>— Rendons immédiatement compte des faits à l’Officier de Police Judiciaire Territorialement Compétent de permanence du poste de la Police Aux Frontières de <span id="paf_ville_o1">Saint Louis à Menton</span>, qui nous donne l’ordre de lui présenter <span id="esi_civil2_o" class="pv-var">Monsieur</span> <span id="esi_nom2_o" class="pv-var">THIAM</span> <span id="esi_prenom2_o" class="pv-var">Mamadou Moustapha</span> dans les plus brefs délais. —</p>
-      <p>— Dès lors, nous nous trouvons en présence <span id="esi_etranger_phrase_o" class="pv-var">d’un étranger</span> en situation irrégulière au voyage, à la circulation ou au séjour sur le territoire national français, —</p>
+	  <p>— FPR : <span id="fpr_o">Négatif</span> —</p>
+      <p>— AGDREF : <span id="agdref_o">Négatif</span> —</p>
+      <p>—Aux fichiers Nationaux il appert qu’à ce jour et sous cette identité : <span id="fichiers_nat_o">il a fait l’objet d’une OQTF</span> —</p>
+      <p>— Rendons immédiatement compte des faits à l’Officier de Police Judiciaire Territorialement Compétent de permanence du poste de la Police Aux Frontières de <span id="paf_ville_o1">Saint Louis à Menton</span>, qui nous donne l’ordre de lui présenter <span id="esi_civil2_o">Monsieur</span> <span id="esi_nom2_o">THIAM</span> <span id="esi_prenom2_o">Mamadou Moustapha</span> dans les plus brefs délais. —</p>
+      <p>— Dès lors, nous nous trouvons en présence <span id="esi_etranger_phrase_o">d’un étranger</span> en situation irrégulière au voyage, à la circulation ou au séjour sur le territoire national français, —</p>
       <p>— Agissant en vertu des articles L813-1 à L813-16 du Code de l’Entrée et du Séjour des Étrangers et du Droit d’Asile, —</p>
       <p>— Informons la personne qu’elle se trouve en situation irrégulière sur le territoire national français. —</p>
-      <p>— Invitons <span id="esi_civil3_o" class="pv-var">Monsieur</span> <span id="esi_nom3_o" class="pv-var">THIAM</span> <span id="esi_prenom3_o" class="pv-var">Mamadou Moustapha</span> à nous suivre. —</p>
+      <p>— Invitons <span id="esi_civil3_o">Monsieur</span> <span id="esi_nom3_o">THIAM</span> <span id="esi_prenom3_o">Mamadou Moustapha</span> à nous suivre. —</p>
       <p>— <span id="palpation_text" style="white-space:pre-line; color:#000;"></span> —</p>
-      <p>— <span id="transport_phrase_o" class="pv-var">
+      <p>— <span id="transport_phrase_o">
 Transportons l’individu sans contrainte ni entraves au poste de la Police Aux Frontières de Saint Louis à Menton, à bord de notre véhicule de service sérigraphié « GENDARMERIE ».
 </span> —</p>
-      <p>— Présentons l’individu devant l’Officier de Police Judiciaire Territorialement Compétent de permanence du poste de la Police Aux Frontières de <span id="paf_ville_o3">Saint Louis à Menton</span> à <span id="paf_heure_o" class="pv-var">17 heures et 10 minutes</span>. L’horaire de présentation étant différé eu égard au délai de route. —</p>
+      <p>— Présentons l’individu devant l’Officier de Police Judiciaire Territorialement Compétent de permanence du poste de la Police Aux Frontières de <span id="paf_ville_o3">Saint Louis à Menton</span> à <span id="paf_heure_o">17 heures et 10 minutes</span>. L’horaire de présentation étant différé eu égard au délai de route. —</p>
 		<p> <span id="conf_paf_text" style="white-space:pre-line; color:#000;"></span> </p>
 		
 		<div class="signzone">
@@ -830,7 +814,6 @@ Transportons l’individu sans contrainte ni entraves au poste de la Police Aux 
       </div>
     </div>
   </div>
-  
     <!-- 📁 Liste des PV sauvegardés -->
   <div id="listePV" style="display:none; margin-top:30px;">
     <h3 style="color:#003366;">📁 Mes PV sauvegardés</h3>
