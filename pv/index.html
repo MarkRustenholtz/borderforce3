@@ -189,13 +189,20 @@ input, select, textarea {
 .signzone {
   margin-top: 16mm;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* deux colonnes */
+  gap: 20mm; /* ⬅️ espace horizontal entre les deux signatures */
+  width: 90%; /* pour recentrer un peu la zone */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .signcell {
   min-height: 28mm;
-  border-top: 1px solid #aaa;
+  border-top: 1px solid #000;
   padding-top: 4mm;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.95em;
 }
 
 /* Impression */
@@ -443,9 +450,22 @@ fieldset textarea {
   <div class="menu-btn" onclick="showSection('mission')">
     <i class="fa-solid fa-shield-halved"></i><span>Mission</span>
   </div>
-  <div class="menu-btn" onclick="showSection('esi')">
-    <i class="fa-solid fa-id-card"></i><span>ESI contrôlé</span>
-  </div>
+  <!-- === NOUVEAUX BOUTONS ESI === -->
+  <div class="menu-btn" onclick="showSection('esi_vehicule')">
+  <i class="fa-solid fa-car"></i><span>ESI — Véhicule/Piéton</span>
+</div>
+<div class="menu-btn" onclick="showSection('esi_identite')">
+  <i class="fa-solid fa-user"></i><span>ESI — Identité</span>
+</div>
+
+<div class="menu-btn" onclick="showSection('esi_fichiers')">
+  <i class="fa-solid fa-tablet-screen-button"></i><span>ESI — Fichiers</span>
+</div>
+
+<div class="menu-btn" onclick="showSection('esi_palpation')">
+  <i class="fa-solid fa-hand"></i><span>ESI — Palpation</span>
+</div>
+
   <div class="menu-btn" onclick="showSection('options')">
     <i class="fa-solid fa-gear"></i><span>Options</span>
   </div>
@@ -533,155 +553,164 @@ fieldset textarea {
   </fieldset>
   <a href="#" class="back-btn" onclick="backHome()">⬅ Retour</a>
 </section>
-
-<!-- SECTION ESI CONTRÔLÉ -->
-<section id="esi">
+<section id="esi_vehicule">
   <fieldset>
-    <legend>ESI contrôlé</legend>
-        <div class="row">
-          <div>
-            <label>Heure de constatation (lettres)</label>
-            <input id="esi_hconstat" type="time" placeholder="16 heures et 30 minutes" />
-          </div>
-          <div>
-           <label for="veh_type">Véhicule/Pieton</label>
+    <legend>ESI — Véhicule / Piéton</legend>
 
-<select id="veh_type">
-  <option value="" selected disabled>— Sélectionner —</option>
-  <option value="bus">Bus</option>
-  <option value="train">Train</option>
-  <option value="VL">Véhicule léger</option>
-  <option value="PL">Poids lourd</option>
-  <option value="personne">Personne</option>
-</select>
-          </div>
-        </div>
-		<label>Marque du véhicule/Compagnie du train/bus</label>
-<input id="veh_marque"placeholder="ex:Renault/Tranitalia/Flixbus" />
+    <div class="row">
+      <div>
+        <label>Heure de constatation</label>
+        <input id="esi_hconstat" type="time" placeholder="16:30">
+      </div>
+      <div>
+        <label for="veh_type">Véhicule / Piéton</label>
+        <select id="veh_type">
+          <option value="" selected disabled>— Sélectionner —</option>
+          <option value="bus">Bus</option>
+          <option value="train">Train</option>
+          <option value="VL">Véhicule léger</option>
+          <option value="PL">Poids lourd</option>
+          <option value="personne">Personne</option>
+        </select>
+      </div>
+    </div>
 
-        <label>Immatriculation / n° de train</label>
-        <input id="veh_immat" 
-       placeholder="AA-123-BB / TGV 6123" 
-       style="text-transform:uppercase" 
-       oninput="this.value=this.value.toUpperCase()" 
-       autocorrect="off" 
-       autocapitalize="characters" 
-       spellcheck="false">
+    <label>Marque du véhicule / Compagnie du train/bus</label>
+    <input id="veh_marque" placeholder="ex: Renault / Trenitalia / FlixBus">
 
-		<label for="veh_pays">Pays d’immatriculation</label>
-<input id="veh_pays" placeholder="ex: en Italie"
-oninput="if(this.value) this.value = this.value.charAt(0).toLowerCase() + this.value.slice(1)">
+    <label>Immatriculation / n° de train</label>
+    <input id="veh_immat" placeholder="AA-123-BB / TGV 6123" style="text-transform:uppercase"
+           oninput="this.value=this.value.toUpperCase()">
 
-<label>Conducteur / Conductrice</label>
-<select id="conducteur_genre">
-  <option value="m">Conducteur</option>
-  <option value="f">Conductrice</option>
-</select>
+    <label>Pays d’immatriculation</label>
+    <input id="veh_pays" placeholder="ex: en Italie"
+           oninput="if(this.value)this.value=this.value.charAt(0).toLowerCase()+this.value.slice(1)">
 
-        <label>Lieu du contrôle</label>
+    <label>Conducteur / Conductrice</label>
+    <select id="conducteur_genre">
+      <option value="m">Conducteur</option>
+      <option value="f">Conductrice</option>
+    </select>
+
+   <label>Lieu du contrôle</label>
         <input id="lieu_controle" placeholder="ex: sur le bas côté" 
 autocapitalize="off"
        autocorrect="off"
        spellcheck="false">
-        <label>Pièce d’identité présentée</label>
+  </fieldset>
+  <a href="#" class="back-btn" onclick="backHome()">⬅ Retour</a>
+</section>
+
+<section id="esi_identite">
+  <fieldset>
+    <legend>ESI — Identité & Pièce</legend>
+
+    <label>Pièce d’identité présentée</label>
         <input id="piece_id" placeholder="ex: passeport sans visa/ titre de séjour périmé"
 autocapitalize="off"
        autocorrect="off"
        spellcheck="false">
         <div class="row3">
-          <div>
-<small>⚠️SI PAS DE PIECE D'IDENTITÉ NE RIEN ECRIRE⚠️
-            <label>Nom</label>
-            <input id="esi_nom"
-       placeholder="NOM ESI"
-       style="text-transform:uppercase"
-       oninput="this.value=this.value.toUpperCase()"
-       autocorrect="off"
-       autocapitalize="characters"
-       spellcheck="false">
-          </div>
-          <div>
-            <label>Prénom</label>
-            <input id="esi_prenom" placeholder="prénom esi" />
-          </div>
-          <div>
-            <label>Sexe</label>
-            <select id="esi_sexe"><option value="m">Masculin</option><option value="f">Féminin</option></select>
-          </div>
-        </div>
-        <div class="row3">
-          <div>
-           <label>Date de naissance</label>
-<input id="esi_dnaiss" type="text" maxlength="10" placeholder="jj/mm/aaaa" oninput="formatDateNaissance(this)">
+      <div>
+        <small>⚠️SI PAS DE PIÈCE D'IDENTITÉ NE RIEN ÉCRIRE⚠️</small>
+        <label>Nom</label>
+        <input id="esi_nom" placeholder="NOM ESI" style="text-transform:uppercase"
+               oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div>
+        <label>Prénom</label>
+        <input id="esi_prenom" placeholder="prénom esi">
+      </div>
+      <div>
+        <label>Sexe</label>
+        <select id="esi_sexe"><option value="m">Masculin</option><option value="f">Féminin</option></select>
+      </div>
+    </div>
 
-          </div>
-          <div>
-            <label>Lieu de naissance</label>
-            <input id="esi_lnaiss" placeholder="ex:DAKAR (SENEGAL)"
-style="text-transform:uppercase" 
-       oninput="this.value=this.value.toUpperCase()" 
-       autocorrect="off" 
-       autocapitalize="characters" 
-       spellcheck="false">
-          </div>
-          <div>
-            <label>Nationalité</label>
-            <input id="esi_nat" placeholder="ex: sénégalaise" 
-autocapitalize="off"
-       autocorrect="off"
-       spellcheck="false">
-          </div>
-        </div>
-		<label>Langue parlée</label>
-<select id="esi_langue">
-  <option value="fr_ok">Parle français</option>
-  <option value="fr_approx">Français approximatif</option>
-  <option value="npf">Ne parle pas français</option>
-</select>
+    <div class="row3">
+      <div>
+        <label>Date de naissance</label>
+        <input id="esi_dnaiss" type="text" maxlength="10" placeholder="jj/mm/aaaa" oninput="formatDateNaissance(this)">
+      </div>
+      <div>
+        <label>Lieu de naissance</label>
+        <input id="esi_lnaiss" placeholder="ex: DAKAR (SÉNÉGAL)" style="text-transform:uppercase"
+               oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div>
+        <label>Nationalité</label>
+        <input id="esi_nat" placeholder="ex: sénégalaise">
+      </div>
+    </div>
 
-        <div class="row3">
-          <div>
-            <label>FPR</label>
-            <select id="fpr"><option>Négatif</option><option>Positif</option></select>
-          </div>
-          <div>
-            <label>AGDREF</label>
-            <select id="agdref"><option>Négatif</option><option>Positif</option></select>
-          </div>
-          <div>
-            <label>Fichiers nationaux (ex:OQTF,RAS,AUTRE)</label>
-            <input id="fichiers_nat" placeholder="OQTF" />
-          </div>
-        </div>
-        <div class="row">
-         <div>
-  <label>Palpation (genre de l’agent qui palpe)</label>
-  <select id="palp_genre" onchange="majPalpation()">
-    <option value="">— Sélectionner —</option>
-    <option value="m">Masculin</option>
-    <option value="f">Féminin</option>
-    <option value="impossible">Impossible (pas de personnel du même sexe)</option>
-  </select>
-</div>
-
-<div>
-  <label>Objets trouvés sur l’individu</label>
-  <input type="text" id="objets_trouves" placeholder="ex : couteau pliant, briquet" oninput="majPalpation()">
-</div>
-<small>⚠️SI PAS D'OBJET NE RIEN ECRIRE⚠️
-          <div>
-            <label>Véhicule de transport</label>
-            <select id="transport_type"><option>GENDARMERIE</option><option>Translation Police</option></select>
-          </div>
-        </div>
-        <label>PAF de présentation (ville)</label>
-        <input id="paf_ville" placeholder="Menton / Nice / Aéroport" />
-		<label>Heure de présentation à la PAF</label>
-<input id="paf_heure" type="time" placeholder="ex: 17 heures et 10 minutes" />
+    <label>Langue parlée</label>
+    <select id="esi_langue">
+      <option value="fr_ok">Parle français</option>
+      <option value="fr_approx">Français approximatif</option>
+      <option value="npf">Ne parle pas français</option>
+    </select>
   </fieldset>
   <a href="#" class="back-btn" onclick="backHome()">⬅ Retour</a>
 </section>
+<section id="esi_fichiers">
+  <fieldset>
+    <legend>ESI — Contrôle aux fichiers</legend>
+    <div class="row3">
+      <div>
+        <label>FPR</label>
+        <select id="fpr"><option>Négatif</option><option>Positif</option></select>
+      </div>
+      <div>
+        <label>AGDREF</label>
+        <select id="agdref"><option>Négatif</option><option>Positif</option></select>
+      </div>
+      <div>
+        <label>Fichiers nationaux (ex: OQTF, RAS, AUTRE)</label>
+        <input id="fichiers_nat" placeholder="OQTF">
+      </div>
+    </div>
+  </fieldset>
+  <a href="#" class="back-btn" onclick="backHome()">⬅ Retour</a>
+</section>
+<section id="esi_palpation">
+  <fieldset>
+    <legend>ESI — Palpation & Transport</legend>
 
+    <div class="row">
+      <div>
+        <label>Palpation (genre de l’agent qui palpe)</label>
+        <select id="palp_genre" onchange="majPalpation()">
+          <option value="">— Sélectionner —</option>
+          <option value="m">Masculin</option>
+          <option value="f">Féminin</option>
+          <option value="impossible">Impossible (pas de personnel du même sexe)</option>
+        </select>
+      </div>
+      <div>
+        <label>Objets trouvés sur l’individu</label>
+        <input type="text" id="objets_trouves" placeholder="ex : couteau pliant, briquet" oninput="majPalpation()">
+      </div>
+    </div>
+
+    <small>⚠️SI PAS D'OBJET NE RIEN ÉCRIRE⚠️</small>
+
+    <div class="row">
+      <div>
+        <label>Véhicule de transport</label>
+        <select id="transport_type"><option>GENDARMERIE</option><option>Translation Police</option></select>
+      </div>
+      <div>
+        <label>PAF de présentation (ville)</label>
+        <input id="paf_ville" placeholder="Menton / Nice / Aéroport">
+      </div>
+    </div>
+
+    <label>Heure de présentation à la PAF</label>
+    <input id="paf_heure" type="time" placeholder="ex: 17:10">
+  </fieldset>
+  <a href="#" class="back-btn" onclick="backHome()">⬅ Retour</a>
+</section>
+			  
 <!-- SECTION OPTIONS -->
 <section id="options">
   <div class="toolbar" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;flex-direction:column;align-items:center;">
