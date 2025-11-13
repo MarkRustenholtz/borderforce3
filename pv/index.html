@@ -1586,8 +1586,6 @@ function sauvegarderPV() {
   localStorage.setItem('pv_list', JSON.stringify(list));
 }
 
-
-
 // 🔹 Affichage de la page "Mes PV"
 function ouvrirMesPV() {
   const listePV = document.getElementById('listePV');
@@ -1752,7 +1750,7 @@ function nouveauPV() {
 
   // Indication visuelle (au lieu de alert, compatible sandbox)
   if (typeof showToast === 'function') {
-    showToast("Nouveau PV vierge prêt");
+    showToast("Nouveau PV vierge prêt champs rédacteur rechargés");
   }
 
   // Remonte en haut
@@ -1983,7 +1981,7 @@ document.getElementById('sendMailBtn').addEventListener('click', () => {
   const subject = encodeURIComponent(`Transmission du PV - ${nomESI} (${date})`);
   const body = encodeURIComponent(
     "Bonjour,\n\n" +
-    "Veuillez trouver ci-joint le procès-verbal généré et enregistré depuis l’application Border Force / App PV.\n\n" +
+    "Veuillez trouver ci-joint le procès-verbal.\n\n" +
     "📎 Sélectionnez le fichier PDF que vous avez enregistré précédemment (dans le dossier Téléchargements ou Documents de votre appareil).\n\n" +
     signature
   );
