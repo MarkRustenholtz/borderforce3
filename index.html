@@ -62,9 +62,9 @@
 <i class="fas fa-file-alt"></i>
 <span>Compte Rendu</span>
 </button>
-<button class="icon-button icon-fiche" onclick="showPage('ficheIdentitePage')">
-<i class="fas fa-id-card"></i>
-<span>Fiche identité</span>
+<button class="icon-button icon-fiche" onclick="showPage('pdfPage')">
+<i class="fa-solid fa-file-pdf"></i>
+<span>Biblithèque PDF</span>
 </button>
 <button class="icon-button icon-visa" onclick="showPage('assistantVisaPage')">
 <i class="fas fa-passport"></i>
@@ -526,80 +526,28 @@ Autres…"></textarea>
 </div>
 </div>
 </div>
-<!-- Page Fiche identité (intégration ESI+Visa - partie Fiche) -->
-<div class="page" id="ficheIdentitePage">
-<div class="page-header">
-<button class="back-button" onclick="showPage('homePage')">
-<i class="fas fa-arrow-left"></i> Retour
+
+<!--page fiches pdf--!>
+<div class="page" id="pdfPage" style="display:none;">
+  <div class="page-header">
+    <button class="back-button" onclick="showPage('homePage')">
+      <i class="fas fa-arrow-left"></i> Retour
     </button>
-<div class="page-title">Fiche identité</div>
+    <div class="page-title">Bibliothèque PDF</div>
+  </div>
+  <div class="page-content">
+    <p>Documents disponibles :</p>
+
+    <div class="pdf-grid">
+      <button class="pdf-item" onclick="openPdf('./pdf/DOC PAF.pdf')">
+        <i class="fa-solid fa-file-pdf"></i>
+        <span>Procédure ESI (PDF)</span>
+      </button>
+    </div>
+  </div>
 </div>
-<div class="page-content">
-<!-- Ici on intégrera le formulaire complet ESI (prochaine étape) -->
-<div id="ficheIdentiteApp">
-<form id="ficheForm">
-<label>Catégorie :
-      <select id="categorie">
-<option value="ESI">ESI</option>
-<option value="PASSEUR">PASSEUR</option>
-</select>
-</label>
-<h2>Identité</h2>
-<label>Nom<input autocomplete="off" id="nom" required="" type="text"/></label>
-<label>Prénom<input autocomplete="off" id="prenom" required="" type="text"/></label>
-<label>Sexe
-      <select id="sexe">
-<option value="">--Sélectionner--</option>
-<option value="Masculin">Masculin</option>
-<option value="Féminin">Féminin</option>
-<option value="Autre">Autre</option>
-</select>
-</label>
-<label>Nationalité<input autocomplete="off" id="nationalite" type="text"/></label>
-<label>Date de naissance :</label>
-<div class="date-naissance">
-<input id="jour" max="31" min="1" placeholder="JJ" required="" type="number"/>
-<input id="mois" max="12" min="1" placeholder="MM" required="" type="number"/>
-<input id="annee" max="2100" min="1900" placeholder="AAAA" required="" type="number"/>
-</div>
-<label>Âge<input id="age" readonly="" type="number"/></label>
-<h2>Intervention</h2>
-<label>Heure et Date d'intervention :</label>
-<div class="heure-date">
-<input id="heure" required="" type="time"/>
-<input id="dateIntervention" required="" type="date"/>
-</div>
-<label>Lieu d'interpellation<input autocomplete="off" id="lieuInterpellation" type="text"/></label>
-<label>Suites données<input autocomplete="off" id="suitesDonnees" type="text"/></label>
-<h2>Voyage</h2>
-<label>Ville de départ<input autocomplete="off" id="villeDepart" type="text"/></label>
-<label>Pays de départ<input autocomplete="off" id="paysDepart" type="text"/></label>
-<label>Ville de destination<input autocomplete="off" id="villeDestination" type="text"/></label>
-<label>Pays de destination<input autocomplete="off" id="paysDestination" type="text"/></label>
-<h2>Véhicule</h2>
-<label>Type de véhicule<input autocomplete="off" id="vehicule" type="text"/></label>
-<label>Immatriculation<input autocomplete="off" id="immatriculation" type="text"/></label>
-<h2>Pièces d'identité présentées</h2>
-<div id="piecesIdentite">
-<label><input name="piece" type="checkbox" value="Passeport valide"/> Passeport valide</label>
-<label><input name="piece" type="checkbox" value="Passeport périmé"/> Passeport périmé</label>
-<label><input name="piece" type="checkbox" value="Fiche de demande d'asile valide"/> Fiche de demande d'asile valide</label>
-<label><input name="piece" type="checkbox" value="Fiche de demande d'asile périmée"/> Fiche de demande d'asile périmée</label>
-<label><input name="piece" type="checkbox" value="Carte d'identité valide"/> Carte d'identité valide</label>
-<label><input name="piece" type="checkbox" value="Carte d'identité périmée"/> Carte d'identité périmée</label>
-<label><input name="piece" type="checkbox" value="Titre de séjour valide"/> Titre de séjour valide</label>
-<label><input name="piece" type="checkbox" value="Titre de séjour périmé"/> Titre de séjour périmé</label>
-<label><input id="autreCheck" name="piece" type="checkbox" value=""/> Autre :</label>
-</div>
-<input disabled="" id="autreTexte" placeholder="Précisez..." style="width:100%;margin-top:5px;padding:8px;" type="text"/>
-<button class="blue" type="submit">Enregistrer la fiche</button>
-</form>
-<h2>Historique des fiches</h2>
-<div id="historique"></div>
-<button class="red" id="effacerFiches">Effacer toutes les fiches</button>
-</div>
-</div>
-</div>
+
+
 <!-- Page Assistant Visas (intégration ESI+Visa - partie Assistant) -->
 <div class="page" id="assistantVisaPage">
 <div class="page-header">

@@ -550,4 +550,39 @@ fieldset {
   color: #fff;
 }
 
+.pdf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.pdf-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+  cursor: pointer;
+  text-align: left;
+}
+
+.pdf-item i {
+  font-size: 1.6em;
+  color: #c1121f; /* rouge PDF */
+}
+
+.pdf-item span {
+  flex: 1;
+  font-size: 0.95em;
+}
+
+.pdf-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+}
+
 
