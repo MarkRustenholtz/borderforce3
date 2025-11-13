@@ -429,6 +429,52 @@ fieldset textarea {
   background: #0070cc;
 }
 
+/* ÉCRAN : tous les champs dynamiques (_o) en bleu */
+@media screen {
+  #sheet [id$="_o"] {
+    color: #0055cc !important;
+    font-weight: 600 !important;
+  }
+}
+
+/* IMPRESSION / PDF : tout redevient noir */
+@media print {
+  #sheet [id$="_o"] {
+    color: #000 !important;
+    font-weight: normal !important;
+  }
+}
+@media screen {
+  #sheet [id$="_o"],
+  #sheet #paf_ville_o3,
+  #sheet #conf_paf_text {
+    color: #0055cc !important;
+    font-weight: 600 !important;
+  }
+}
+
+@media print {
+  #sheet [id$="_o"],
+  #sheet #paf_ville_o3,
+  #sheet #conf_paf_text {
+    color: #000 !important;
+    font-weight: normal !important;
+  }
+}
+
+@media screen {
+  #sheet #palpation_text {
+    color: #0055cc !important;
+    font-weight: 600 !important;
+  }
+}
+@media print {
+  #sheet #palpation_text {
+    color: #000 !important;
+    font-weight: normal !important;
+  }
+}
+
 </style>
 </head>
 
@@ -835,7 +881,7 @@ DIRECTION GÉNÉRALE DE LA GENDARMERIE     NATIONALE</div>
 Transportons l’individu sans contrainte ni entraves au poste de la Police Aux Frontières de Saint Louis à Menton, à bord de notre véhicule de service sérigraphié « GENDARMERIE ».
 </span> —</p>
       <p>— Présentons l’individu devant l’Officier de Police Judiciaire Territorialement Compétent de permanence du poste de la Police Aux Frontières de <span id="paf_ville_o3">Saint Louis à Menton</span> à <span id="paf_heure_o">17 heures et 10 minutes</span>. L’horaire de présentation étant différé eu égard au délai de route. —</p>
-		<p> <span id="conf_paf_text" style="white-space:pre-line; color:#000;"></span> </p>
+		<p> <span id="conf_paf_text" style="white-space:pre-line;"></span> </p>
 		
 		<div class="signzone">
         
