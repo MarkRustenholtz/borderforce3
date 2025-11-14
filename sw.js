@@ -7,7 +7,7 @@ const urlsToCache = [
   './icon-512.png',
    './libs/html5-qrcode.min.js',
   './libs/html2pdf.bundle.min.js',
-  ./docs/DOC PAF.pdf
+  ./docs/DOC_PAF.pdf
 ];
 
 // Installation : on met en cache les fichiers de base
