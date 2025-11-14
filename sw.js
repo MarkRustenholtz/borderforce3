@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cr-gendarmerie-cache-v64'; // ⚠️ change le numéro à chaque mise à jour
+const CACHE_NAME = 'cr-gendarmerie-cache-v65'; // ⚠️ change le numéro à chaque mise à jour
 const urlsToCache = [
   './',
   './index.html',
@@ -7,7 +7,7 @@ const urlsToCache = [
   './icon-512.png',
    './libs/html5-qrcode.min.js',
   './libs/html2pdf.bundle.min.js',
-  ./docs/DOC_PAF.pdf
+  ./docs/doc_paf.pdf
 ];
 
 // Installation : on met en cache les fichiers de base
