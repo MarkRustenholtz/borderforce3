@@ -1455,3 +1455,46 @@ function attachNatAutocomplete(input) {
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.nat-autocomplete').forEach(attachNatAutocomplete);
 });
+
+// Format automatique JJ/MM/AAAA
+function formatDOB(input) {
+  let numbers = input.value.replace(/\D/g, ''); // garde que les chiffres
+  if (numbers.length >= 5) {
+    input.value = numbers.slice(0, 2) + "/" + numbers.slice(2, 4) + "/" + numbers.slice(4, 8);
+  } else if (numbers.length >= 3) {
+    input.value = numbers.slice(0, 2) + "/" + numbers.slice(2, 4);
+  } else {
+    input.value = numbers;
+  }
+
+  updateAgeFromDOB();
+}
+
+// Calcul de l'âge et mise à jour du champ
+function updateAgeFromDOB() {
+  const dob = document.getElementById("esiDob").value;
+  const ageNum = document.getElementById("esiAgeNum");
+
+  const age = calculateAge(dob);
+  if (age !== null) {
+    ageNum.value = age;
+    majEsiStatut(); // Simule une saisie utilisateur
+  }
+}
+
+// Calcule l'âge en fonction de la date de naissance
+function calculateAge(dob) {
+  if (!dob || dob.length !== 10) return null;
+  const [day, month, year] = dob.split("/");
+  const birthDate = new Date(`${year}-${month}-${day}`);
+  if (isNaN(birthDate)) return null;
+
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
