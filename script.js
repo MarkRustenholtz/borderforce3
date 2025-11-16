@@ -1456,9 +1456,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.nat-autocomplete').forEach(attachNatAutocomplete);
 });
 
-// Format automatique JJ/MM/AAAA
+// Fonction commune pour formater la date (JJ/MM/AAAA) et calculer l'âge automatiquement
 function formatDOB(input) {
-  let numbers = input.value.replace(/\D/g, ''); // garde que les chiffres
+  let numbers = input.value.replace(/\D/g, ''); // chiffres uniquement
+  
+  // Auto-formatage JJ/MM/AAAA
   if (numbers.length >= 5) {
     input.value = numbers.slice(0, 2) + "/" + numbers.slice(2, 4) + "/" + numbers.slice(4, 8);
   } else if (numbers.length >= 3) {
@@ -1467,18 +1469,29 @@ function formatDOB(input) {
     input.value = numbers;
   }
 
-  updateAgeFromDOB();
+  // Détection automatique : ESI ou PASSEUR
+  if (input.id === "esiDob") {
+    updateAgeFromDOB("esiDob", "esiAgeNum", majEsiStatut);
+  } else if (input.id === "passeurDob") {
+    updateAgeFromDOB("passeurDob", "passeurAgeNum", majPasseurStatut);
+  }
 }
 
-// Calcul de l'âge et mise à jour du champ
-function updateAgeFromDOB() {
-  const dob = document.getElementById("esiDob").value;
-  const ageNum = document.getElementById("esiAgeNum");
+// Fonction commune pour calculer l'âge et remplir le champ cible
+function updateAgeFromDOB(dobId, ageNumId, callback) {
+  const dob = document.getElementById(dobId).value;
+  const ageNum = document.getElementById(ageNumId);
 
   const age = calculateAge(dob);
   if (age !== null) {
     ageNum.value = age;
-    majEsiStatut(); // Simule une saisie utilisateur
+
+    // Simule l'événement input pour déclencher les tests 'majeur' ou 'mineur'
+    const event = new Event("input", { bubbles: true });
+    ageNum.dispatchEvent(event);
+
+    // Appelle la fonction liée (ex: majEsiStatut ou majPasseurStatut)
+    if (typeof callback === "function") callback();
   }
 }
 
