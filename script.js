@@ -332,214 +332,243 @@ function addManualCf(type){
   });
 });
 
+// ESI
+function renderEsiList() {
+  const container = document.getElementById('esiList');
+  container.innerHTML = '';
+  if (!state.esiList || state.esiList.length === 0) {
+    container.innerHTML = '<p>Aucun ESI ajouté.</p>';
+    return;
+  }
+  const ul = document.createElement('ul');
+  ul.style.listStyle = 'none';
+  ul.style.padding = '0';
+  
+  state.esiList.forEach((esi, i) => {
+    const li = document.createElement('li');
+    li.style.background = '#f8f9fa';
+    li.style.padding = '10px';
+    li.style.margin = '8px 0';
+    li.style.borderRadius = '6px';
+    li.style.border = '1px solid #ddd';
+    
+    const info = document.createElement('div');
+    info.textContent = `${i+1} - ${esi.heure} - ${esi.age} - ${esi.sexe} - ${esi.ageNum} ans - ${esi.nationalite} - ${esi.lieu} - ${esi.suites}`;
+    info.style.marginBottom = '8px';
+    
+    const buttons = document.createElement('div');
 
-    // ESI
-    function renderEsiList() {
-      const container = document.getElementById('esiList');
-      container.innerHTML = '';
-      if(!state.esiList || state.esiList.length === 0) {
-        container.innerHTML = '<p>Aucun ESI ajouté.</p>';
-        return;
-      }
-      const ul = document.createElement('ul');
-      ul.style.listStyle = 'none';
-      ul.style.padding = '0';
-      
-      state.esiList.forEach((esi,i) => {
-        const li = document.createElement('li');
-        li.style.background = '#f8f9fa';
-        li.style.padding = '10px';
-        li.style.margin = '8px 0';
-        li.style.borderRadius = '6px';
-        li.style.border = '1px solid #ddd';
-        
-        const info = document.createElement('div');
-        info.textContent = `${i+1} - ${esi.heure} - ${esi.age} - ${esi.sexe} - ${esi.ageNum} ans - ${esi.nationalite} - ${esi.lieu} - ${esi.suites}`;
-        info.style.marginBottom = '8px';
-        
-        const buttons = document.createElement('div');
+    // bouton Modifier
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Modifier';
+    editBtn.className = 'blue';
+    editBtn.style.marginRight = '8px';
+    editBtn.onclick = () => {
+      document.getElementById('esiAge').value          = esi.age;
+      document.getElementById('esiSexe').value         = esi.sexe;
+      document.getElementById('esiAgeNum').value       = esi.ageNum;
+      document.getElementById('esiNationalite').value  = esi.nationalite;
+      document.getElementById('esiLieu').value         = esi.lieu;
+      document.getElementById('esiHeure').value        = esi.heure;
+      document.getElementById('esiSuites').value       = esi.suites;
 
-        // bouton Modifier
-        const editBtn = document.createElement('button');
-        editBtn.textContent = 'Modifier';
-        editBtn.className = 'blue';
-        editBtn.style.marginRight = '8px';
-        editBtn.onclick = () => {
-          document.getElementById('esiAge').value = esi.age;
-          document.getElementById('esiSexe').value = esi.sexe;
-          document.getElementById('esiAgeNum').value = esi.ageNum;
-          document.getElementById('esiNationalite').value = esi.nationalite;
-          document.getElementById('esiLieu').value = esi.lieu;
-          document.getElementById('esiHeure').value = esi.heure;
-          document.getElementById('esiSuites').value = esi.suites;
-          state.editingEsiIndex = i;
-          document.getElementById('addEsiBtn').textContent = "Enregistrer";
-        };
+      // ✅ remettre la date de naissance dans le champ
+      document.getElementById('esiDob').value = esi.dob || '';
 
-        // bouton Supprimer
-        const delBtn = document.createElement('button');
-        delBtn.textContent = 'Supprimer';
-        delBtn.className = 'red';
-        delBtn.onclick = () => {
-          if(confirm("Supprimer cet ESI ?")) {
-            state.esiList.splice(i,1);
-            renderEsiList();
-            debounceSave();
-          }
-        };
-
-        buttons.appendChild(editBtn);
-        buttons.appendChild(delBtn);
-        li.appendChild(info);
-        li.appendChild(buttons);
-        ul.appendChild(li);
-      });
-      container.appendChild(ul);
-    }
-
-    function addEsi() {
-      const heure = document.getElementById('esiHeure').value.trim();
-      const age = document.getElementById('esiAge').value;
-      const sexe = document.getElementById('esiSexe').value;
-      const ageNum = document.getElementById('esiAgeNum').value.trim();
-      const nationalite = document.getElementById('esiNationalite').value.trim();
-      const lieu = document.getElementById('esiLieu').value.trim();
-      const suites = document.getElementById('esiSuites').value.trim();
-      if(!age || !sexe || !ageNum || !nationalite || !lieu || !suites) {
-        alert('Merci de remplir tous les champs ESI.');
-        return;
+      // Optionnel : reformater / recalculer
+      if (esi.dob) {
+        formatDOB(document.getElementById('esiDob'));
       }
 
-      if(state.editingEsiIndex !== null && state.editingEsiIndex !== undefined) {
-        state.esiList[state.editingEsiIndex] = {age,sexe,ageNum,nationalite,lieu,heure,suites};
-        state.editingEsiIndex = null;
-        document.getElementById('addEsiBtn').textContent = "Ajouter ESI";
-      } else {
-        state.esiList.push({age,sexe,ageNum,nationalite,lieu,heure,suites});
-      }
+      state.editingEsiIndex = i;
+      document.getElementById('addEsiBtn').textContent = "Enregistrer";
+    };
 
-      document.getElementById('esiAge').value = '';
-      document.getElementById('esiSexe').value = '';
-      document.getElementById('esiAgeNum').value = '';
-      document.getElementById('esiNationalite').value = '';
-      document.getElementById('esiLieu').value = '';
-      document.getElementById('esiHeure').value = '';
-      document.getElementById('esiSuites').value = '';
-      renderEsiList();
-      debounceSave();
-    }
-
-    function delEsi() {
-      if(state.esiList && state.esiList.length > 0) {
-        state.esiList.pop();
+    // bouton Supprimer
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Supprimer';
+    delBtn.className = 'red';
+    delBtn.onclick = () => {
+      if (confirm("Supprimer cet ESI ?")) {
+        state.esiList.splice(i, 1);
         renderEsiList();
         debounceSave();
       }
-    }
+    };
 
-    // PASSEUR
-    function renderPasseurList() {
-      const container = document.getElementById('passeurList');
-      container.innerHTML = '';
-      if(!state.passeurList || state.passeurList.length === 0) {
-        container.innerHTML = '<p>Aucun passeur ajouté.</p>';
-        return;
+    buttons.appendChild(editBtn);
+    buttons.appendChild(delBtn);
+    li.appendChild(info);
+    li.appendChild(buttons);
+    ul.appendChild(li);
+  });
+  container.appendChild(ul);
+}
+
+function addEsi() {
+  const heure        = document.getElementById('esiHeure').value.trim();
+  const age          = document.getElementById('esiAge').value;
+  const sexe         = document.getElementById('esiSexe').value;
+  const ageNum       = document.getElementById('esiAgeNum').value.trim();
+  const nationalite  = document.getElementById('esiNationalite').value.trim();
+  const lieu         = document.getElementById('esiLieu').value.trim();
+  const suites       = document.getElementById('esiSuites').value.trim();
+  const dob          = document.getElementById('esiDob').value.trim(); // ✅ nouvelle donnée
+
+  if (!age || !sexe || !ageNum || !nationalite || !lieu || !suites) {
+    alert('Merci de remplir tous les champs ESI.');
+    return;
+  }
+
+  const newEsi = { age, sexe, ageNum, nationalite, lieu, heure, suites, dob }; // ✅ dob stocké
+
+  if (state.editingEsiIndex !== null && state.editingEsiIndex !== undefined) {
+    state.esiList[state.editingEsiIndex] = newEsi;
+    state.editingEsiIndex = null;
+    document.getElementById('addEsiBtn').textContent = "Ajouter ESI";
+  } else {
+    state.esiList.push(newEsi);
+  }
+
+  // ✅ on nettoie aussi la date de naissance
+  document.getElementById('esiAge').value          = '';
+  document.getElementById('esiSexe').value         = '';
+  document.getElementById('esiAgeNum').value       = '';
+  document.getElementById('esiNationalite').value  = '';
+  document.getElementById('esiLieu').value         = '';
+  document.getElementById('esiHeure').value        = '';
+  document.getElementById('esiSuites').value       = '';
+  document.getElementById('esiDob').value          = '';
+
+  renderEsiList();
+  debounceSave();
+}
+
+function delEsi() {
+  if (state.esiList && state.esiList.length > 0) {
+    state.esiList.pop();
+    renderEsiList();
+    debounceSave();
+  }
+}
+
+// PASSEUR
+function renderPasseurList() {
+  const container = document.getElementById('passeurList');
+  container.innerHTML = '';
+  if (!state.passeurList || state.passeurList.length === 0) {
+    container.innerHTML = '<p>Aucun passeur ajouté.</p>';
+    return;
+  }
+  const ul = document.createElement('ul');
+  ul.style.listStyle = 'none';
+  ul.style.padding = '0';
+  
+  state.passeurList.forEach((passeur, i) => {
+    const li = document.createElement('li');
+    li.style.background = '#f8f9fa';
+    li.style.padding = '10px';
+    li.style.margin = '8px 0';
+    li.style.borderRadius = '6px';
+    li.style.border = '1px solid #ddd';
+    
+    const info = document.createElement('div');
+    info.textContent = `${i+1} - ${passeur.heure} - ${passeur.age} - ${passeur.sexe} - ${passeur.ageNum} ans - ${passeur.nationalite} - ${passeur.lieu} - ${passeur.suites}`;
+    info.style.marginBottom = '8px';
+    
+    const buttons = document.createElement('div');
+
+    // bouton Modifier
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Modifier';
+    editBtn.className = 'blue';
+    editBtn.style.marginRight = '8px';
+    editBtn.onclick = () => {
+      document.getElementById('passeurAge').value         = passeur.age;
+      document.getElementById('passeurSexe').value        = passeur.sexe;
+      document.getElementById('passeurAgeNum').value      = passeur.ageNum;
+      document.getElementById('passeurNationalite').value = passeur.nationalite;
+      document.getElementById('passeurLieu').value        = passeur.lieu;
+      document.getElementById('passeurHeure').value       = passeur.heure;
+      document.getElementById('passeurSuites').value      = passeur.suites;
+
+      // ✅ remettre la date de naissance passeur
+      document.getElementById('passeurDob').value = passeur.dob || '';
+      if (passeur.dob) {
+        formatDOB(document.getElementById('passeurDob'));
       }
-      const ul = document.createElement('ul');
-      ul.style.listStyle = 'none';
-      ul.style.padding = '0';
-      
-      state.passeurList.forEach((passeur,i) => {
-        const li = document.createElement('li');
-        li.style.background = '#f8f9fa';
-        li.style.padding = '10px';
-        li.style.margin = '8px 0';
-        li.style.borderRadius = '6px';
-        li.style.border = '1px solid #ddd';
-        
-        const info = document.createElement('div');
-        info.textContent = `${i+1} - ${passeur.heure} - ${passeur.age} - ${passeur.sexe} - ${passeur.ageNum} ans - ${passeur.nationalite} - ${passeur.lieu} - ${passeur.suites}`;
-        info.style.marginBottom = '8px';
-        
-        const buttons = document.createElement('div');
 
-        // bouton Modifier
-        const editBtn = document.createElement('button');
-        editBtn.textContent = 'Modifier';
-        editBtn.className = 'blue';
-        editBtn.style.marginRight = '8px';
-        editBtn.onclick = () => {
-          document.getElementById('passeurAge').value = passeur.age;
-          document.getElementById('passeurSexe').value = passeur.sexe;
-          document.getElementById('passeurAgeNum').value = passeur.ageNum;
-          document.getElementById('passeurNationalite').value = passeur.nationalite;
-          document.getElementById('passeurLieu').value = passeur.lieu;
-          document.getElementById('passeurHeure').value = passeur.heure;
-          document.getElementById('passeurSuites').value = passeur.suites;
-          state.editingPasseurIndex = i;
-          document.getElementById('addPasseurBtn').textContent = "Enregistrer";
-        };
+      state.editingPasseurIndex = i;
+      document.getElementById('addPasseurBtn').textContent = "Enregistrer";
+    };
 
-        // bouton Supprimer
-        const delBtn = document.createElement('button');
-        delBtn.textContent = 'Supprimer';
-        delBtn.className = 'red';
-        delBtn.onclick = () => {
-          if(confirm("Supprimer ce passeur ?")) {
-            state.passeurList.splice(i,1);
-            renderPasseurList();
-            debounceSave();
-          }
-        };
-
-        buttons.appendChild(editBtn);
-        buttons.appendChild(delBtn);
-        li.appendChild(info);
-        li.appendChild(buttons);
-        ul.appendChild(li);
-      });
-      container.appendChild(ul);
-    }
-
-    function addPasseur() {
-      const heure = document.getElementById('passeurHeure').value.trim();
-      const age = document.getElementById('passeurAge').value;
-      const sexe = document.getElementById('passeurSexe').value;
-      const ageNum = document.getElementById('passeurAgeNum').value.trim();
-      const nationalite = document.getElementById('passeurNationalite').value.trim();
-      const lieu = document.getElementById('passeurLieu').value.trim();
-      const suites = document.getElementById('passeurSuites').value.trim();
-      if(!age || !sexe || !ageNum || !nationalite || !lieu || !suites) {
-        alert('Merci de remplir tous les champs Passeur.');
-        return;
-      }
-
-      if(state.editingPasseurIndex !== null && state.editingPasseurIndex !== undefined) {
-        state.passeurList[state.editingPasseurIndex] = {age,sexe,ageNum,nationalite,lieu,heure,suites};
-        state.editingPasseurIndex = null;
-        document.getElementById('addPasseurBtn').textContent = "Ajouter Passeur";
-      } else {
-        state.passeurList.push({age,sexe,ageNum,nationalite,lieu,heure,suites});
-      }
-
-      document.getElementById('passeurAge').value = '';
-      document.getElementById('passeurSexe').value = '';
-      document.getElementById('passeurAgeNum').value = '';
-      document.getElementById('passeurNationalite').value = '';
-      document.getElementById('passeurLieu').value = '';
-      document.getElementById('passeurHeure').value = '';
-      document.getElementById('passeurSuites').value = '';
-      renderPasseurList();
-      debounceSave();
-    }
-
-    function delPasseur() {
-      if(state.passeurList && state.passeurList.length > 0) {
-        state.passeurList.pop();
+    // bouton Supprimer
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Supprimer';
+    delBtn.className = 'red';
+    delBtn.onclick = () => {
+      if (confirm("Supprimer ce passeur ?")) {
+        state.passeurList.splice(i, 1);
         renderPasseurList();
         debounceSave();
       }
-    }
+    };
+
+    buttons.appendChild(editBtn);
+    buttons.appendChild(delBtn);
+    li.appendChild(info);
+    li.appendChild(buttons);
+    ul.appendChild(li);
+  });
+  container.appendChild(ul);
+}
+
+function addPasseur() {
+  const heure        = document.getElementById('passeurHeure').value.trim();
+  const age          = document.getElementById('passeurAge').value;
+  const sexe         = document.getElementById('passeurSexe').value;
+  const ageNum       = document.getElementById('passeurAgeNum').value.trim();
+  const nationalite  = document.getElementById('passeurNationalite').value.trim();
+  const lieu         = document.getElementById('passeurLieu').value.trim();
+  const suites       = document.getElementById('passeurSuites').value.trim();
+  const dob          = document.getElementById('passeurDob').value.trim(); // ✅ nouvelle donnée
+
+  if (!age || !sexe || !ageNum || !nationalite || !lieu || !suites) {
+    alert('Merci de remplir tous les champs passeur.');
+    return;
+  }
+
+  const newPasseur = { age, sexe, ageNum, nationalite, lieu, heure, suites, dob }; // ✅ dob stocké
+
+  if (state.editingPasseurIndex !== null && state.editingPasseurIndex !== undefined) {
+    state.passeurList[state.editingPasseurIndex] = newPasseur;
+    state.editingPasseurIndex = null;
+    document.getElementById('addPasseurBtn').textContent = "Ajouter Passeur";
+  } else {
+    state.passeurList.push(newPasseur);
+  }
+
+  // ✅ nettoyage, y compris la date
+  document.getElementById('passeurAge').value         = '';
+  document.getElementById('passeurSexe').value        = '';
+  document.getElementById('passeurAgeNum').value      = '';
+  document.getElementById('passeurNationalite').value = '';
+  document.getElementById('passeurLieu').value        = '';
+  document.getElementById('passeurHeure').value       = '';
+  document.getElementById('passeurSuites').value      = '';
+  document.getElementById('passeurDob').value         = '';
+
+  renderPasseurList();
+  debounceSave();
+}
+
+function delPasseur() {
+  if (state.passeurList && state.passeurList.length > 0) {
+    state.passeurList.pop();
+    renderPasseurList();
+    debounceSave();
+  }
+}
 
     // Compte rendu generator (utilise state)
     function generateCompteRendu() {
